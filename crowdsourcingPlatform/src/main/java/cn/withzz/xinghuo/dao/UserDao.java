@@ -33,7 +33,7 @@ public interface UserDao {
     })
     User findByKey(@Param("username") String username);
 
-    @Insert("insert into users values(#{username},#{password},#{createTime},#{updateTime})")
+    @Insert("insert into users values(#{username},#{password},#{createTime},#{updateTime},1)")
     Long save(User user);
 
     @Update("update users set password=#{password},updateTime=#{updateTime} where username=#{username} and status=1")

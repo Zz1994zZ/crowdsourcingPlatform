@@ -5,7 +5,9 @@ import cn.withzz.xinghuo.domain.User;
 import cn.withzz.xinghuo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.DigestUtils;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -30,13 +32,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Long save(User User) {
-        return userDao.save(User);
+    public Long save(User user) {
+        user.setCreateTime(new Date());
+        user.setUpdateTime(new Date());
+        //createTime做盐
+        String salt = user.getCreateTime().getTime()+"";
+        String password = user.getPassword()+salt;
+        String encodeStr = DigestUtils.md5DigestAsHex(password.getBytes());
+        user.setPassword(encodeStr);
+        return userDao.save(user);
     }
 
     @Override
-    public Long update(User User) {
-        return userDao.update(User);
+    public Long update(User user) {
+        return userDao.update(user);
     }
 
     @Override

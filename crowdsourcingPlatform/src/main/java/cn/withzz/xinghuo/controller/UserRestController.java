@@ -30,8 +30,6 @@ public class UserRestController {
 
     @RequestMapping(value = "/api/user", method = RequestMethod.POST)
     public void create(@RequestBody User user) {
-        System.out.print(user.getUsername());
-        System.out.print(user.getPassword());
         userService.save(user);
     }
 
