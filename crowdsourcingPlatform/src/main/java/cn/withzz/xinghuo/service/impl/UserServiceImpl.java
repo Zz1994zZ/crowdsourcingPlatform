@@ -1,7 +1,6 @@
 package cn.withzz.xinghuo.service.impl;
 
 import cn.withzz.xinghuo.dao.UserDao;
-import cn.withzz.xinghuo.domain.ResponseResult;
 import cn.withzz.xinghuo.domain.User;
 import cn.withzz.xinghuo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
