@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
@@ -33,8 +34,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Long save(User user) {
-        user.setCreateTime(new Date());
-        user.setUpdateTime(new Date());
+        user.setCreateTime(new Timestamp(System.currentTimeMillis()));
+        user.setUpdateTime(user.getCreateTime());
         //createTime做盐
         String salt = user.getCreateTime().getTime()+"";
         String password = user.getPassword()+salt;

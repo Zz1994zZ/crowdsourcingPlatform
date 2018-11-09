@@ -23,7 +23,7 @@ public interface UserDao {
 
     List<User> findByPage();
 
-    @Select("SELECT * FROM users where status = 1")
+    @Select("SELECT * FROM users where status = 1 and username=#{username}")
     // 返回 Map 结果集
     @Results({
             @Result(property = "username", column = "username"),

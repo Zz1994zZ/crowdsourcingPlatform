@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
+import java.sql.Timestamp;
 
 /**
  * Token Controller 实现 Restful HTTP 服务
@@ -38,10 +38,11 @@ public class TokenRestController {
         if(encodeStr.equals(realUser.getPassword())){
             Token token = new Token();
             token.setUsername(user.getUsername());
-            token.setCreateTime(new Date());
+            token.setCreateTime(new Timestamp(System.currentTimeMillis()));
             token.setUpdateTime(token.getCreateTime());
-            token.setExprieTime(20L);
+            token.setExprieTime(3600L);
             token.setType(Token.Tpye.USER);
+            String exitToken = redisService.query(token.getUsername());
             redisService.saveToken(token);
             result.setData(token);
             result.setMessage("登陆成功！");

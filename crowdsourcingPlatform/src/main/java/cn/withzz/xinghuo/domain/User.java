@@ -1,6 +1,7 @@
 package cn.withzz.xinghuo.domain;
 
 
+import java.sql.Timestamp;
 import java.util.Date;
 
 /**
@@ -11,8 +12,8 @@ public class User {
     private String username;
     //密码 createTime加盐
     private String password;
-    private Date createTime;
-    private Date updateTime;
+    private Timestamp createTime;
+    private Timestamp updateTime;
 
     public String getUsername() {
         return username;
@@ -30,19 +31,19 @@ public class User {
         this.password = password;
     }
 
-    public Date getCreateTime() {
+    public Timestamp getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Date createTime) {
+    public void setCreateTime(Timestamp createTime) {
         this.createTime = createTime;
     }
 
-    public Date getUpdateTime() {
+    public Timestamp getUpdateTime() {
         return updateTime;
     }
 
-    public void setUpdateTime(Date updateTime) {
+    public void setUpdateTime(Timestamp updateTime) {
         this.updateTime = updateTime;
     }
 }

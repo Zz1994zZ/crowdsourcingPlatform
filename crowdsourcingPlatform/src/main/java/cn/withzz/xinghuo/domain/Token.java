@@ -3,6 +3,7 @@ package cn.withzz.xinghuo.domain;
 
 import org.springframework.util.DigestUtils;
 
+import java.sql.Timestamp;
 import java.util.Date;
 
 /**
@@ -12,8 +13,8 @@ import java.util.Date;
 public class Token {
     private String tokenCode;
     private String username;
-    private Date createTime;
-    private Date updateTime;
+    private Timestamp createTime;
+    private Timestamp updateTime;
     private Tpye type;
     //过期时间秒
     private long exprieTime;
@@ -37,19 +38,19 @@ public class Token {
         this.username = username;
     }
 
-    public Date getCreateTime() {
+    public Timestamp getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Date createTime) {
+    public void setCreateTime(Timestamp createTime) {
         this.createTime = createTime;
     }
 
-    public Date getUpdateTime() {
+    public Timestamp getUpdateTime() {
         return updateTime;
     }
 
-    public void setUpdateTime(Date updateTime) {
+    public void setUpdateTime(Timestamp updateTime) {
         this.updateTime = updateTime;
     }
 
@@ -72,7 +73,7 @@ public class Token {
     private void generateToken(){
         StringBuffer sb =new StringBuffer();
         sb.append(username);
-        String temp = createTime.toString()+new Date().toString();
+        String temp = createTime+new Date().toString();
         sb.append(DigestUtils.md5DigestAsHex(temp.getBytes()));
         this.tokenCode=sb.toString();
     }
