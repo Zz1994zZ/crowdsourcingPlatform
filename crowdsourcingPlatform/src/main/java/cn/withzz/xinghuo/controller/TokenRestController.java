@@ -1,8 +1,9 @@
 package cn.withzz.xinghuo.controller;
 
+import cn.withzz.xinghuo.domain.ResponseResult;
 import cn.withzz.xinghuo.domain.Token;
 import cn.withzz.xinghuo.domain.User;
-import cn.withzz.xinghuo.service.TokenService;
+import cn.withzz.xinghuo.service.RedisService;
 import cn.withzz.xinghuo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.DigestUtils;
@@ -19,35 +20,43 @@ import java.util.Date;
 public class TokenRestController {
 
     @Autowired
-    private TokenService tokenService;
-    @Autowired
     private UserService userService;
+    @Autowired
+    private RedisService redisService;
+
 
 
     @RequestMapping(value = "/api/token", method = RequestMethod.POST)
-    public String login(@RequestBody User user) {
+    public ResponseResult login(@RequestBody User user) {
         User realUser = userService.findByKey(user.getUsername());
         //createTime做盐
         String salt = realUser.getCreateTime().getTime()+"";
         String password = user.getPassword()+salt;
         String encodeStr = DigestUtils.md5DigestAsHex(password.getBytes());
+        ResponseResult<Token> result =new ResponseResult<Token>();
+        //校验密码是否正确
         if(encodeStr.equals(realUser.getPassword())){
             Token token = new Token();
             token.setUsername(user.getUsername());
             token.setCreateTime(new Date());
             token.setUpdateTime(token.getCreateTime());
-            token.setExprieTime(7200L);
-            token.setType(1);
-            tokenService.add(token);
-            return "OK";
+            token.setExprieTime(20L);
+            token.setType(Token.Tpye.USER);
+            redisService.saveToken(token);
+            result.setData(token);
+            result.setMessage("登陆成功！");
+            result.setSuccess(true);
         }else
         {
-            return "fails";
+            result.setSuccess(false);
+            result.setErrorcode("");
+            result.setMessage("账号或密码错误！");
         }
+        return result;
     }
 
     @RequestMapping(value = "/api/token/{token}", method = RequestMethod.DELETE)
-    public void logout(@PathVariable("token") String token) {
-        tokenService.delete(token);
+    public void logout(@PathVariable("token") String username) {
+        redisService.delete(username);
     }
 }

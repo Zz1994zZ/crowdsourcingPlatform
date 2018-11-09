@@ -1,5 +1,6 @@
 package cn.withzz.xinghuo.controller;
 
+import cn.withzz.xinghuo.domain.ResponseResult;
 import cn.withzz.xinghuo.domain.User;
 import cn.withzz.xinghuo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,8 +30,17 @@ public class UserRestController {
     }
 
     @RequestMapping(value = "/api/user", method = RequestMethod.POST)
-    public void create(@RequestBody User user) {
-        userService.save(user);
+    public ResponseResult create(@RequestBody User user) {
+        ResponseResult<String> result =new ResponseResult<String>();
+        try{
+            userService.save(user);
+            result.setMessage("注册成功！");
+            result.setSuccess(true);
+        }catch (Exception e){
+            result.setMessage("注册失败！");
+            result.setSuccess(false);
+        }
+        return result;
     }
 
     @RequestMapping(value = "/api/user", method = RequestMethod.PUT)

@@ -1,6 +1,7 @@
 package cn.withzz.xinghuo.service.impl;
 
 import cn.withzz.xinghuo.dao.UserDao;
+import cn.withzz.xinghuo.domain.ResponseResult;
 import cn.withzz.xinghuo.domain.User;
 import cn.withzz.xinghuo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,7 @@ import java.util.List;
 /**
  * 城市业务逻辑实现类
  *
- * Created by bysocket on 07/02/2017.
+ * Created by svenzzhou on 09/11/2018.
  */
 @Service
 public class UserServiceImpl implements UserService {

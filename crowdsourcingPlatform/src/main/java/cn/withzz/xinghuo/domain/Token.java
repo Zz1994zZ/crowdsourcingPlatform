@@ -1,6 +1,8 @@
 package cn.withzz.xinghuo.domain;
 
 
+import org.springframework.util.DigestUtils;
+
 import java.util.Date;
 
 /**
@@ -12,11 +14,14 @@ public class Token {
     private String username;
     private Date createTime;
     private Date updateTime;
-    private int type;
-    //过期时间毫秒
+    private Tpye type;
+    //过期时间秒
     private long exprieTime;
 
+    public static enum Tpye {USER,OTHER};
     public String getTokenCode() {
+        if(tokenCode == null)
+            this.generateToken();
         return tokenCode;
     }
 
@@ -48,11 +53,11 @@ public class Token {
         this.updateTime = updateTime;
     }
 
-    public int getType() {
+    public Tpye getType() {
         return type;
     }
 
-    public void setType(int type) {
+    public void setType(Tpye type) {
         this.type = type;
     }
 
@@ -62,5 +67,13 @@ public class Token {
 
     public void setExprieTime(long exprieTime) {
         this.exprieTime = exprieTime;
+    }
+
+    private void generateToken(){
+        StringBuffer sb =new StringBuffer();
+        sb.append(username);
+        String temp = createTime.toString()+new Date().toString();
+        sb.append(DigestUtils.md5DigestAsHex(temp.getBytes()));
+        this.tokenCode=sb.toString();
     }
 }
