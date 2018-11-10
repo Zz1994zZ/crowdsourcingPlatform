@@ -49,7 +49,7 @@ public class UserRestController {
     }
 
     @RequestMapping(value = "/api/user/{username}", method = RequestMethod.DELETE)
-    public void deleteUser(@PathVariable("username") Long id) {
-        userService.delete(id);
+    public void deleteUser(@PathVariable("username") String usernmae) {
+        userService.delete(usernmae);
     }
 }

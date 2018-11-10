@@ -15,9 +15,6 @@ public interface UserDao {
 
     @Select("SELECT * FROM users where status = 1")
     // 返回 Map 结果集
-    @Results({
-            @Result(property = "username", column = "username"),
-    })
     List<User> findAll();
 
 
@@ -39,6 +36,5 @@ public interface UserDao {
     @Update("update users set password=#{password},updateTime=#{updateTime} where username=#{username} and status=1")
     Long update(User user);
 
-
-    Long delete(Long id);
+    Long delete(String username);
 }

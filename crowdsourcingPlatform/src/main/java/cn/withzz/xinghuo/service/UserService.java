@@ -20,5 +20,5 @@ public interface UserService {
 
     Long update(User User);
 
-    Long delete(Long id);
+    Long delete(String username);
 }

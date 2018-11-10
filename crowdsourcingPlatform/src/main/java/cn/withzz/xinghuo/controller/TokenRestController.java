@@ -6,6 +6,7 @@ import cn.withzz.xinghuo.domain.User;
 import cn.withzz.xinghuo.service.RedisService;
 import cn.withzz.xinghuo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -56,8 +57,19 @@ public class TokenRestController {
         return result;
     }
 
-    @RequestMapping(value = "/api/token/{token}", method = RequestMethod.DELETE)
-    public void logout(@PathVariable("token") String username) {
-        redisService.delete(username);
+    @RequestMapping(value = "/api/token", method = RequestMethod.DELETE)
+    public ResponseResult logout(@RequestHeader HttpHeaders headers) {
+        String username = headers.getFirst("username");
+        ResponseResult<String> result =new ResponseResult<String>();
+        result.setData(username);
+        try{
+            redisService.delete(username);
+            result.setSuccess(true);
+            result.setMessage("注销成功！");
+        }catch (Exception e){
+            result.setSuccess(false);
+            result.setMessage("注销失败！");
+        }
+        return result;
     }
 }

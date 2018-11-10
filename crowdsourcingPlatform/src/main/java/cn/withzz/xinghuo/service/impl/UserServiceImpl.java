@@ -50,8 +50,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Long delete(Long id) {
-        return userDao.delete(id);
+    public Long delete(String username) {
+        return userDao.delete(username);
     }
 
 }
