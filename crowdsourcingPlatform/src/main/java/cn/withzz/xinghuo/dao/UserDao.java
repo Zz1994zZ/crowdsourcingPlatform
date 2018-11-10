@@ -13,7 +13,7 @@ import java.util.List;
 @Mapper // 标志为 Mybatis 的 Mapper
 public interface UserDao {
 
-    @Select("SELECT * FROM users where status = 1")
+    @Select("SELECT username,createTime FROM users where status = 1")
     // 返回 Map 结果集
     List<User> findAll();
 

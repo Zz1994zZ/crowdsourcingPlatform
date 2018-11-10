@@ -46,6 +46,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Long update(User user) {
+        user.setUpdateTime(new Timestamp(System.currentTimeMillis()));
+        String salt = user.getCreateTime().getTime()+"";
+        String password = user.getPassword()+salt;
+        String encodeStr = DigestUtils.md5DigestAsHex(password.getBytes());
+        user.setPassword(encodeStr);
         return userDao.update(user);
     }
 

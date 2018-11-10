@@ -20,6 +20,7 @@ public class LoginInterceptor implements HandlerInterceptor {
 
     //这个方法是在访问接口之前执行的，我们只需要在这里写验证登陆状态的业务逻辑，就可以在用户调用指定接口之前验证登陆状态了
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        //登陆和注册不需要拦截
         if(request.getMethod().equals("POST")){
             if(request.getRequestURI().equals("/api/user")){
                 return true;

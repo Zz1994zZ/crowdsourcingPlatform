@@ -6,6 +6,7 @@ import cn.withzz.xinghuo.domain.User;
 import cn.withzz.xinghuo.service.RedisService;
 import cn.withzz.xinghuo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
@@ -24,8 +25,8 @@ public class TokenRestController {
     private UserService userService;
     @Autowired
     private RedisService redisService;
-
-
+    @Value("${cn.withzz.xingHuo.tokenExpireTime}")
+    private long expireTime;
 
     @RequestMapping(value = "/api/token", method = RequestMethod.POST)
     public ResponseResult login(@RequestBody User user) {
@@ -41,7 +42,7 @@ public class TokenRestController {
             token.setUsername(user.getUsername());
             token.setCreateTime(new Timestamp(System.currentTimeMillis()));
             token.setUpdateTime(token.getCreateTime());
-            token.setExprieTime(3600L);
+            token.setExprieTime(expireTime);
             token.setType(Token.Tpye.USER);
             String exitToken = redisService.query(token.getUsername());
             redisService.saveToken(token);

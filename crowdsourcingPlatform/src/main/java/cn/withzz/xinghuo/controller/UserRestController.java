@@ -2,6 +2,7 @@ package cn.withzz.xinghuo.controller;
 
 import cn.withzz.xinghuo.domain.ResponseResult;
 import cn.withzz.xinghuo.domain.User;
+import cn.withzz.xinghuo.service.RedisService;
 import cn.withzz.xinghuo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +19,8 @@ public class UserRestController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private RedisService redisService;
 
     @RequestMapping(value = "/api/user/{username}", method = RequestMethod.GET)
     public User findOne(@PathVariable("username") String username) {
@@ -44,8 +47,25 @@ public class UserRestController {
     }
 
     @RequestMapping(value = "/api/user", method = RequestMethod.PUT)
-    public void modify(@RequestBody User user) {
-        userService.update(user);
+    public ResponseResult modify(@RequestBody User user) {
+        ResponseResult<String> result =new ResponseResult<String>();
+        //填入createTime,因为后面要做盐用
+        User realUser =  userService.findByKey(user.getUsername());
+        user.setCreateTime(realUser.getCreateTime());
+        try{
+            //删除token
+            if(redisService.query(user.getUsername())!=null){
+                redisService.delete(user.getUsername());
+            }
+            userService.update(user);
+            result.setMessage("修改成功！");
+            result.setSuccess(true);
+        }catch (Exception e){
+            result.setMessage("修改失败！");
+            result.setSuccess(false);
+        }
+        return result;
+
     }
 
     @RequestMapping(value = "/api/user/{username}", method = RequestMethod.DELETE)
