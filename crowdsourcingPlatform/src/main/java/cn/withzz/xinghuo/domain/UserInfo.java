@@ -46,4 +46,12 @@ public class UserInfo {
     public void setInfo(String info) {
         this.info = info;
     }
+
+    public String getExtention() {
+        return extention;
+    }
+
+    public void setExtention(String extention) {
+        this.extention = extention;
+    }
 }

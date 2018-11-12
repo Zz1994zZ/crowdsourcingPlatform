@@ -5,9 +5,6 @@ import cn.withzz.xinghuo.domain.UserInfo;
 import cn.withzz.xinghuo.service.UserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.DigestUtils;
-
-import java.sql.Timestamp;
 import java.util.List;
 
 /**

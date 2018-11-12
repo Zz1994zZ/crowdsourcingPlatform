@@ -30,28 +30,42 @@ public class UserInfoController {
     }
 
     @RequestMapping(value = "/api/userInfo", method = RequestMethod.POST)
-    public ResponseResult create(@RequestBody UserInfo user) {
+    public ResponseResult create(@RequestBody UserInfo userInfo,@RequestHeader("username") String username) {
         ResponseResult<String> result =new ResponseResult<String>();
-        try{
-            userInfoService.save(user);
-            result.setMessage("注册成功！");
-            result.setSuccess(true);
-        }catch (Exception e){
-            result.setMessage("注册失败！");
+        //校验身份
+        if(username.equals(userInfo.getUsername())){
+            try{
+                userInfoService.save(userInfo);
+                result.setMessage("添加用户信息成功！");
+                result.setSuccess(true);
+            }catch (Exception e){
+                result.setMessage("添加用户信息失败！");
+                result.setSuccess(false);
+            }
+        }else{
+            result.setMessage("添加用户信息失败！无权操作该用户！");
             result.setSuccess(false);
         }
+
         return result;
     }
 
     @RequestMapping(value = "/api/userInfo", method = RequestMethod.PUT)
-    public ResponseResult modify(@RequestBody UserInfo userInfo) {
+    public ResponseResult modify(@RequestBody UserInfo userInfo,@RequestHeader("username") String username) {
         ResponseResult<String> result =new ResponseResult<String>();
-        try{
-            userInfoService.update(userInfo);
-            result.setMessage("修改成功！");
-            result.setSuccess(true);
-        }catch (Exception e){
-            result.setMessage("修改失败！");
+
+        //校验身份
+        if(username.equals(userInfo.getUsername())){
+            try{
+                userInfoService.update(userInfo);
+                result.setMessage("修改用户信息成功！");
+                result.setSuccess(true);
+            }catch (Exception e){
+                result.setMessage("修改用户信息失败！");
+                result.setSuccess(false);
+            }
+        }else{
+            result.setMessage("修改用户信息失败！无权操作该用户！");
             result.setSuccess(false);
         }
         return result;

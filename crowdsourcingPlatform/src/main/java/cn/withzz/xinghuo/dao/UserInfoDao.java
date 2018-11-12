@@ -28,7 +28,7 @@ public interface UserInfoDao {
     @Insert("insert into usersinfo values(#{username},#{name},#{skillList},#{info},#{extention})")
     Long save(UserInfo userInfo);
 
-    @Update("update users set name=#{name},skillList=#{skillList},info=#{info},extention=#{extention} where username=#{username}")
+    @Update("update usersinfo set name=#{name},skillList=#{skillList},info=#{info},extention=#{extention} where username=#{username}")
     Long update(UserInfo userInfo);
 
 
