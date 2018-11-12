@@ -1,7 +1,7 @@
 package cn.withzz.xinghuo.dao;
 
 
-import cn.withzz.xinghuo.domain.User;
+import cn.withzz.xinghuo.domain.UserInfo;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -14,28 +14,23 @@ import java.util.List;
 @Mapper // 标志为 Mybatis 的 Mapper
 public interface UserInfoDao {
 
-    @Select("SELECT username,createTime FROM users where status = 1")
+    @Select("SELECT * FROM usersinfo")
     // 返回 Map 结果集
-    List<User> findAll();
+    List<UserInfo> findAll();
 
 
-    List<User> findByPage();
+    List<UserInfo> findByPage();
 
-    @Select("SELECT * FROM users where status = 1 and username=#{username}")
+    @Select("SELECT * FROM usersinfo where  username=#{username}")
     // 返回 Map 结果集
-    @Results({
-            @Result(property = "username", column = "username"),
-            @Result(property = "password", column = "password"),
-            @Result(property = "createTime", column = "createTime"),
-            @Result(property = "updateTime", column = "updateTime"),
-    })
-    User findByKey(@Param("username") String username);
+    UserInfo findByKey(@Param("username") String username);
 
-    @Insert("insert into users values(#{username},#{password},#{createTime},#{updateTime},1)")
-    Long save(User user);
+    @Insert("insert into usersinfo values(#{username},#{name},#{skillList},#{info},#{extention})")
+    Long save(UserInfo userInfo);
 
-    @Update("update users set password=#{password},updateTime=#{updateTime} where username=#{username} and status=1")
-    Long update(User user);
+    @Update("update users set name=#{name},skillList=#{skillList},info=#{info},extention=#{extention} where username=#{username}")
+    Long update(UserInfo userInfo);
+
 
     Long delete(String username);
 }

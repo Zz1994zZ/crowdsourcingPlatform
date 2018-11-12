@@ -16,9 +16,9 @@ public interface UserService {
 
     User findByKey(String username);
 
-    Long save(User User);
+    Long save(User user);
 
-    Long update(User User);
+    Long update(User user);
 
     Long delete(String username);
 }
