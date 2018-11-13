@@ -34,35 +34,45 @@ public class TaskController {
     @RequestMapping(value = "/api/task", method = RequestMethod.POST)
     public ResponseResult create(@RequestBody Task task,@RequestHeader("username") String username) {
         ResponseResult<String> result =new ResponseResult<String>();
-            try{
-                task.setCreator(username);
-                taskService.save(task);
-                result.setMessage("添加任务信息成功！");
-                result.setSuccess(true);
-            }catch (Exception e){
-                result.setMessage("添加任务信息失败！");
+        if(task.getParentTask()!=0){
+            Task parentTask = taskService.findByKey(task.getParentTask());
+            if(parentTask==null||!parentTask.getCreator().equals(username)){
+                result.setMessage("没有权限为该任务添加子任务或该任务不存在！");
                 result.setSuccess(false);
+                return result;
             }
+        }
+        try{
+            task.setCreator(username);
+            taskService.save(task);
+            result.setMessage("添加任务信息成功！");
+            result.setSuccess(true);
+        }catch (Exception e){
+            e.printStackTrace();
+            result.setMessage("添加任务信息失败！");
+            result.setSuccess(false);
+        }
         return result;
     }
 
     @RequestMapping(value = "/api/task", method = RequestMethod.PUT)
     public ResponseResult modify(@RequestBody Task task,@RequestHeader("username") String username) {
         ResponseResult<String> result =new ResponseResult<String>();
-
+        Task oldTask = taskService.findByKey(task.getId());
         //校验身份
-        if(username.equals(task.getCreator())){
+        if(oldTask==null||!oldTask.getCreator().equals(username)){
+            result.setMessage("修改任务信息失败！任务不存在或无权操作该任务！");
+            result.setSuccess(false);
+        }else{
             try{
                 taskService.update(task);
                 result.setMessage("修改任务信息成功！");
                 result.setSuccess(true);
             }catch (Exception e){
+                e.printStackTrace();
                 result.setMessage("修改任务信息失败！");
                 result.setSuccess(false);
             }
-        }else{
-            result.setMessage("修改用户信息失败！无权操作该用户！");
-            result.setSuccess(false);
         }
         return result;
 
