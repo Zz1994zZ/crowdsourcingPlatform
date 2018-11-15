@@ -28,7 +28,7 @@ public interface TaskDao {
     @Insert("insert into tasks values(0,#{parentTask},#{name},#{type},#{creator},#{properties},#{createTime},#{endTime},#{status})")
     Long save(Task task);
 
-    @Update("update tasks set name=#{name},properties=#{properties},endTime=#{endTime},status=#{status} where id=#{id}")
+    @Update("update tasks set name=#{name},executor=#{executor},properties=#{properties},endTime=#{endTime},status=#{status} where id=#{id}")
     Long update(Task task);
 
     Long delete(int id);

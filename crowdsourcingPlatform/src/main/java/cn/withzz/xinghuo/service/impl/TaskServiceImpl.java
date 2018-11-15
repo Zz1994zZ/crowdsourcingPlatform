@@ -1,5 +1,6 @@
 package cn.withzz.xinghuo.service.impl;
 
+import cn.withzz.xinghuo.dao.RegisterDao;
 import cn.withzz.xinghuo.dao.TaskDao;
 import cn.withzz.xinghuo.domain.Task;
 import cn.withzz.xinghuo.service.TaskService;
@@ -20,6 +21,10 @@ public class TaskServiceImpl implements TaskService {
 
     @Autowired
     private TaskDao taskDao;
+
+    @Autowired
+    private RegisterDao registerDao;
+
 
     @Override
     public List<Task> findAll(){
@@ -46,6 +51,16 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public Long delete(int id) {
         return taskDao.delete(id);
+    }
+
+    @Override
+    public List<String> getAllRegisters(int taskId) {
+        return registerDao.findByTask(taskId);
+    }
+
+    @Override
+    public Long register(int taskId, String username) {
+        return registerDao.save(taskId,username,new Date());
     }
 
 }

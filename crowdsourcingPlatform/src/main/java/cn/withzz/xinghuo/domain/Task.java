@@ -12,6 +12,7 @@ public class Task {
     private String name;
     private int type;
     private String creator;
+    private String executor;
     private String properties;
     private Timestamp createTime;
     private Timestamp endTime;
@@ -55,6 +56,14 @@ public class Task {
 
     public void setCreator(String creator) {
         this.creator = creator;
+    }
+
+    public String getExecutor() {
+        return executor;
+    }
+
+    public void setExecutor(String executor) {
+        this.executor = executor;
     }
 
     public String getProperties() {

@@ -53,11 +53,13 @@ public class UserRestController {
         User realUser =  userService.findByKey(user.getUsername());
         user.setCreateTime(realUser.getCreateTime());
         try{
+
+
+            userService.update(user);
             //删除token
             if(redisService.query(user.getUsername())!=null){
                 redisService.delete(user.getUsername());
             }
-            userService.update(user);
             result.setMessage("修改成功！");
             result.setSuccess(true);
         }catch (Exception e){
@@ -65,7 +67,6 @@ public class UserRestController {
             result.setSuccess(false);
         }
         return result;
-
     }
 
     @RequestMapping(value = "/api/user/{username}", method = RequestMethod.DELETE)

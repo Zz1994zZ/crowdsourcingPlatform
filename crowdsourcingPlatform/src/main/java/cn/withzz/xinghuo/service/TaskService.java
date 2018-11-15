@@ -22,4 +22,9 @@ public interface TaskService {
     Long update(Task userInfo);
 
     Long delete(int id);
+
+    List<String> getAllRegisters(int taskId);
+
+    Long register(int taskId,String username);
+
 }

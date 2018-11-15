@@ -78,6 +78,30 @@ public class TaskController {
 
     }
 
+    //报名任务
+    @RequestMapping(value = "/api/task/{id}/user", method = RequestMethod.POST)
+    public ResponseResult register(@PathVariable("id") int id,@RequestHeader("username") String username) {
+        ResponseResult<String> result =new ResponseResult<String>();
+        Task task = taskService.findByKey(id);
+        //校验任务是否存在
+        if(task==null){
+            result.setMessage("任务不存在！");
+            result.setSuccess(false);
+        }else{
+            try{
+                taskService.register(task.getId(),username);
+                result.setMessage("报名任务成功！");
+                result.setSuccess(true);
+            }catch (Exception e){
+                e.printStackTrace();
+                result.setMessage("报名任务失败！");
+                result.setSuccess(false);
+            }
+        }
+        return result;
+    }
+
+
     @RequestMapping(value = "/api/task/{id}", method = RequestMethod.DELETE)
     public void deleteUser(@PathVariable("id") int id) {
         taskService.delete(id);
