@@ -31,30 +31,30 @@ public class TokenRestController {
     @RequestMapping(value = "/api/token", method = RequestMethod.POST)
     public ResponseResult login(@RequestBody User user) {
         User realUser = userService.findByKey(user.getUsername());
-        //createTime做盐
-        String salt = realUser.getCreateTime().getTime()+"";
-        String password = user.getPassword()+salt;
-        String encodeStr = DigestUtils.md5DigestAsHex(password.getBytes());
         ResponseResult<Token> result =new ResponseResult<Token>();
-        //校验密码是否正确
-        if(encodeStr.equals(realUser.getPassword())){
-            Token token = new Token();
-            token.setUsername(user.getUsername());
-            token.setCreateTime(new Timestamp(System.currentTimeMillis()));
-            token.setUpdateTime(token.getCreateTime());
-            token.setExprieTime(expireTime);
-            token.setType(Token.Tpye.USER);
-            String exitToken = redisService.query(token.getUsername());
-            redisService.saveToken(token);
-            result.setData(token);
-            result.setMessage("登陆成功！");
-            result.setSuccess(true);
-        }else
-        {
-            result.setSuccess(false);
-            result.setErrorcode("");
-            result.setMessage("账号或密码错误！");
+        if(realUser!=null){
+            //createTime做盐
+            String salt = realUser.getCreateTime().getTime()+"";
+            String password = user.getPassword()+salt;
+            String encodeStr = DigestUtils.md5DigestAsHex(password.getBytes());
+            //校验密码是否正确
+            if(encodeStr.equals(realUser.getPassword())){
+                Token token = new Token();
+                token.setUsername(user.getUsername());
+                token.setCreateTime(new Timestamp(System.currentTimeMillis()));
+                token.setUpdateTime(token.getCreateTime());
+                token.setExprieTime(expireTime);
+                token.setType(Token.Tpye.USER);
+                redisService.saveToken(token);
+                result.setData(token);
+                result.setMessage("登陆成功！");
+                result.setSuccess(true);
+                return result;
+            }
         }
+        result.setSuccess(false);
+        result.setErrorcode("");
+        result.setMessage("账号或密码错误！");
         return result;
     }
 
