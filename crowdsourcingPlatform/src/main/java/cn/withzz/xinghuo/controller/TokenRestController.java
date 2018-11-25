@@ -39,17 +39,21 @@ public class TokenRestController {
             String encodeStr = DigestUtils.md5DigestAsHex(password.getBytes());
             //校验密码是否正确
             if(encodeStr.equals(realUser.getPassword())){
-                Token token = new Token();
-                token.setUsername(user.getUsername());
-                token.setCreateTime(new Timestamp(System.currentTimeMillis()));
-                token.setUpdateTime(token.getCreateTime());
-                token.setExprieTime(expireTime);
-                token.setType(Token.Tpye.USER);
-                redisService.saveToken(token);
-                result.setData(token);
-                result.setMessage("登陆成功！");
-                result.setSuccess(true);
-                return result;
+                try{
+                    Token token = new Token();
+                    token.setUsername(user.getUsername());
+                    token.setCreateTime(new Timestamp(System.currentTimeMillis()));
+                    token.setUpdateTime(token.getCreateTime());
+                    token.setExprieTime(expireTime);
+                    token.setType(Token.Tpye.USER);
+                    redisService.saveToken(token);
+                    result.setData(token);
+                    result.setMessage("登陆成功！");
+                    result.setSuccess(true);
+                    return result;
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
             }
         }
         result.setSuccess(false);

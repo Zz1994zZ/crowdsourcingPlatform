@@ -32,7 +32,12 @@
 	<!-- VUE -->
 	<script src="https://cdn.jsdelivr.net/npm/vue"></script>
 	<!-- axios  -->
-	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+	<script src="https://cdn.bootcss.com/axios/0.18.0/axios.min.js"></script>
+
+      <!-- 引入样式 -->
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/element-ui/2.4.9/theme-chalk/index.css">
+      <!-- 引入组件库 -->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/element-ui/2.4.9/index.js"></script>
   </head>
 
   <body>
@@ -41,8 +46,8 @@
         <div class="form-signin">
             <h2 class="form-signin-heading">Please sign in</h2>
             <label for="inputEmail" class="sr-only">Email address</label>
-            <input v-model="username" type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
-            <label for="inputPassword" class="sr-only">Password</label>
+            <input v-model="username"  id="inputEmail" class="form-control" placeholder="Username" required autofocus>
+            <label for="inputPass   word" class="sr-only">Password</label>
             <input v-model="password" type="password" id="inputPassword" class="form-control" placeholder="Password" required>
             <div class="checkbox">
               <label>
@@ -75,6 +80,14 @@
 			  })
 			  .then(function (response) {
 				console.log(response);
+                  let data = response.data;
+                  let msg = data.message;
+                  let type = data.success? 'success':'error';
+                  that.$message({
+                      message: msg,
+                      type: type
+                  });
+
 			  })
 			  .catch(function (error) {
 				console.log(error);
