@@ -67,13 +67,19 @@ var app = new Vue({
                     'username': that.username,
                     'token': that.token
                 },
+                params : { //请求参数
+                    page : that.currentPage,
+                    per_page : 10
+                },
                 data: {
                     body: that.username
                 }
               })
               .then(function (response) {
                     console.log(response);
-                    that.tasks = response.data;
+                    let data = response.data;
+                    that.tasks = data.tasks;
+                    that.total = data.count;
               })
               .catch(function (error) {
                 console.log(error);
@@ -88,6 +94,7 @@ var app = new Vue({
       },
       handleCurrentChange(val) {
           console.log(`当前页: ${val}`);
+          this.getTasksList();
       }
   },
   mounted: function () {

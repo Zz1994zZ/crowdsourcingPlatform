@@ -15,6 +15,10 @@ public interface TaskService {
 
     List<Task> findAll();
 
+    List<Task> findByPage(int page,int per_page);
+
+    int getCount(String condition);
+
     Task findByKey(int id);
 
     Long save(Task userInfo);

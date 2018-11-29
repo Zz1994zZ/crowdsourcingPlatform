@@ -18,8 +18,18 @@ public interface TaskDao {
     // 返回 Map 结果集
     List<Task> findAll();
 
+    @Select("select * from tasks limit #{start}, #{pageSize}")
+    List<Task> findByPage(@Param("start") int start,@Param("pageSize") int per_page);
 
-    List<Task> findByPage();
+//    @Select("select * from tasks #{condition}")
+    @Select("<script>"
+            + "SELECT COUNT(*) "
+            + "FROM tasks "
+            + "<if test='condition!=null'>"
+            + "WHERE #{condition}"
+            + "</if>"
+            + "</script>")
+    int getCount(@Param("condition") String condition);
 
     @Select("SELECT * FROM tasks where id=#{id}")
     // 返回 Map 结果集

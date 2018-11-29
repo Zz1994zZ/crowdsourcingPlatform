@@ -7,8 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * User Controller 实现 Restful HTTP 服务
@@ -27,9 +26,28 @@ public class TaskController {
     }
 
     @RequestMapping(value = "/api/task", method = RequestMethod.GET)
-    public List<Task> findAll() {
-        return taskService.findAll();
+    public Map<String,Object> findAll(String page,String per_page) {
+        Map<String,Object> result = new HashMap<>();
+        List<Task>  tasks = null;
+        if(page==null&&per_page==null){
+            tasks = taskService.findAll();
+        }else{
+            try{
+                int iPage = Integer.parseInt(page);
+                int iPer_page = Integer.parseInt(per_page);
+                if(iPage>0&&iPer_page>0){
+                    tasks = taskService.findByPage(iPage,iPer_page);
+                }
+            }catch (Exception e){
+                tasks = taskService.findByPage(1,10);
+            }
+        }
+        int count = taskService.getCount(null);
+        result.put("count",count);
+        result.put("tasks",tasks);
+        return result;
     }
+
 
     @RequestMapping(value = "/api/task", method = RequestMethod.POST)
     public ResponseResult create(@RequestBody Task task,@RequestHeader("username") String username) {

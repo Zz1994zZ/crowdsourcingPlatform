@@ -31,6 +31,18 @@ public class TaskServiceImpl implements TaskService {
         return taskDao.findAll();
     }
 
+
+    @Override
+    public List<Task> findByPage(int page,int per_page){
+        return taskDao.findByPage((page-1)*per_page,per_page);
+    }
+
+    @Override
+    public int getCount(String condition){
+        return taskDao.getCount(condition);
+    };
+
+
     @Override
     public Task findByKey(int id) {
         return taskDao.findByKey(id);
