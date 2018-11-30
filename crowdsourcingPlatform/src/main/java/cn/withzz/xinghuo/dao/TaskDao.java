@@ -35,7 +35,7 @@ public interface TaskDao {
     // 返回 Map 结果集
     Task findByKey(@Param("id") int id);
 
-    @Insert("insert into tasks values(0,#{parentTask},#{name},#{type},#{creator},#{properties},#{createTime},#{endTime},#{status})")
+    @Insert("insert into tasks values(0,#{parentTask},#{name},#{type},#{creator},#{executor},#{properties},#{createTime},#{endTime},#{status})")
     Long save(Task task);
 
     @Update("update tasks set name=#{name},executor=#{executor},properties=#{properties},endTime=#{endTime},status=#{status} where id=#{id}")
