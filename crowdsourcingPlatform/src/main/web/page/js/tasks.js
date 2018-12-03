@@ -8,13 +8,17 @@ var app = new Vue({
     loginLabel: '登陆',
 
     tasks: [],
+    recommendTasks: [],
 
     //登陆授权token
     token:'',
     loginData:'',
     //分页
     currentPage: 1,
-    total: 100
+    total: 100,
+    //搜索
+    searchText: ''
+
   },
   methods: {
       onSubmit() {
@@ -79,6 +83,8 @@ var app = new Vue({
                     console.log(response);
                     let data = response.data;
                     that.tasks = data.tasks;
+                    //测试用推荐任务取任务的前三条
+                    that.recommendTasks=that.tasks.slice(0,3);
                     that.total = data.count;
               })
               .catch(function (error) {
