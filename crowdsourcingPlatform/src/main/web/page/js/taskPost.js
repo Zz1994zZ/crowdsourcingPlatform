@@ -66,6 +66,15 @@ var app = new Vue({
       }
   },
   mounted: function () {
+      let that = this;
+      this.$nextTick(function () {
+          let username = sessionStorage['username'];
+          let token = sessionStorage['token'];
+          if(username&&token){
+              that.username = username;
+              that.token = token;
+          }
 
+      });
   }
 })

@@ -62,6 +62,6 @@ var app = new Vue({
               that.token = token;
           }
 
-      })
+      });
     }
 })
