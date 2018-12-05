@@ -18,7 +18,7 @@ public interface TaskDao {
     // 返回 Map 结果集
     List<Task> findAll();
 
-    @Select("select * from tasks limit #{start}, #{pageSize}")
+    @Select("select * from tasks order by createTime desc limit #{start}, #{pageSize}")
     List<Task> findByPage(@Param("start") int start,@Param("pageSize") int per_page);
 
 //    @Select("select * from tasks #{condition}")

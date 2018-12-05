@@ -43,47 +43,6 @@
 ================================================== -->
   <body>
   <div id="app" style="background: #f7f7f7">
-    <div  class="navbar-wrapper">
-      <div class="container">
-        <nav class="navbar navbar-inverse navbar-static-top">
-          <div class="container">
-            <div class="navbar-header">
-              <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-              </button>
-              <a class="navbar-brand" href="#"></a>
-            </div>
-            <div id="navbar" class="navbar-collapse collapse">
-              <ul class="nav navbar-nav">
-                <li><a href="index.html">首页</a></li>
-                <li><a href="tasks.html">接任务</a></li>
-                <li class="active"><a href="taskPost.html">找帮手</a></li>
-                <li class="dropdown">
-                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
-                  <ul class="dropdown-menu">
-                    <li><a href="#">Action</a></li>
-                    <li><a href="#">Another action</a></li>
-                    <li><a href="#">Something else here</a></li>
-                    <li role="separator" class="divider"></li>
-                    <li class="dropdown-header">Nav header</li>
-                    <li><a href="#">Separated link</a></li>
-                    <li><a href="#">One more separated link</a></li>
-                  </ul>
-                </li>
-              </ul>
-              <ul class="nav navbar-nav navbar-right">
-                <li v-if="token!=''"><a href="#about" @click="">{{username}}</a></li>
-                <li v-if="token==''"><a href="#about" @click="dialogFormVisible = true">登陆</a></li>
-                <li v-if="token!=''"><a href="#contact" @click="onLogout()">注销</a></li>
-              </ul>
-            </div>
-          </div>
-        </nav>
-      </div>
-    </div>
     <!-- Wrap the rest of the page in another container to center all the content. -->
     <div class="container marketing">
       <!-- START THE FEATURETTES -->
@@ -94,47 +53,35 @@
             <div slot="header" class="clearfix">
               <H4>填写您的任务信息</H4>
             </div>
-            <el-form ref="form" :model="form" label-width="80px" style="width: 580px">
+            <el-form ref="task" :model="task" label-width="80px" style="width: 580px">
               <el-form-item label="任务名称">
-                <el-input v-model="form.name"></el-input>
+                <el-input v-model="task.name"></el-input>
               </el-form-item>
               <el-form-item label="任务类型">
-                <el-select v-model="form.region" placeholder="请选择任务类型">
-                  <el-option label="软件众包" value="timespace"></el-option>
-                  <el-option label="时空总包" value="software"></el-option>
+                <el-select v-model="task.type" placeholder="请选择任务类型">
+                  <el-option label="软件众包" value="1"></el-option>
+                  <el-option label="时空总包" value="2"></el-option>
                 </el-select>
               </el-form-item>
               <el-form-item label="任务时间">
                 <el-col :span="11">
-                  <el-date-picker type="datetime" placeholder="预计起始时间" v-model="form.date1" style="width: 100%;"></el-date-picker>
+                  <el-date-picker type="datetime" placeholder="预计起始时间" v-model="task.properties.expStartTime" style="width: 100%;"></el-date-picker>
                 </el-col>
                 <el-col class="line" :span="2" sttle>-</el-col>
                 <el-col :span="11">
-                  <el-date-picker type="datetime" placeholder="预计完成时间" v-model="form.date2" style="width: 100%;"></el-date-picker>
+                  <el-date-picker type="datetime" placeholder="预计完成时间" v-model="task.properties.expEndTime" style="width: 100%;"></el-date-picker>
                 </el-col>
               </el-form-item>
-              <el-form-item label="即时配送">
-                <el-switch v-model="form.delivery"></el-switch>
+              <el-form-item label="需求人数">
+                <template>
+                  <el-input-number v-model="task.properties.crowdNum" :min="1" :max="1000" label="描述文字"></el-input-number>
+                </template>
               </el-form-item>
-              <el-form-item label="活动性质">
-                <el-checkbox-group v-model="form.type">
-                  <el-checkbox label="美食/餐厅线上活动" name="type"></el-checkbox>
-                  <el-checkbox label="地推活动" name="type"></el-checkbox>
-                  <el-checkbox label="线下主题活动" name="type"></el-checkbox>
-                  <el-checkbox label="单纯品牌曝光" name="type"></el-checkbox>
-                </el-checkbox-group>
-              </el-form-item>
-              <el-form-item label="特殊资源">
-                <el-radio-group v-model="form.resource">
-                  <el-radio label="线上品牌商赞助"></el-radio>
-                  <el-radio label="线下场地免费"></el-radio>
-                </el-radio-group>
-              </el-form-item>
-              <el-form-item label="活动形式">
-                <el-input type="textarea" v-model="form.desc"></el-input>
+              <el-form-item label="任务描述">
+                <el-input type="textarea" v-model="task.properties.description"></el-input>
               </el-form-item>
               <el-form-item>
-                <el-button type="primary" @click="onSubmit">立即发布</el-button>
+                <el-button type="primary" @click="onPost">立即发布</el-button>
                 <el-button>取消</el-button>
               </el-form-item>
             </el-form>
@@ -162,7 +109,50 @@
       </footer>
 
     </div><!-- /.container -->
-    <el-dialog :visible.sync="dialogFormVisible" width="400px">
+  </div>
+  <div id="login">
+    <div  class="navbar-wrapper">
+      <div class="container">
+        <nav class="navbar navbar-inverse navbar-static-top">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="#"></a>
+            </div>
+            <div  class="navbar-collapse collapse">
+              <ul class="nav navbar-nav">
+                <li ><a href="index.html">首页</a></li>
+                <li><a href="tasks.html">接任务</a></li>
+                <li class="active"><a href="taskPost.html">找帮手</a></li>
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
+                  <ul class="dropdown-menu">
+                    <li><a href="#">Action</a></li>
+                    <li><a href="#">Another action</a></li>
+                    <li><a href="#">Something else here</a></li>
+                    <li role="separator" class="divider"></li>
+                    <li class="dropdown-header">Nav header</li>
+                    <li><a href="#">Separated link</a></li>
+                    <li><a href="#">One more separated link</a></li>
+                  </ul>
+                </li>
+              </ul>
+              <ul class="nav navbar-nav navbar-right">
+                <li v-if="token!=''"><a href="#about" @click="">{{username}}</a></li>
+                <li v-if="token==''"><a href="#about" @click="dialogFormVisible = true">登陆</a></li>
+                <li v-if="token!=''"><a href="#contact" @click="onLogout()">注销</a></li>
+              </ul>
+            </div>
+          </div>
+        </nav>
+      </div>
+    </div>
+    <el-dialog :visible.sync="dialogFormVisible" width="400px" >
       <div class="form-signin" style="z-index: 2002">
         <h2 class="form-signin-heading">Please sign in</h2>
         <label for="inputEmail" class="sr-only">Email address</label>
@@ -178,7 +168,6 @@
       </div>
     </el-dialog>
   </div>
-
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
@@ -190,6 +179,7 @@
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
   </body>
+  <script src="../js/login.js"></script>
   <script src="../js/taskPost.js"></script>
 </html>
 
