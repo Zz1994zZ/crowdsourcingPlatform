@@ -21,8 +21,13 @@ public class TaskController {
     private TaskService taskService;
 
     @RequestMapping(value = "/api/task/{id}", method = RequestMethod.GET)
-    public Task findOne(@PathVariable("id") int id) {
-        return taskService.findByKey(id);
+    public Map<String,Object> findOne(@PathVariable("id") int id) {
+        Map<String,Object> result = new HashMap<>();
+        Task task = taskService.findByKey(id);
+        List<String> registers = taskService.getAllRegisters(id);
+        result.put("task",task);
+        result.put("registers",registers);
+        return result;
     }
 
     @RequestMapping(value = "/api/task", method = RequestMethod.GET)

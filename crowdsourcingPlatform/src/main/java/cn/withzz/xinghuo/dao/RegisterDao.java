@@ -21,7 +21,7 @@ public interface RegisterDao {
 //
 //    List<> findByPage();
 
-    @Select("SELECT * FROM taskregister where taskId=#{taskId}")
+    @Select("SELECT username FROM taskregister where taskId=#{taskId}")
     // 返回 Map 结果集
     List<String> findByTask(@Param("taskId") int taskId);
 

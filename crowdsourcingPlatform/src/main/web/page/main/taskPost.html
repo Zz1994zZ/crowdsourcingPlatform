@@ -77,8 +77,15 @@
                   <el-input-number v-model="task.properties.crowdNum" :min="1" :max="1000" label="描述文字"></el-input-number>
                 </template>
               </el-form-item>
+              <el-form-item label="预计酬劳">
+                <template>
+                  <el-input-number v-model="task.properties.price" :precision="2" :step="0.1" ></el-input-number>
+                  <label style="padding-left: 10px">元</label>
+                </template>
+              </el-form-item>
               <el-form-item label="任务描述">
-                <el-input type="textarea" v-model="task.properties.description"></el-input>
+                <div id="editor">
+                </div>
               </el-form-item>
               <el-form-item>
                 <el-button type="primary" @click="onPost">立即发布</el-button>
@@ -180,7 +187,21 @@
     <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
   </body>
   <script src="../js/login.js"></script>
+  <script src="https://unpkg.com/wangeditor@3.1.1/release/wangEditor.min.js"></script>
   <script src="../js/taskPost.js"></script>
+  <script type="text/javascript">
+      var E = window.wangEditor
+      var editor = new E('#editor')
+      // 或者 var editor = new E( document.getElementById('editor') )
+      // 自定义菜单配置
+      editor.customConfig.menus = [
+          'head',
+          'bold',
+          'italic',
+          'underline'
+      ]
+      editor.create()
+  </script>
 </html>
 
 

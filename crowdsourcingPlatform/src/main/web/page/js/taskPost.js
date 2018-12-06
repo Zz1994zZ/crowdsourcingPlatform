@@ -9,13 +9,15 @@ var app = new Vue({
           expStartTime:'',
           expEndTime:'',
           crowdNum: 1,
-          description:''
+          description:'',
+          price:0
       }
     },
   },
   methods: {
       onPost(){
           let that = this;
+          this.task.properties.description = editor.txt.html();
           axios(
               {
                   method: 'post',
