@@ -132,3 +132,9 @@ body {
     margin-top: 120px;
   }
 }
+
+/*为了解决Badge 标记颜色的CSS冲突*/
+.el-badge.mark {
+  background-color: rgba(255,255,255,.5)
+}
+
