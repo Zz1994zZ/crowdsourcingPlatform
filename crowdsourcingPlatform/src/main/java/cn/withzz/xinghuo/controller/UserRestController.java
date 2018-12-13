@@ -27,7 +27,7 @@ public class UserRestController {
         return userService.findByKey(username);
     }
 
-    @RequestMapping(value = "/api/user/{username}/task", method = RequestMethod.GET)
+    @RequestMapping(value = "/api/user/{username}/publishTask", method = RequestMethod.GET)
     public User findOnesTasks(@PathVariable("username") String username) {
         return userService.findByKey(username);
     }

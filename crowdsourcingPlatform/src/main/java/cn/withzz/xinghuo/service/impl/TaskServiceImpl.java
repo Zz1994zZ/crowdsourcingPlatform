@@ -84,7 +84,10 @@ public class TaskServiceImpl implements TaskService {
             map.put(task.getId(),task);
         }
         for (int id: taskIds) {
-            result.add(map.get(id));
+            Task t = map.get(id);
+            if(t!=null&&type==t.getType()){
+                result.add(map.get(id));
+            }
         }
         return result;
     }

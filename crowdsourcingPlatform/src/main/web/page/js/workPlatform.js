@@ -15,38 +15,27 @@ var app = new Vue({
           console.log(key, keyPath);
       },
       getTasksList(){
-         // let that = this;
-         //      axios(
-         //      {
-         //        method: 'get',
-         //        url: "http://"+login.ip+"/api/task",
-         //        headers: {
-         //            'username': login.username,
-         //            'token': login.token
-         //        },
-         //        params : { //请求参数
-         //            page : that.currentPage,
-         //            per_page : 10
-         //        },
-         //        data: {
-         //            body: that.username
-         //        }
-         //      })
-         //      .then(function (response) {
-         //            console.log(response);
-         //            let data = response.data;
-         //            that.tasks = data.tasks;
-         //            //测试用推荐任务取任务的前三条
-         //            that.recommendTasks=that.tasks.slice(0,3);
-         //            that.total = data.count;
-         //      })
-         //      .catch(function (error) {
-         //        console.log(error);
-         //        that.$message({
-         //              message: '网络错误！',
-         //              type: 'error'
-         //        });
-         //      });
+          let that = this;
+               axios(
+               {
+                 method: 'get',
+                 url: "http://"+login.ip+"/api/user/"+login.username+"/registerTask",
+                 headers: {
+                     'username': login.username,
+                     'token': login.token
+                 }
+               })
+               .then(function (response) {
+                     console.log(response);
+                     that.tasks = response.data;
+               })
+               .catch(function (error) {
+                 console.log(error);
+                 that.$message({
+                       message: '网络错误！',
+                       type: 'error'
+                 });
+               });
       },
       handleSizeChange(val) {
           console.log(`每页 ${val} 条`);
