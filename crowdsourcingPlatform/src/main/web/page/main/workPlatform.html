@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Carousel Template for Bootstrap</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="../../dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="../../assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+
+    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+    <script src="../../assets/js/ie-emulation-modes-warning.js"></script>
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Custom styles for this template -->
+    <link href="../../css/carousel.css" rel="stylesheet">
+
+    <!-- VUE -->
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <!-- axios  -->
+    <script src="https://cdn.bootcss.com/axios/0.18.0/axios.min.js"></script>
+
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/element-ui/2.4.9/theme-chalk/index.css">
+    <!-- 引入组件库 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/element-ui/2.4.9/index.js"></script>
+  </head>
+<!-- NAVBAR
+================================================== -->
+  <body>
+  <div  style="background: #f7f7f7">
+    <!-- Wrap the rest of the page in another container to center all the content. -->
+    <div id="app" class="container marketing">
+      <!-- START THE FEATURETTES -->
+      <hr class="featurette-divider" style="margin-bottom: 10px">
+      <el-row>
+        <el-col :span="4" style="padding-right: 10px">
+          <el-menu
+                  default-active="2"
+                  class="el-menu-vertical-demo"
+                  @open="handleOpen"
+                  unique-opened
+                  @close="handleClose">
+            <el-submenu index="1">
+              <template slot="title">
+                <i class="el-icon-document"></i>
+                <span>我的任务</span>
+              </template>
+              <el-menu-item-group>
+                <template slot="title"></template>
+                <el-menu-item index="1-1">进行中</el-menu-item>
+                <el-menu-item index="1-2">已完成</el-menu-item>
+                <el-menu-item index="1-3">申请记录</el-menu-item>
+              </el-menu-item-group>
+            </el-submenu>
+            <el-submenu index="2">
+              <template slot="title">
+                <i class="el-icon-edit-outline"></i>
+                <span>我的发布</span>
+              </template>
+              <el-menu-item-group>
+                <template slot="title"></template>
+                <el-menu-item index="1-1">开发中</el-menu-item>
+                <el-menu-item index="1-2">报名中</el-menu-item>
+                <el-menu-item index="1-3">已完成</el-menu-item>
+              </el-menu-item-group>
+            </el-submenu>
+            <el-menu-item index="4">
+              <i class="el-icon-message"></i>
+              <span slot="title">我的消息</span>
+            </el-menu-item>
+          </el-menu>
+        </el-col>
+        <el-col :span="20">
+          <el-card v-if="!tasks.length" :body-style="{ padding: '0px'}" shadow="hover">
+            <el-alert
+                    title="暂时没有内容"
+                    type="info"
+                    close-text="知道了">
+            </el-alert>
+          </el-card>
+          <el-row  v-for="task of tasks" style="padding-bottom: 10px">
+              <el-card :body-style="{ padding: '0px'}" shadow="hover">
+                <el-col :span="6" >
+                  <img src="https://ss0.baidu.com/73x1bjeh1BF3odCf/it/u=3899933224,734271981&fm=85&s=6BFA72DA67080F5B80E9A626030020D7" width="180px" height="100px">
+                </el-col>
+                <el-col :span="16" style="padding-left: 10px">
+                  <el-row>
+                    <H4><a :href="'taskInfo.html?id='+task.id">{{task.name}}</a></H4>
+                  </el-row>
+                  <el-row>
+                    <time class="time">{{new Date(parseInt(task.createTime)).toLocaleString().replace(/:\d{1,2}$/,' ')}}</time>
+                  </el-row>
+                  <el-row style="padding-top: 10px">
+                    <el-tag size="small">标签一</el-tag>
+                    <el-tag size="small" type="success">标签二</el-tag>
+                    <el-tag size="small" type="info">标签三</el-tag>
+                    <el-tag size="small" type="warning">标签四</el-tag>
+                    <el-tag size="small" type="danger">标签五</el-tag>
+                  </el-row>
+                </el-col>
+                <el-col :span="2" style="text-align: right">
+                  <el-tag size="small">报名中</el-tag>
+                </el-col>
+              </el-card>
+          </el-row>
+        </el-col>
+
+      </el-row>
+      <div class="center-block" style="text-align: center">
+        <el-pagination
+                background
+                @size-change="handleSizeChange"
+                @current-change="handleCurrentChange"
+                :current-page.sync="currentPage"
+                :page-size="10"
+                layout="total, prev, pager, next"
+                :total="total">
+        </el-pagination>
+      </div>
+
+      <hr class="featurette-divider">
+      <!-- /END THE FEATURETTES -->
+
+      <!-- FOOTER -->
+      <footer>
+        <p class="pull-right"><a href="#">Back to top</a></p>
+        <p>&copy; 2016 Company, Inc. &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
+      </footer>
+
+    </div><!-- /.container -->
+    <!--导航栏-->
+    <div id="login">
+      <xinhuo-navbar @finishlogin="onGotToken"></xinhuo-navbar>
+    </div>
+  </div>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
+    <script src="../../dist/js/bootstrap.min.js"></script>
+    <!-- Just to make our placeholder images work. Don't actually copy the next line! -->
+    <script src="../../assets/js/vendor/holder.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
+  </body>
+  <script src="../js/navbarComponent.js"></script>
+  <script src="../js/workPlatform.js"></script>
+</html>
+
+

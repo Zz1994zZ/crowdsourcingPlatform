@@ -8,8 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * task业务逻辑实现类
@@ -73,6 +72,21 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public Long register(int taskId, String username) {
         return registerDao.save(taskId,username,new Date());
+    }
+
+    @Override
+    public List<Task> getRegisterTasks(String username,int type){
+        List<Task> allTasks  = taskDao.findAll();
+        List<Integer> taskIds =  registerDao.findByUser(username);
+        Map<Integer,Task> map = new HashMap<Integer,Task>();
+        List<Task> result = new LinkedList<Task>();
+        for (Task task: allTasks) {
+            map.put(task.getId(),task);
+        }
+        for (int id: taskIds) {
+            result.add(map.get(id));
+        }
+        return result;
     }
 
 }

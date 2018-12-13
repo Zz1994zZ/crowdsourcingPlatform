@@ -7,8 +7,8 @@ var app = new Vue({
     token:'',
     loginData:'',
     //分页
-    currentPage: 1,
-    total: 100,
+    currentPage: 0,
+    total: 0,
     //搜索
     searchText: ''
   },

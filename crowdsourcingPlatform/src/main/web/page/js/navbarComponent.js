@@ -24,16 +24,16 @@ Vue.component('xinhuo-navbar', {
                 <!--<li v-if="token!=''"><a href="#about" @click="">{{username}}</a></li>-->
                 <li v-if="token!=''">
                   <a>
-                  <el-dropdown trigger="click">
+                  <el-dropdown trigger="click"  @command="handleCommand">
                       <span class="el-dropdown-link">
                         {{username}}<i class="el-icon-caret-bottom el-icon--right"></i>
                       </span>
                     <el-dropdown-menu slot="dropdown">
-                      <el-dropdown-item class="clearfix">
+                      <el-dropdown-item class="clearfix" command="workPlatform">
                         工作台
                         <el-badge class="mark" :value="12" />
                       </el-dropdown-item>
-                      <el-dropdown-item class="clearfix">
+                      <el-dropdown-item class="clearfix" command="message">
                         消息
                         <el-badge class="mark" :value="3" />
                       </el-dropdown-item>
@@ -79,6 +79,9 @@ Vue.component('xinhuo-navbar', {
             }
         },
         methods: {
+            handleCommand(command) {
+                window.location.href=command+".html";
+            },
             onSubmit() {
                 let that = this;
                 if (!$.trim(this.username) || !$.trim(this.password)) {

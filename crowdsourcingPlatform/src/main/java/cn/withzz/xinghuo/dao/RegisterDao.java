@@ -27,7 +27,7 @@ public interface RegisterDao {
 
     @Select("SELECT * FROM taskregister where username=#{username}")
         // 返回 Map 结果集
-    List<Integer> findByUser(@Param("username") int username);
+    List<Integer> findByUser(@Param("username") String username);
 
 
     @Insert("insert into taskregister values(#{taskId},#{username},#{createTime},1)")
