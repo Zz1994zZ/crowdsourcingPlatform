@@ -44,8 +44,8 @@ public class RegisterController {
     }
     //获取用户报名的任务
     @RequestMapping(value = "/api/user/{username}/registerTask", method = RequestMethod.GET)
-    public List<Task> getTasksByUsername(@PathVariable("username") String username) {
-        List<Task> tasks = taskService.getRegisterTasks(username,1);
+    public List<Task> getTasksByUsername(@PathVariable("username") String username,@RequestParam("status") int status) {
+        List<Task> tasks = taskService.getRegisterTasks(username,status);
         return tasks;
     }
 

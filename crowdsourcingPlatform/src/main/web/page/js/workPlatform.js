@@ -6,8 +6,45 @@ var app = new Vue({
     //分页
     currentPage: 0,
     total: 0,
+    menuIndex:'1-1',
+    status: 2,
+    requestContent:'registerTask',
   },
   methods: {
+      menuSelect(index,indexPath){
+          console.log(indexPath);
+          this.menuIndex = indexPath[1]?indexPath[1]:indexPath[0];
+          switch (this.menuIndex) {
+              case '1-1':
+                  this.status = 2;
+                  this.requestContent='registerTask';
+                  break;
+              case '1-2':
+                  this.status = 3;
+                  this.requestContent='registerTask';
+                  break;
+              case '1-3':
+                  this.status = 0;
+                  this.requestContent='registerTask';
+                  break;
+              case '2-1':
+                  this.status = 2;
+                  this.requestContent='publishedTask';
+                  break;
+              case '2-2':
+                  this.status = 1;
+                  this.requestContent='publishedTask';
+                  break;
+              case '2-3':
+                  this.status = 3;
+                  this.requestContent='publishedTask';
+                  break;
+              case '3-1':
+                  //TODO
+                  break;
+          }
+          this.getTasksList();
+      },
       handleOpen(key, keyPath) {
           console.log(key, keyPath);
       },
@@ -19,7 +56,10 @@ var app = new Vue({
                axios(
                {
                  method: 'get',
-                 url: "http://"+login.ip+"/api/user/"+login.username+"/registerTask",
+                 url: "http://"+login.ip+"/api/user/"+login.username+"/"+this.requestContent,
+                 params:{
+                    status: this.status,
+                 },
                  headers: {
                      'username': login.username,
                      'token': login.token
@@ -28,6 +68,9 @@ var app = new Vue({
                .then(function (response) {
                      console.log(response);
                      that.tasks = response.data;
+                     for(let t of  that.tasks) {
+                         t.properties = JSON.parse(t.properties);
+                     }
                })
                .catch(function (error) {
                  console.log(error);

@@ -10,7 +10,9 @@ var app = new Vue({
           expEndTime:'',
           crowdNum: 1,
           description:'',
-          price:0
+          price:0,
+          labels:{},
+          skills:{}
       }
     },
   },
@@ -40,13 +42,13 @@ var app = new Vue({
                           message: '发布成功！',
                           type: 'success'
                       });
+                      window.location.href="tasks.html";
                   }else{
                       that.$message({
                           message: response.data.message,
                           type: 'error'
                       });
                   }
-
               })
               .catch(function (error) {
                   console.log(error);

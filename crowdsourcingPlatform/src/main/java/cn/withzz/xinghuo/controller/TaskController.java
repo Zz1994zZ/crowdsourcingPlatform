@@ -105,4 +105,9 @@ public class TaskController {
         taskService.delete(id);
     }
 
+    @RequestMapping(value = "/api/user/{username}/publishedTask", method = RequestMethod.GET)
+    public List<Task> findOnesTasks(@PathVariable("username") String username,@RequestParam("status") int status) {
+        List<Task> tasks = taskService.getPublishedTasks(username,status);
+        return tasks;
+    }
 }

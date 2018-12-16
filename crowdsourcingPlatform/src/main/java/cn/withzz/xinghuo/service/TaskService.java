@@ -31,5 +31,7 @@ public interface TaskService {
 
     Long register(int taskId,String username);
 
-    List<Task> getRegisterTasks(String username,int type);
+    List<Task> getRegisterTasks(String username,int status);
+
+    List<Task> getPublishedTasks(String username,int status);
 }

@@ -35,7 +35,10 @@ var app = new Vue({
                     console.log(response);
                     let data = response.data;
                     that.tasks = data.tasks;
-                    //测试用推荐任务取任务的前三条
+                    for(let t of  that.tasks) {
+                        t.properties = JSON.parse(t.properties);
+                    }
+                  //测试用推荐任务取任务的前三条
                     that.recommendTasks=that.tasks.slice(0,3);
                     that.total = data.count;
               })

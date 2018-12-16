@@ -50,7 +50,7 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public Long save(Task task) {
         task.setCreateTime(new Timestamp(new Date().getTime()));
-        task.setStatus(0);
+        task.setStatus(1);
         return taskDao.save(task);
     }
 
@@ -75,7 +75,19 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public List<Task> getRegisterTasks(String username,int type){
+    public List<Task> getPublishedTasks(String username,int status){
+        List<Task> allTasks  = taskDao.findAll();
+        List<Task> result = new LinkedList<Task>();
+        for (Task task: allTasks) {
+            if(task.getCreator().equals(username)&&(status==0||status==task.getStatus())){
+                result.add(task);
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public List<Task> getRegisterTasks(String username,int status){
         List<Task> allTasks  = taskDao.findAll();
         List<Integer> taskIds =  registerDao.findByUser(username);
         Map<Integer,Task> map = new HashMap<Integer,Task>();
@@ -85,7 +97,7 @@ public class TaskServiceImpl implements TaskService {
         }
         for (int id: taskIds) {
             Task t = map.get(id);
-            if(t!=null&&type==t.getType()){
+            if(t!=null&&(status==0||status==t.getStatus())){
                 result.add(map.get(id));
             }
         }
