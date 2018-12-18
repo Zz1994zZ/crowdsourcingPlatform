@@ -1,3 +1,4 @@
+const appTypeOptions = ['不限', '移动应用','H5应用','微信应用','企业应用','WEB应用','工具应用','桌面应用','嵌入式应用','云计算','物联网','大数据','人工智能','区块链','培训咨询','设计','游戏开发'];
 var app = new Vue({
   el: '#app',
   data: {
@@ -9,8 +10,9 @@ var app = new Vue({
     //分页
     currentPage: 0,
     total: 0,
-    //搜索
-    searchText: ''
+    //过滤条件
+    appTypes:appTypeOptions,
+    appType:['不限'],
   },
   methods: {
       getTasksList(){

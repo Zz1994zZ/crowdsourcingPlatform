@@ -17,8 +17,8 @@ Vue.component('xinhuo-navbar', {
             <div  class="navbar-collapse collapse">
               <ul class="nav navbar-nav">
                 <li v-bind:class="activeIndex == 1 ? 'active':''"><a href="index.html">首页</a></li>
-                <li v-bind:class="activeIndex == 2 ? 'active':''"><a href="tasks.html">接任务</a></li>
-                <li v-bind:class="activeIndex == 3 ? 'active':''"><a href="taskPost.html">找帮手</a></li>
+                <li v-bind:class="activeIndex == 2 ? 'active':''"><a href="tasks.html">项目大厅</a></li>
+                <li v-bind:class="activeIndex == 3 ? 'active':''"><a href="taskPost.html">成为开发者</a></li>
               </ul>
               <ul class="nav navbar-nav navbar-right">
                 <!--<li v-if="token!=''"><a href="#about" @click="">{{username}}</a></li>-->

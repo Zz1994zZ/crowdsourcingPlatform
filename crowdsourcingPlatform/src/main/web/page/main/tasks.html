@@ -48,7 +48,20 @@
       <!-- START THE FEATURETTES -->
       <hr class="featurette-divider" style="margin-bottom: 10px">
       <el-row>
-        <el-col :span="16">
+        <el-col :span="18">
+          <el-card :body-style="{ padding: '0px'}">
+            <el-form  label-width="100px" >
+              <el-form-item label="应用类型：">
+                <el-checkbox-group v-model="appType" size="small">
+                  <el-checkbox-button style="width: 74px;margin: 5px;border: 0px;" v-for="type in appTypes" :label="type" :key="type">{{type}}</el-checkbox-button>
+                </el-checkbox-group>
+              </el-form-item>
+              <el-form-item label="项目类型：">
+              </el-form-item>
+              <el-form-item label="金额范围：">
+              </el-form-item>
+            </el-form>
+          </el-card>
           <el-card v-if="!tasks.length" :body-style="{ padding: '0px'}" shadow="hover">
             <el-alert
                     title="暂时没有可接任务"
@@ -83,26 +96,24 @@
               </el-card>
           </el-row>
         </el-col>
-        <el-col :span="8" style="padding-left: 10px">
-          <el-card class="box-card" shadow="hover">
+        <el-col :span="6" style="padding-left: 10px">
+          <el-card class="box-card" shadow="hover" :body-style="{ padding: '0px'}">
             <el-row>
-              <el-col :span="16">
-                <el-input
-                        placeholder="请输入内容"
-                        v-model="searchText"
-                        clearable>
-                </el-input>
-              </el-col>
-              <el-col :span="8">
-                <el-button type="primary" icon="el-icon-search">搜索</el-button>
-              </el-col>
+              <img width="100%" src="https://zb.oschina.net/static/images/hezuo.png"/>
             </el-row>
+            <el-row style="text-align: center">
+                即刻，让专业的开发者开始为您服务
+            </el-row>
+            <el-row style="text-align: center">
+              <el-button type="primary" @click="window.location.href='taskPost.html'" style="width:100%">免费发布需求</el-button>
+            </el-row>
+
           </el-card>
-          <el-card class="box-card" shadow="hover">
+          <el-card class="box-card" shadow="hover" :body-style="{ padding: '0px'}" style="margin-top: 10px">
             <div slot="header" class="clearfix">
               <i class="el-icon-view"></i><span> 适合您的任务</span>
             </div>
-            <el-row  v-for="task of recommendTasks" style="padding-bottom: 10px">
+            <el-row  v-for="task of recommendTasks" style="padding-bottom: 5px">
               <el-card :body-style="{ padding: '0px'}" shadow="hover">
                 <el-col :span="18" style="padding-left: 10px">
                   <el-row>
