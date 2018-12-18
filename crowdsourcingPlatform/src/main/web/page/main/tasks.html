@@ -47,18 +47,38 @@
     <div id="app" class="container marketing">
       <!-- START THE FEATURETTES -->
       <hr class="featurette-divider" style="margin-bottom: 10px">
+      <img width="100%" style="margin-bottom:10px" src="https://zb.oschina.net/static/images/project/star-list1.png"/>
       <el-row>
         <el-col :span="18">
+          <el-row style="margin-bottom: 10px">
+            <el-col :span="20">
+              <el-input
+                      size="large"
+                      placeholder="输入关键字词, 开始检索您感兴趣的项目，例如：网站、微信"
+                      v-model="searchText"
+                      clearable>
+              </el-input>
+            </el-col>
+            <el-col :span="4">
+              <el-button type="primary" icon="el-icon-search" style="width: 100%">搜索</el-button>
+            </el-col>
+          </el-row>
           <el-card :body-style="{ padding: '0px'}">
             <el-form  label-width="100px" >
-              <el-form-item label="应用类型：">
+              <el-form-item label="应用类型：" style="margin-bottom: 0px;">
                 <el-checkbox-group v-model="appType" size="small">
-                  <el-checkbox-button style="width: 74px;margin: 5px;border: 0px;" v-for="type in appTypes" :label="type" :key="type">{{type}}</el-checkbox-button>
+                  <el-checkbox-button style="" border="true" v-for="type in appTypes" :label="type" :key="type">{{type}}</el-checkbox-button>
                 </el-checkbox-group>
               </el-form-item>
-              <el-form-item label="项目类型：">
+              <el-form-item label="项目类型：" style="margin-bottom: 0px;">
+                <el-checkbox-group v-model="projectType" size="small">
+                  <el-checkbox-button style="" border="true" v-for="type in projectTypes" :label="type" :key="type">{{type}}</el-checkbox-button>
+                </el-checkbox-group>
               </el-form-item>
-              <el-form-item label="金额范围：">
+              <el-form-item label="金额范围：" style="margin-bottom: 0px;">
+                <el-checkbox-group v-model="priceType" size="small">
+                  <el-checkbox-button style="" border="true" v-for="type in priceTypes" :label="type" :key="type">{{type}}</el-checkbox-button>
+                </el-checkbox-group>
               </el-form-item>
             </el-form>
           </el-card>

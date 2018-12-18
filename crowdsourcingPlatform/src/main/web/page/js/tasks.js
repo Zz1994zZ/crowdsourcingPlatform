@@ -1,4 +1,7 @@
 const appTypeOptions = ['不限', '移动应用','H5应用','微信应用','企业应用','WEB应用','工具应用','桌面应用','嵌入式应用','云计算','物联网','大数据','人工智能','区块链','培训咨询','设计','游戏开发'];
+const projectTypeOptions = ['不限', '软件众包','时空众包'];
+const priceTypeOptions = ['不限', '3000以内','3000-5000','5001-10000','10001-50000','50001及以上'];
+
 var app = new Vue({
   el: '#app',
   data: {
@@ -10,9 +13,15 @@ var app = new Vue({
     //分页
     currentPage: 0,
     total: 0,
+    //搜索条件
+    searchText:'',
     //过滤条件
     appTypes:appTypeOptions,
+    projectTypes:projectTypeOptions,
+    priceTypes:priceTypeOptions,
     appType:['不限'],
+    projectType:['不限'],
+    priceType:['不限']
   },
   methods: {
       getTasksList(){
