@@ -89,30 +89,39 @@
                     close-text="知道了">
             </el-alert>
           </el-card>
-          <el-row  v-for="task of tasks" style="padding-bottom: 10px">
+          <el-row  v-for="task of tasks" style="margin-bottom: 10px">
               <el-card :body-style="{ padding: '0px'}" shadow="hover">
-                <el-col :span="6" >
-                  <img src="https://ss0.baidu.com/73x1bjeh1BF3odCf/it/u=3899933224,734271981&fm=85&s=6BFA72DA67080F5B80E9A626030020D7" width="180px" height="100px">
-                </el-col>
-                <el-col :span="16" style="padding-left: 10px">
-                  <el-row>
-                    <H4><a :href="'taskInfo.html?id='+task.id">{{task.name}}</a></H4>
-                  </el-row>
-                  <el-row>
-                    <time class="time">报名截止时间：{{new Date(task.properties.expStartTime).toLocaleString().replace(/:\d{1,2}$/,' ')}}</time>
-                  </el-row>
-                  <el-row style="padding-top: 10px">
-                    <el-tag v-if="task.type==1" size="small">软件众包</el-tag>
-                    <el-tag v-if="task.type==2" size="small">时空众包</el-tag>
-                    <el-tag v-if="task.properties.price>1000" size="small" type="danger">高酬劳</el-tag>
-                    <el-tag v-if="task.properties.crowdNum>1" size="small" type="success">多人协作</el-tag>
-                    <el-tag v-if="task.properties.crowdNum==1" size="small" type="success">独立任务</el-tag>
-                    <el-tag v-if="new Date()-new Date(task.properties.expStartTime)<=24*3600*1000" size="small" type="danger">即将截止</el-tag>
-                  </el-row>
-                </el-col>
-                <el-col :span="2" style="text-align: right">
-                  <el-tag size="small">报名中</el-tag>
-                </el-col>
+                <el-row style="padding: 10px">
+                  <el-col :span="5" >
+                    <img src="https://zb.oschina.net/file/get?path=static/project-reward/cover/H5yingyong_2.png" width="150px" height="110px">
+                  </el-col>
+                  <el-col :span="19">
+                    <el-row>
+                      <el-col :span="12" style="font-weight: 700">
+                        <a style="font-size: 16px;color: #0f0f0f" :href="'taskInfo.html?id='+task.id">{{task.name}}</a>
+                      </el-col>
+                      <el-col :span="12" style="text-align: right;color: red;font-size: 20px;font-weight: 700;">
+                        ￥{{task.properties.price}}
+                      </el-col>
+                    </el-row>
+                    <el-row style="margin-bottom: 20px;margin-top: 10px">
+                      <el-tag v-if="task.type==1" size="small">软件众包</el-tag>
+                      <el-tag v-if="task.type==2" size="small">时空众包</el-tag>
+                      <el-tag v-if="task.properties.price>1000" size="small" type="danger">高酬劳</el-tag>
+                      <el-tag v-if="task.properties.crowdNum>1" size="small" type="success">多人协作</el-tag>
+                      <el-tag v-if="task.properties.crowdNum==1" size="small" type="success">独立任务</el-tag>
+                      <el-tag v-if="new Date()-new Date(task.properties.expStartTime)<=24*3600*1000" size="small" type="danger">即将截止</el-tag>
+                    </el-row>
+                    <el-row style="padding-top: 10px;color: #999">
+                      <el-col :span="12" style="">
+                        技技能要求：PHP、HTML5
+                      </el-col>
+                      <el-col :span="12" style="text-align: right;">
+                        已报名：2 人 | 发布于{{new Date(task.createTime).Format("yyyy-MM-dd")}}
+                      </el-col>
+                    </el-row>
+                 </el-col>
+                </el-row>
               </el-card>
           </el-row>
         </el-col>

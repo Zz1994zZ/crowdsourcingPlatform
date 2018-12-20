@@ -1,3 +1,21 @@
+Date.prototype.Format = function(fmt)
+{ //author: meizz
+    var o = {
+        "M+" : this.getMonth()+1,                 //月份
+        "d+" : this.getDate(),                    //日
+        "h+" : this.getHours(),                   //小时
+        "m+" : this.getMinutes(),                 //分
+        "s+" : this.getSeconds(),                 //秒
+        "q+" : Math.floor((this.getMonth()+3)/3), //季度
+        "S"  : this.getMilliseconds()             //毫秒
+    };
+    if(/(y+)/.test(fmt))
+        fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length));
+    for(var k in o)
+        if(new RegExp("("+ k +")").test(fmt))
+            fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));
+    return fmt;
+}
 Vue.component('xinhuo-navbar', {
     props: ['activeIndex'],
     template:`<div>
@@ -18,10 +36,13 @@ Vue.component('xinhuo-navbar', {
               <ul class="nav navbar-nav">
                 <li v-bind:class="activeIndex == 1 ? 'active':''"><a href="index.html">首页</a></li>
                 <li v-bind:class="activeIndex == 2 ? 'active':''"><a href="tasks.html">项目大厅</a></li>
-                <li v-bind:class="activeIndex == 3 ? 'active':''"><a href="taskPost.html">成为开发者</a></li>
+                <li v-bind:class="activeIndex == 3 ? 'active':''"><a href="userInfoPost.html">成为开发者</a></li>
               </ul>
               <ul class="nav navbar-nav navbar-right">
                 <!--<li v-if="token!=''"><a href="#about" @click="">{{username}}</a></li>-->
+                     <li v-bind:class="activeIndex == 2 ? 'active':''"><a href="workPlatform.html">工作台</a></li>
+                     <li v-bind:class="activeIndex == 2 ? 'active':''"><a href="userInfo.html">个人中心</a></li>
+                     <li ><el-button style="height: 50px;"  icon="el-icon-message" plain="true"></el-button></i> </li> 
                 <li v-if="token!=''">
                   <a>
                   <el-dropdown trigger="click"  @command="handleCommand">

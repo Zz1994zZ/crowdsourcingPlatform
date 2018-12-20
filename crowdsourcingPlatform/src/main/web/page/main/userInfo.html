@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Carousel Template for Bootstrap</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="../../dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="../../assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+
+    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+    <script src="../../assets/js/ie-emulation-modes-warning.js"></script>
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Custom styles for this template -->
+    <link href="../../css/carousel.css" rel="stylesheet">
+
+    <!-- VUE -->
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <!-- axios  -->
+    <script src="https://cdn.bootcss.com/axios/0.18.0/axios.min.js"></script>
+
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/element-ui/2.4.9/theme-chalk/index.css">
+    <!-- 引入组件库 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/element-ui/2.4.9/index.js"></script>
+  </head>
+<!-- NAVBAR
+================================================== -->
+  <body>
+  <div id="app" style="background: #f7f7f7">
+    <!-- Wrap the rest of the page in another container to center all the content. -->
+    <div class="container marketing">
+      <!-- START THE FEATURETTES -->
+      <hr class="featurette-divider" style="margin-bottom: 10px">
+      <el-row>
+          <el-col :span="16">
+             <el-card class="box-card" shadow="hover">
+            <div slot="header" class="clearfix">
+              <H4>{{newUser? '填写':'编辑'}}您的个人信息</H4>
+            </div>
+            <el-form ref="userInfo" :model="userInfo" label-width="80px" style="width: 580px">
+              <el-form-item label="昵称">
+                <el-input v-model="userInfo.name"></el-input>
+              </el-form-item>
+              <el-form-item label="性别">
+                <el-radio-group v-model="userInfo.info.sex">
+                  <el-radio :label="1">男</el-radio>
+                  <el-radio :label="0">女</el-radio>
+                </el-radio-group>
+              </el-form-item>
+              <el-form-item label="工作年限">
+                <el-select v-model="userInfo.info.workYears" placeholder="请选择">
+                  <el-option
+                          v-for="item in options"
+                          :key="item"
+                          :label="item<10? item+'年':'大于等于10年'"
+                          :value="item">
+                  </el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="就职公司">
+                <el-input v-model="userInfo.info.company"></el-input>
+              </el-form-item>
+              <el-form-item label="个人简介">
+                <div id="editor">
+                </div>
+              </el-form-item>
+              <el-form-item label="QQ">
+                <el-input v-model="userInfo.info.qq"></el-input>
+              </el-form-item>
+              <el-form-item label="微信">
+                <el-input v-model="userInfo.info.wechat"></el-input>
+              </el-form-item>
+              <el-form-item>
+                <el-button type="primary" @click="onPost">提交</el-button>
+                <el-button>取消</el-button>
+              </el-form-item>
+            </el-form>
+          </el-card>
+          </el-col>
+          <el-col :span="8" style="padding-left: 10px">
+            <el-card class="box-card" shadow="hover">
+              <div slot="header" class="clearfix">
+                <span>填写须知</span>
+              </div>
+              <div v-for="o in 4" :key="o" class="text item">
+                {{'列表内容 ' + o }}
+              </div>
+            </el-card>
+          </el-col>
+      </el-row>
+
+      <hr class="featurette-divider">
+      <!-- /END THE FEATURETTES -->
+
+      <!-- FOOTER -->
+      <footer>
+        <p class="pull-right"><a href="#">Back to top</a></p>
+        <p>&copy; 2016 Company, Inc. &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
+      </footer>
+
+    </div><!-- /.container -->
+  </div>
+  <!--导航栏-->
+  <div id="login">
+    <xinhuo-navbar @finishlogin="onGotToken" v-bind:active-index="3"></xinhuo-navbar>
+  </div>
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
+    <script src="../../dist/js/bootstrap.min.js"></script>
+    <!-- Just to make our placeholder images work. Don't actually copy the next line! -->
+    <script src="../../assets/js/vendor/holder.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
+  </body>
+  <script src="../js/navbarComponent.js"></script>
+  <script src="https://unpkg.com/wangeditor@3.1.1/release/wangEditor.min.js"></script>
+  <script src="../js/userInfo.js"></script>
+  <script type="text/javascript">
+      var E = window.wangEditor
+      var editor = new E('#editor')
+      // 或者 var editor = new E( document.getElementById('editor') )
+      // 自定义菜单配置
+      editor.customConfig.menus = [
+          'head',
+          'bold',
+          'italic',
+          'underline'
+      ]
+      editor.create();
+      $(".w-e-text-container").css("z-index",100);
+      $(".w-e-menu").css("z-index",100);
+
+  </script>
+</html>
+
+
