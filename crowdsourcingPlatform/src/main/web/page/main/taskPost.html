@@ -97,10 +97,15 @@
           <el-col :span="8" style="padding-left: 10px">
             <el-card class="box-card" shadow="hover">
               <div slot="header" class="clearfix">
-                <span>填写须知</span>
+                <span>发布流程</span>
               </div>
-              <div v-for="o in 4" :key="o" class="text item">
-                {{'列表内容 ' + o }}
+              <div style="height: 300px;">
+                <el-steps direction="vertical" :active="1">
+                  <el-step title="发布需求"></el-step>
+                  <el-step title="筛选合适的接包方" description="若选择自动派单则将由系统挑选接包方"></el-step>
+                  <el-step title="签订电子合同、进入实施"></el-step>
+                  <el-step title="验收完成"></el-step>
+                </el-steps>
               </div>
             </el-card>
           </el-col>

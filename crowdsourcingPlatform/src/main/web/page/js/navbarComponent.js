@@ -36,13 +36,13 @@ Vue.component('xinhuo-navbar', {
               <ul class="nav navbar-nav">
                 <li v-bind:class="activeIndex == 1 ? 'active':''"><a href="index.html">首页</a></li>
                 <li v-bind:class="activeIndex == 2 ? 'active':''"><a href="tasks.html">项目大厅</a></li>
-                <li v-bind:class="activeIndex == 3 ? 'active':''"><a href="userInfoPost.html">成为开发者</a></li>
+                <!--<li v-bind:class="activeIndex == 3 ? 'active':''"><a href="userInfoPost.html">成为开发者</a></li>-->
               </ul>
               <ul class="nav navbar-nav navbar-right">
                 <!--<li v-if="token!=''"><a href="#about" @click="">{{username}}</a></li>-->
                      <li v-bind:class="activeIndex == 2 ? 'active':''"><a href="workPlatform.html">工作台</a></li>
                      <li v-bind:class="activeIndex == 2 ? 'active':''"><a href="userInfo.html">个人中心</a></li>
-                     <li ><el-button style="height: 50px;"  icon="el-icon-message" plain="true"></el-button></i> </li> 
+                     <!--<li ><el-button style="height: 50px;"  icon="el-icon-message" plain="true"></el-button></i> </li>--> 
                 <li v-if="token!=''">
                   <a>
                   <el-dropdown trigger="click"  @command="handleCommand">
