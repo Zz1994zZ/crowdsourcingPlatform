@@ -49,7 +49,7 @@
       <hr class="featurette-divider" style="margin-bottom: 10px">
       <el-row>
         <el-card class="box-card" shadow="hover">
-          <el-tabs tab-position="left">
+          <el-tabs tab-position="left" @tab-click="editing=false;userInfo=tempInfo? tempInfo:userInfo">
             <el-tab-pane label="基本信息"><el-card class="box-card" shadow="hover">
               <div slot="header" class="clearfix">
                 <el-col :span="6" style="padding-left: 10px"> <B style="font-size: 17px">{{editing? '编辑':''}}个人信息</B></el-col>
@@ -108,61 +108,11 @@
               </el-form>
             </el-card></el-tab-pane>
             <el-tab-pane label="时空众包"><el-card class="box-card" shadow="hover">
-              <div slot="header" class="clearfix">
-                <el-col :span="6" style="padding-left: 10px"> <B style="font-size: 17px">{{editing? '编辑':''}}时空众包相关信息</B></el-col>
-                <el-col :span="18" style="text-align: right"><el-button v-if="!editing" type="primary" size="mini" @click="editing=true;tempInfo=JSON.parse(JSON.stringify(userInfo));; ">编辑</el-button></el-col>
-              </div>
-
-              <el-form ref="userInfo" :model="userInfo" label-width="100px" style="width: 580px">
-                <el-form-item label="昵称：">
-                  <el-input v-if="editing" v-model="userInfo.name"></el-input>
-                  <span v-else >{{userInfo.name}}</span>
-                </el-form-item>
-                <el-form-item  label="性别：">
-                  <el-radio-group v-if="editing" v-model="userInfo.info.sex">
-                    <el-radio :label="1">男</el-radio>
-                    <el-radio :label="0">女</el-radio>
-                  </el-radio-group>
-                  <span v-else >{{userInfo.info.sex? '男':'女'}}</span>
-                </el-form-item>
-                <el-form-item label="工作年限：">
-                  <el-select v-if="editing" v-model="userInfo.info.workYears" placeholder="请选择">
-                    <el-option
-                            v-for="item in options"
-                            :key="item"
-                            :label="item<10? item+'年':'大于等于10年'"
-                            :value="item">
-                    </el-option>
-                  </el-select>
-                  <span v-else >{{userInfo.info.workYears>=10? '大于等于10年':userInfo.info.workYears+'年'}}</span>
-                </el-form-item>
-                <el-form-item  label="就职公司：">
-                  <el-input v-if="editing" v-model="userInfo.info.company"></el-input>
-                  <span v-else >{{userInfo.info.company}}</span>
-                </el-form-item>
-                <el-form-item  label="个人简介：">
-                  <el-input
-                          v-if="editing"
-                          type="textarea"
-                          :rows="2"
-                          placeholder="请输入个人简介"
-                          v-model="userInfo.info.description">
-                  </el-input>
-                  <span v-else >{{userInfo.info.description}}</span>
-                </el-form-item>
-                <el-form-item label="QQ：">
-                  <el-input v-if="editing" v-model="userInfo.info.qq"></el-input>
-                  <span v-else >{{userInfo.info.qq}}</span>
-                </el-form-item>
-                <el-form-item label="微信：">
-                  <el-input v-if="editing" v-model="userInfo.info.wechat"></el-input>
-                  <span v-else >{{userInfo.info.wechat}}</span>
-                </el-form-item>
-                <el-form-item>
-                  <el-button v-if="editing" type="primary" @click="onPost">提交</el-button>
-                  <el-button v-if="editing" @click="editing=false;userInfo=tempInfo">取消</el-button>
-                </el-form-item>
-              </el-form>
+              <el-alert
+                      title="暂时没有配置，敬请期待！"
+                      type="info"
+                      >
+              </el-alert>
             </el-card></el-tab-pane>
             <el-tab-pane label="软件众包"><el-card class="box-card" shadow="hover">
               <div slot="header" class="clearfix">
@@ -183,6 +133,8 @@
                 </el-form-item>
                 <el-form-item  label="活跃时间：">
                   <el-slider
+                          v-if="editing"
+                          v-model="userInfo.extention.activeTime"
                           show-tooltip
                           :format-tooltip="formatSlider"
                           range
@@ -190,44 +142,7 @@
                           show-stops
                           :max="23">
                   </el-slider>
-                  <el-radio-group v-if="editing" v-model="userInfo.info.sex">
-                    <el-radio :label="1">男</el-radio>
-                    <el-radio :label="0">女</el-radio>
-                  </el-radio-group>
-                  <span v-else >{{userInfo.info.sex? '男':'女'}}</span>
-                </el-form-item>
-                <el-form-item label="工作年限：">
-                  <el-select v-if="editing" v-model="userInfo.info.workYears" placeholder="请选择">
-                    <el-option
-                            v-for="item in options"
-                            :key="item"
-                            :label="item<10? item+'年':'大于等于10年'"
-                            :value="item">
-                    </el-option>
-                  </el-select>
-                  <span v-else >{{userInfo.info.workYears>=10? '大于等于10年':userInfo.info.workYears+'年'}}</span>
-                </el-form-item>
-                <el-form-item  label="就职公司：">
-                  <el-input v-if="editing" v-model="userInfo.info.company"></el-input>
-                  <span v-else >{{userInfo.info.company}}</span>
-                </el-form-item>
-                <el-form-item  label="个人简介：">
-                  <el-input
-                          v-if="editing"
-                          type="textarea"
-                          :rows="2"
-                          placeholder="请输入个人简介"
-                          v-model="userInfo.info.description">
-                  </el-input>
-                  <span v-else >{{userInfo.info.description}}</span>
-                </el-form-item>
-                <el-form-item label="QQ：">
-                  <el-input v-if="editing" v-model="userInfo.info.qq"></el-input>
-                  <span v-else >{{userInfo.info.qq}}</span>
-                </el-form-item>
-                <el-form-item label="微信：">
-                  <el-input v-if="editing" v-model="userInfo.info.wechat"></el-input>
-                  <span v-else >{{userInfo.info.wechat}}</span>
+                  <span v-else >{{formatSlider(userInfo.extention.activeTime[0])+'~'+formatSlider(userInfo.extention.activeTime[1])}}</span>
                 </el-form-item>
                 <el-form-item>
                   <el-button v-if="editing" type="primary" @click="onPost">提交</el-button>
