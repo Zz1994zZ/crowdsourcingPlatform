@@ -144,6 +144,22 @@
                   </el-slider>
                   <span v-else >{{formatSlider(userInfo.extention.activeTime[0])+'~'+formatSlider(userInfo.extention.activeTime[1])}}</span>
                 </el-form-item>
+                <el-form-item  v-if="!editing" label="技能评分：">
+                  <el-row v-for="item in userInfo.extention.developmentLanguage">
+                    <el-col :span="3" style="text-align: right;">
+                      {{item+'：'}}
+                    </el-col>
+                    <el-col :span="21" style="margin-top: 10px;">
+                      <el-rate
+                              v-bind:value="userInfo.skillList[item]? (userInfo.skillList[item]*5).toFixed(1):2.5"
+                              disabled
+                              show-score
+                              text-color="#ff9900"
+                              score-template="{value}">
+                      </el-rate>
+                    </el-col>
+                  </el-row>
+                </el-form-item>
                 <el-form-item>
                   <el-button v-if="editing" type="primary" @click="onPost">提交</el-button>
                   <el-button v-if="editing" @click="editing=false;userInfo=tempInfo">取消</el-button>

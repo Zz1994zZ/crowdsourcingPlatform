@@ -77,6 +77,28 @@
                   <el-input-number v-model="task.properties.crowdNum" :min="1"  label="描述文字"></el-input-number>
                 </template>
               </el-form-item>
+              <el-form-item v-if="task.properties.crowdNum>1" v-for="i in task.properties.crowdNum" :label="'模块'+i">
+                <el-form-item label="任务名称">
+                  <el-input v-model="task.name"></el-input>
+                </el-form-item>
+                <el-form-item label="预计酬劳">
+                  <template>
+                    <el-input-number v-model="task.properties.price" :precision="2" :step="0.1" :min="0"></el-input-number>
+                    <label style="padding-left: 10px">元</label>
+                  </template>
+                </el-form-item>
+                <el-form-item label="需求设计">
+                  <el-upload
+                          class="upload-demo"
+                          drag
+                          action="https://jsonplaceholder.typicode.com/posts/"
+                          multiple>
+                    <i class="el-icon-upload"></i>
+                    <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+                    <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>
+                  </el-upload>
+                </el-form-item>
+              </el-form-item>
               <el-form-item label="预计酬劳">
                 <template>
                   <el-input-number v-model="task.properties.price" :precision="2" :step="0.1" :min="0"></el-input-number>
