@@ -42,17 +42,17 @@ var app = new Vue({
                   ]
               },
               series: [{
-                  name: '预算 vs 开销（Budget vs spending）',
+                  name: '能力水平',
                   type: 'radar',
                   // areaStyle: {normal: {}},
                   data : [
                       {
                           value : [0.5, 0.5, 0.5, 0.5, 0.5, 0.5],
-                          name : '需求水平（Allocated Budget）'
+                          name : '需求水平'
                       },
                       {
                           value : [0.5, 0.5, 0.5, 0.5, 0.5, 0.5],
-                          name : '实际开销（Actual Spending）'
+                          name : '实际开销'
                       }
                   ]
               }]

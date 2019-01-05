@@ -63,6 +63,16 @@
                   <el-option label="时空总包" value="2"></el-option>
                 </el-select>
               </el-form-item>
+              <el-form-item label="开发语言">
+                <el-select   filterable placeholder="请选择" v-model="task.properties.skills" style="width: 90%">
+                  <el-option
+                          v-for="item in skills.developmentLanguage"
+                          :key="item.value"
+                          :label="item.value"
+                          :value="item.value">
+                  </el-option>
+                </el-select>
+              </el-form-item>
               <el-form-item label="任务时间">
                 <el-col :span="11">
                   <el-date-picker type="datetime" placeholder="预计起始时间" v-model="task.properties.expStartTime" style="width: 100%;"></el-date-picker>
@@ -74,38 +84,37 @@
               </el-form-item>
               <el-form-item label="需求人数">
                 <template>
-                  <el-input-number v-model="task.properties.crowdNum" :min="1"  label="描述文字"></el-input-number>
+                  <el-input-number v-model="task.properties.crowdNum" :min="1"  label="描述文字" change="onCrowdNumChange"></el-input-number>
                 </template>
               </el-form-item>
+
               <el-form-item v-if="task.properties.crowdNum>1" v-for="i in task.properties.crowdNum" :label="'模块'+i">
-                <el-form-item label="任务名称">
-                  <el-input v-model="task.name"></el-input>
+                <el-form-item label="模块名称">
+                  <el-input v-model="subTasks[i].name"></el-input>
                 </el-form-item>
                 <el-form-item label="预计酬劳">
                   <template>
-                    <el-input-number v-model="task.properties.price" :precision="2" :step="0.1" :min="0"></el-input-number>
+                    <el-input-number v-model="subTasks[i].properties.price" :precision="2" :step="0.1" :min="0"></el-input-number>
                     <label style="padding-left: 10px">元</label>
                   </template>
                 </el-form-item>
-                <el-form-item label="需求设计">
-                  <el-upload
-                          class="upload-demo"
-                          drag
-                          action="https://jsonplaceholder.typicode.com/posts/"
-                          multiple>
-                    <i class="el-icon-upload"></i>
-                    <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-                    <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>
-                  </el-upload>
+                <el-form-item label="需求描述">
+                    <el-input
+                            type="textarea"
+                            :rows="2"
+                            placeholder="请输入内容"
+                            v-model="subTasks[i].properties.description">
+                    </el-input>
                 </el-form-item>
               </el-form-item>
-              <el-form-item label="预计酬劳">
+
+              <el-form-item v-if="task.properties.crowdNum==1" label="预计酬劳">
                 <template>
                   <el-input-number v-model="task.properties.price" :precision="2" :step="0.1" :min="0"></el-input-number>
                   <label style="padding-left: 10px">元</label>
                 </template>
               </el-form-item>
-              <el-form-item label="任务描述">
+              <el-form-item v-show="task.properties.crowdNum==1" label="任务描述">
                 <div id="editor">
                 </div>
               </el-form-item>
