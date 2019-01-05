@@ -23,6 +23,8 @@ public interface TaskService {
 
     Long save(Task userInfo);
 
+    Long saveModule(Task mainTask,Task model);
+
     Long update(Task userInfo);
 
     Long delete(int id);

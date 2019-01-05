@@ -78,6 +78,33 @@ public class TaskController {
         return result;
     }
 
+    @RequestMapping(value = "/api/taskModules", method = RequestMethod.POST)
+    public ResponseResult createModules(@RequestBody List<Task> taskModules,@RequestHeader("username") String username) {
+        ResponseResult<String> result =new ResponseResult<String>();
+        if(taskModules.size()<=1){//单人任务
+            result.setMessage("请使用 /api/task 添加单人任务");
+            result.setSuccess(false);
+        }else {//多模块任务
+            try{
+                Task mainTask = taskModules.get(0);
+                mainTask.setCreator(username);
+                taskService.save(mainTask);
+                for (int i = 1; i < taskModules.size(); i++) {
+                    Task module = taskModules.get(i);
+                    taskService.saveModule(mainTask,module);
+                }
+                result.setMessage("添加任务信息成功！");
+                result.setSuccess(true);
+            }catch (Exception e){
+                e.printStackTrace();
+                result.setMessage("添加任务信息失败！");
+                result.setSuccess(false);
+            }
+
+        }
+        return result;
+    }
+
     @RequestMapping(value = "/api/task", method = RequestMethod.PUT)
     public ResponseResult modify(@RequestBody Task task,@RequestHeader("username") String username) {
         ResponseResult<String> result =new ResponseResult<String>();

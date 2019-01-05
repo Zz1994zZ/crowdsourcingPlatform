@@ -84,7 +84,7 @@
               </el-form-item>
               <el-form-item label="需求人数">
                 <template>
-                  <el-input-number v-model="task.properties.crowdNum" :min="1"  label="描述文字" change="onCrowdNumChange"></el-input-number>
+                  <el-input-number v-model.lazy="task.properties.crowdNum"  :min="1"  label="描述文字" @change="onCrowdNumChange"></el-input-number>
                 </template>
               </el-form-item>
 

@@ -36,6 +36,7 @@ public interface TaskDao {
     Task findByKey(@Param("id") int id);
 
     @Insert("insert into tasks values(0,#{parentTask},#{name},#{type},#{creator},#{executor},#{properties},#{createTime},#{endTime},#{status})")
+    @Options(useGeneratedKeys=true, keyProperty="id", keyColumn="id")
     Long save(Task task);
 
     @Update("update tasks set name=#{name},executor=#{executor},properties=#{properties},endTime=#{endTime},status=#{status} where id=#{id}")

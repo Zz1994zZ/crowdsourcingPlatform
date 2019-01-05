@@ -16,52 +16,133 @@ var app = new Vue({
           skills:{}
       }
     },
-    subTasks:[]
+    subTasks:[
+                 {
+                   name:'',
+                   properties:{
+                       crowdNum: 1,
+                       description:'',
+                       price:0,
+                   }
+                 },
+                 {
+                    name:'',
+                    properties:{
+                        crowdNum: 1,
+                        description:'',
+                        price:0,
+                    }
+                 }
+             ]
   },
   methods: {
       onCrowdNumChange(num){
-        alert(num);
+        //这里下标0的位置是留给父任务的~
+          if(this.subTasks.length<num+1){
+           this.subTasks.push({
+                                           name:'',
+                                           properties:{
+                                               crowdNum: 1,
+                                               description:'',
+                                               price:0,
+                                           }
+                                         });
+          }else if (this.subTasks.length>num+1){
+            this.subTasks.pop();
+          }
       },
       onPost(){
           let that = this;
-          this.task.properties.description = editor.txt.html();
-          axios(
-              {
-                  method: 'post',
-                  url: "http://"+login.ip+"/api/task",
-                  headers: {
-                      'username': login.username,
-                      'token': login.token
-                  },
-                  data: {
-                      name:this.task.name,
-                      type:this.task.type,
-                      properties:JSON.stringify(this.task.properties)
-                  }
-              })
-              .then(function (response) {
-                  console.log(response);
-                  let success = response.data.success;
-                  if(success){
-                      that.$message({
-                          message: '发布成功！',
-                          type: 'success'
-                      });
-                      window.location.href="tasks.html";
-                  }else{
-                      that.$message({
-                          message: response.data.message,
-                          type: 'error'
-                      });
-                  }
-              })
-              .catch(function (error) {
-                  console.log(error);
-                  that.$message({
-                      message: '网络错误！',
-                      type: 'error'
-                  });
-              });
+          if(this.task.properties.crowdNum==1){
+             this.task.properties.description = editor.txt.html();
+                      axios(
+                          {
+                              method: 'post',
+                              url: "http://"+login.ip+"/api/task",
+                              headers: {
+                                  'username': login.username,
+                                  'token': login.token
+                              },
+                              data: {
+                                  name:this.task.name,
+                                  type:this.task.type,
+                                  properties:JSON.stringify(this.task.properties)
+                              }
+                          })
+                          .then(function (response) {
+                              console.log(response);
+                              let success = response.data.success;
+                              if(success){
+                                  that.$message({
+                                      message: '发布成功！',
+                                      type: 'success'
+                                  });
+                                  window.location.href="tasks.html";
+                              }else{
+                                  that.$message({
+                                      message: response.data.message,
+                                      type: 'error'
+                                  });
+                              }
+                          })
+                          .catch(function (error) {
+                              console.log(error);
+                              that.$message({
+                                  message: '网络错误！',
+                                  type: 'error'
+                              });
+                          });
+          }else{
+            let submitData = [];
+            this.subTasks[0] = this.task;
+            //主任务酬金置零
+            this.subTasks[0].properties.price=0;
+            let sumPrice = 0;
+            for(let subTask of this.subTasks){
+                sumPrice +=  subTask.properties.price;
+                submitData.push(JSON.parse(JSON.stringify(subTask)))
+            }
+            //主任务酬金置为子模块合
+            submitData[0].properties.price=sumPrice;
+            for(let task of submitData){
+                          task.properties=JSON.stringify(task.properties);
+            }
+             console.log(submitData);
+             axios(
+                                      {
+                                          method: 'post',
+                                          url: "http://"+login.ip+"/api/taskModules",
+                                          headers: {
+                                              'username': login.username,
+                                              'token': login.token
+                                          },
+                                          data: submitData
+                                      })
+                                      .then(function (response) {
+                                          console.log(response);
+                                          let success = response.data.success;
+                                          if(success){
+                                              that.$message({
+                                                  message: '发布成功！',
+                                                  type: 'success'
+                                              });
+                                              window.location.href="tasks.html";
+                                          }else{
+                                              that.$message({
+                                                  message: response.data.message,
+                                                  type: 'error'
+                                              });
+                                          }
+                                      })
+                                      .catch(function (error) {
+                                          console.log(error);
+                                          that.$message({
+                                              message: '网络错误！',
+                                              type: 'error'
+                                          });
+                                      });
+          }
+
       },
   },
   mounted: function () {

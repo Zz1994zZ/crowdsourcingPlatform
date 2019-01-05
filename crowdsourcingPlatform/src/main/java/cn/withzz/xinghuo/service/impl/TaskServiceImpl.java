@@ -55,6 +55,15 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    public Long saveModule(Task mainTask,Task model) {
+        model.setCreator(mainTask.getCreator());
+        model.setCreateTime(mainTask.getCreateTime());
+        model.setParentTask(mainTask.getId());
+        model.setStatus(1);
+        return taskDao.save(model);
+    }
+
+    @Override
     public Long update(Task task) {
         return taskDao.update(task);
     }
