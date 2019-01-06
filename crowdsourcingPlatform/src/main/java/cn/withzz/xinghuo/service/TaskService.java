@@ -21,6 +21,10 @@ public interface TaskService {
 
     Task findByKey(int id);
 
+    List<Task> findByCondition(String conditon);
+
+    List<Task> findByParentTask(int parentId);
+
     Long save(Task userInfo);
 
     Long saveModule(Task mainTask,Task model);

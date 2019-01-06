@@ -68,13 +68,54 @@
                   <el-row>
                     <H4><i class="el-icon-document"></i>项目需求详情：</H4>
                   </el-row>
-                  <el-row style="padding-top: 10px">
+                  <el-row style="padding-top: 10px" v-if="modules.length==0">
                     <div v-html="task.properties.description?task.properties.description:'该任务暂未填写需求详情'">
                       {{task.properties.description}}
                     </div>
                     <!--{{task.properties.description?task.properties.description:'该任务暂未填写需求详情'}}-->
                   </el-row>
-                  <el-row style="text-align: right">
+                  <el-row style="padding-top: 10px" v-else>
+                    <H5>本项目包含{{modules.length}}个子模块：</H5>
+                    <div v-for="module in modules">
+                      <!--<l1>{{module.name}}</l1>-->
+                      <!--<div  v-html="module.properties.description?module.properties.description:'该模块暂未填写需求详情'">-->
+                      <!--</div>-->
+                      <el-card :body-style="{ padding: '0px'}" shadow="hover">
+                        <el-row style="padding: 10px">
+                          <el-col :span="6" >
+                            <img src="https://zb.oschina.net/file/get?path=static/project-reward/cover/H5yingyong_2.png" width="150px" height="110px">
+                          </el-col>
+                          <el-col :span="18">
+                            <el-row>
+                              <el-col :span="12" style="font-weight: 700">
+                                <a style="font-size: 16px;color: #0f0f0f" :href="'taskInfo.html?id='+module.id">{{module.name}}</a>
+                              </el-col>
+                              <el-col :span="12" style="text-align: right;color: red;font-size: 20px;font-weight: 700;">
+                                ￥{{module.properties.price}}
+                              </el-col>
+                            </el-row>
+                            <el-row style="margin-bottom: 20px;margin-top: 10px">
+                              <el-tag v-if="module.type==1" size="small">软件众包</el-tag>
+                              <el-tag v-if="module.type==2" size="small">时空众包</el-tag>
+                              <el-tag v-if="module.properties.price>1000" size="small" type="danger">高酬劳</el-tag>
+                              <el-tag v-if="module.properties.crowdNum>1" size="small" type="success">多人协作</el-tag>
+                              <el-tag v-if="module.properties.crowdNum==1" size="small" type="success">独立任务</el-tag>
+                              <el-tag v-if="new Date()-new Date(task.properties.expStartTime)<=24*3600*1000" size="small" type="danger">即将截止</el-tag>
+                            </el-row>
+                            <el-row style="padding-top: 10px;color: #999">
+                              <el-col :span="12" style="">
+                                技能要求：{{module.properties.skills}}
+                              </el-col>
+                              <el-col :span="12" style="text-align: right;">
+                                <!--已报名：2 人 |--> 发布于{{new Date(module.createTime).Format("yyyy-MM-dd")}}
+                              </el-col>
+                            </el-row>
+                          </el-col>
+                        </el-row>
+                      </el-card>
+                    </div>
+                  </el-row>
+                  <el-row style="margin-top:20px;text-align: right">
                     <el-button v-if="!registers.includes(login.username)" type="primary" size="medium" @click="confirm">我要报名</el-button>
                     <el-button v-else  size="medium" type="info" plain disabled>已报名</el-button>
                   </el-row>

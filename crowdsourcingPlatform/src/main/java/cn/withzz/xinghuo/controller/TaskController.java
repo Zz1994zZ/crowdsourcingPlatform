@@ -30,6 +30,15 @@ public class TaskController {
         return result;
     }
 
+    @RequestMapping(value = "/api/task/{id}/taskModules", method = RequestMethod.GET)
+    public Map<String,Object> findOnesModules(@PathVariable("id") int id) {
+        //输入是父任务id
+        Map<String,Object> result = new HashMap<>();
+        List<Task> modules = taskService.findByParentTask(id);
+        result.put("modules",modules);
+        return result;
+    }
+
     @RequestMapping(value = "/api/task", method = RequestMethod.GET)
     public Map<String,Object> findAll(String page,String per_page) {
         Map<String,Object> result = new HashMap<>();

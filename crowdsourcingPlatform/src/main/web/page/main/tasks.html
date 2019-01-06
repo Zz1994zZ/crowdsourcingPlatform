@@ -114,10 +114,10 @@
                     </el-row>
                     <el-row style="padding-top: 10px;color: #999">
                       <el-col :span="12" style="">
-                        技技能要求：PHP、HTML5
+                        技能要求：{{task.properties.skills}}
                       </el-col>
                       <el-col :span="12" style="text-align: right;">
-                        已报名：2 人 | 发布于{{new Date(task.createTime).Format("yyyy-MM-dd")}}
+                        <!--已报名：2 人 |--> 发布于{{new Date(task.createTime).Format("yyyy-MM-dd")}}
                       </el-col>
                     </el-row>
                  </el-col>

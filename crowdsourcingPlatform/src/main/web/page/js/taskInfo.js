@@ -13,6 +13,7 @@ var app = new Vue({
   data: {
     id:'',
     task: {},
+    modules:[],
     registers:[]
   },
   methods: {
@@ -62,6 +63,7 @@ var app = new Vue({
       },
       getTaskInfo(){
          let that = this;
+         //获取任务信息
               axios(
               {
                 method: 'get',
@@ -77,6 +79,10 @@ var app = new Vue({
                     that.task = data.task;
                     that.registers = data.registers;
                     that.task.properties = JSON.parse(that.task.properties);
+                    //多人任务含有子任务（模块）
+                    if(that.task.properties.crowdNum>1){
+                        that.getModulesInfo();
+                    }
                   that.$nextTick(function () {
                       that.initChart();
                   })
@@ -87,6 +93,35 @@ var app = new Vue({
                       message: '网络错误！',
                       type: 'error'
                 });
+              });
+      },
+      getModulesInfo(){
+          let that = this;
+          //获取子任务（模块）信息
+          axios(
+              {
+                  method: 'get',
+                  url: "http://"+login.ip+"/api/task/"+that.id+"/taskModules",
+                  headers: {
+                      'username': login.username,
+                      'token': login.token
+                  }
+              })
+              .then(function (response) {
+                  console.log(response);
+                  let data = response.data;
+                  that.modules = data.modules;
+                  for(let module of that.modules){
+                      console.log(module);
+                      module.properties = JSON.parse(module.properties);
+                  }
+              })
+              .catch(function (error) {
+                  console.log(error);
+                  that.$message({
+                      message: '网络错误！',
+                      type: 'error'
+                  });
               });
       },
       confirm(){

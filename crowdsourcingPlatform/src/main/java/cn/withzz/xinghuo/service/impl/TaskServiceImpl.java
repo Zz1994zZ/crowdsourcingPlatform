@@ -48,6 +48,18 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    public List<Task> findByCondition(String conditon) {
+        return taskDao.findByCondition(conditon);
+    }
+
+    @Override
+    public List<Task> findByParentTask(int parentId) {
+        return taskDao.findByParentTask(parentId);
+    }
+
+
+
+    @Override
     public Long save(Task task) {
         task.setCreateTime(new Timestamp(new Date().getTime()));
         task.setStatus(1);
@@ -59,6 +71,7 @@ public class TaskServiceImpl implements TaskService {
         model.setCreator(mainTask.getCreator());
         model.setCreateTime(mainTask.getCreateTime());
         model.setParentTask(mainTask.getId());
+        model.setEndTime(mainTask.getEndTime());
         model.setStatus(1);
         return taskDao.save(model);
     }

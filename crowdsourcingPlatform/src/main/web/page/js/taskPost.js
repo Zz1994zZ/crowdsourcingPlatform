@@ -100,6 +100,10 @@ var app = new Vue({
             let sumPrice = 0;
             for(let subTask of this.subTasks){
                 sumPrice +=  subTask.properties.price;
+                subTask.type = this.task.type;
+                subTask.properties.expStartTime = this.task.properties.expStartTime;
+                subTask.properties.expEndTime = this.task.properties.expEndTime;
+                subTask.properties.skills = this.task.properties.skills;
                 submitData.push(JSON.parse(JSON.stringify(subTask)))
             }
             //主任务酬金置为子模块合
