@@ -72,17 +72,34 @@ Vue.component('xinhuo-navbar', {
     </div>
     <el-dialog :visible.sync="dialogFormVisible" width="400px" >
       <div class="form-signin" style="z-index: 2002">
-        <h2 class="form-signin-heading">Please sign in</h2>
+        <h2 class="form-signin-heading">用户登陆</h2>
         <label for="inputEmail" class="sr-only">Email address</label>
-        <input v-model="username"  id="inputEmail" class="form-control" placeholder="Username" required autofocus>
+        <input v-model="username"  id="inputEmail" class="form-control" placeholder="用户名" required autofocus>
         <label for="inputPassword" class="sr-only">Password</label>
-        <input v-model="password" type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+        <input v-model="password" type="password" id="inputPassword" class="form-control" placeholder="密码" required>
         <div class="checkbox">
           <label>
-            <input type="checkbox" value="remember-me"> Remember me
+            <input type="checkbox" value="remember-me"> 记住我
           </label>
         </div>
-        <button class="btn btn-lg btn-primary btn-block" v-on:click="onSubmit()">Sign in</button>
+        <button class="btn btn-lg btn-primary btn-block" v-on:click="onSubmit()">登陆</button>
+        <div style="text-align: right">
+            <a  v-on:click="dialogFormVisible = false; registerFormVisible = true">注册新用户</a>
+            <a >忘记密码</a>
+        </div>
+      </div>
+    </el-dialog>
+    
+    <el-dialog :visible.sync="registerFormVisible" width="400px" >
+      <div class="form-signin" style="z-index: 2002">
+        <h2 class="form-signin-heading">用户注册</h2>
+        <label for="inputEmail" class="sr-only">Email address</label>
+        <input style="margin-top: 5px" v-model="username"  id="inputEmail" class="form-control" placeholder="用户名" required autofocus>
+        <label for="inputPassword" class="sr-only">Password</label>
+        <input  style="margin-top: 5px" v-model="password" type="password" id="inputPassword" class="form-control" placeholder="密码" required>
+        <input style="margin-top: 5px" v-model="confrim" type="password" id="inputPassword" class="form-control" placeholder="确认密码" required>
+        <input style="margin-top: 5px" v-model="email" type="email" id="inputPassword" class="form-control" placeholder="常用邮箱" required>
+        <button style="margin-top: 5px" class="btn btn-lg btn-primary btn-block" v-on:click="onSubmit()">注册</button>
       </div>
     </el-dialog>
   </div>`,
@@ -90,8 +107,11 @@ Vue.component('xinhuo-navbar', {
             return {
                 ip: 'localhost:8080',
                 dialogFormVisible: false,
+                registerFormVisible: false,
                 username: '',
                 password: '',
+                confrim: '',
+                email:'',
                 loginLabel: '登陆',
 
                 //登陆授权token

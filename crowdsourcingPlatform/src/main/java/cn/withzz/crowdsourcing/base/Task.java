@@ -12,6 +12,7 @@ import cn.withzz.crowdsourcing.core.TimeRangeInt;
 import cn.withzz.crowdsourcing.core.WokerSetInt;
 
 public class Task implements Serializable{
+	private int id;
 	private TreeSet<Model> models=new TreeSet<Model>();
 	private transient List<User> register=new ArrayList<User>();
 	private String skill;
@@ -21,7 +22,15 @@ public class Task implements Serializable{
 	//附加
 	private transient LinkedList<CoCGroup> ccgs;
 	private transient CoCGroup ccg;
-	
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
 	public CoCGroup getCcg() {
 		return ccg;
 	}

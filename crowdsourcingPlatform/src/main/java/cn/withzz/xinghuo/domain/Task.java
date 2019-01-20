@@ -7,7 +7,8 @@ import java.sql.Timestamp;
  * Created by svenzzhou on 14/11/2018.
  */
 public class Task {
-    private int id;
+    //兼容之前的实验这里id字段不序列化
+    private transient int id;
     private int parentTask;
     private String name;
     private int type;
