@@ -12,7 +12,7 @@ import cn.withzz.crowdsourcing.core.TimeRangeInt;
 import cn.withzz.crowdsourcing.core.WokerSetInt;
 
 public class Task implements Serializable{
-	private int id;
+	private transient int id;
 	private TreeSet<Model> models=new TreeSet<Model>();
 	private transient List<User> register=new ArrayList<User>();
 	private String skill;

@@ -10,7 +10,7 @@ import java.util.Date;
 @Component
 public class ScheduledTasks {
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-    @Scheduled(fixedRate = 60000)
+//    @Scheduled(fixedRate = 60000)
     public void reportCurrentTime() {
         try {
             String time = dateFormat.format(new Date());

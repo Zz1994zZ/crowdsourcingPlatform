@@ -8,6 +8,7 @@ import cn.withzz.xinghuo.service.UserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -23,7 +24,14 @@ public class TaskAssignController {
 
     @RequestMapping(value = "/api/assign", method = RequestMethod.GET)
     public List<Distribution> findOne() {
-        return taskAssigner.assign();
+        try {
+            return taskAssigner.assign();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 }

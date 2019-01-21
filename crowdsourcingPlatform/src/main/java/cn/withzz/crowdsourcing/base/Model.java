@@ -3,6 +3,7 @@ package cn.withzz.crowdsourcing.base;
 import java.io.Serializable;
 
 public class Model implements Comparable<Model>,Serializable{
+	private transient int id;
 	private float complexity;
 	private User woker;
 	private String skill;
@@ -16,6 +17,15 @@ public class Model implements Comparable<Model>,Serializable{
 	public Model() {
 		super();
 	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
 	public float getComplexity() {
 		return complexity;
 	}
