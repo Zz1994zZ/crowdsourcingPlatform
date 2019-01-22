@@ -11,7 +11,7 @@ import cn.withzz.xinghuo.dao.TaskDao;
 import cn.withzz.xinghuo.dao.UserInfoDao;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Component
+@Service
 public class TaskAssigner {
     @Autowired
     TaskDao taskDao;
@@ -51,11 +51,11 @@ public class TaskAssigner {
             String properties = task.getProperties();
 
             try {
-                Map<String,String> userData = mapper.readValue(properties, Map.class);
+                Map<String,Object> userData = mapper.readValue(properties, Map.class);
                 t.setId(task.getId());
-                t.setSkill(userData.get("skills"));
+                t.setSkill((String)userData.get("skills"));
                 //多模块任务
-                if(!userData.get("crowdNum").equals("1")){
+                if(!userData.get("crowdNum").equals(1)){
                     for (cn.withzz.xinghuo.domain.Task module: modules) {
                         Model model = new Model(0.7f,t.getSkill(),t);
                         model.setId(t.getId());
@@ -86,8 +86,8 @@ public class TaskAssigner {
                 HashMap<String,Float> skillList = mapper.readValue( user.getSkillList(), HashMap.class);
                 dumpUser.setSkillMap(skillList);
                 //获取活跃时间
-                HashMap<String,String> extention = mapper.readValue( user.getExtention(), HashMap.class);
-                ArrayList<Integer> times = mapper.readValue( extention.get("activeTime"), ArrayList.class);
+                HashMap<String,Object> extention = mapper.readValue( user.getExtention(), HashMap.class);
+                ArrayList<Integer> times =  (ArrayList<Integer>)extention.get("activeTime");
                 TimeRangeInt tri = new TimeRangeInt();
                 tri.addRange(times.get(0),times.get(1));
                 dumpUser.setTimeRangeInt(tri);

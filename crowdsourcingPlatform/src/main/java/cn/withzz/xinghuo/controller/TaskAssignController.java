@@ -23,7 +23,7 @@ public class TaskAssignController {
     private TaskAssigner taskAssigner;
 
     @RequestMapping(value = "/api/assign", method = RequestMethod.GET)
-    public List<Distribution> findOne() {
+    public List<Distribution> assign() {
         try {
             return taskAssigner.assign();
         } catch (IOException e) {
