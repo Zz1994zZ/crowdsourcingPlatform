@@ -16,6 +16,10 @@ Date.prototype.Format = function(fmt)
             fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));
     return fmt;
 }
+
+//发布的时候这里记得改成部署的机器域名
+let publishHost = 'localhost:8080';
+
 Vue.component('xinhuo-navbar', {
     props: ['activeIndex'],
     template:`<div>
@@ -105,7 +109,7 @@ Vue.component('xinhuo-navbar', {
   </div>`,
         data: function () {
             return {
-                ip: 'localhost:8080',
+                ip: publishHost,
                 dialogFormVisible: false,
                 registerFormVisible: false,
                 username: '',
@@ -128,7 +132,7 @@ Vue.component('xinhuo-navbar', {
                 if (!$.trim(this.username) || !$.trim(this.password)) {
                     return;
                 }
-                axios.post('http://localhost:8080/api/token', {
+                axios.post('http://'+login.ip+'/api/token', {
                     username: this.username,
                     password: this.password
                 })
@@ -185,7 +189,7 @@ Vue.component('xinhuo-navbar', {
 var login = new Vue({
     el: '#login',
     data:{
-        ip: 'localhost:8080',
+        ip: publishHost,
         username: '',
         //登陆授权token
         token: '',
