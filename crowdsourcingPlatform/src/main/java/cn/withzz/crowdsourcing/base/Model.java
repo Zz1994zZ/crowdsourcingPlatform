@@ -71,12 +71,18 @@ public class Model implements Comparable<Model>,Serializable{
 			return -1; 
 		 return a;
 	}
+
 	@Override
 	public String toString() {
-		return "Model [complexity=" + complexity
-				+ "\t]";
+		return "Model{" +
+				"id=" + id +
+				", complexity=" + complexity +
+				", woker=" + woker +
+				", skill='" + skill + '\'' +
+				", task=" + task.getId() +
+				'}';
 	}
-//	@Override
+	//	@Override
 //	public String toString() {
 //		return "Model [complexity=" + complexity
 //				+ "\t, skill=" + skill + "\t]";

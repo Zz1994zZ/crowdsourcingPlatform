@@ -178,7 +178,7 @@ public class User implements Serializable {
 //	}
 	@Override
 	public String toString() {
-		return  nickname;
+		return  id+"\t"+timeRangeInt+"\t"+this.getSkillMap();
 	}
 	public void updateSkill(String skill,float point){
 		float rank=this.skillMap.get(skill);

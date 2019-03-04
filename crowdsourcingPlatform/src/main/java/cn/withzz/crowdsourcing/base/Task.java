@@ -9,6 +9,7 @@ import java.util.TreeSet;
 
 import cn.withzz.crowdsourcing.core.CoCGroup;
 import cn.withzz.crowdsourcing.core.TimeRangeInt;
+import cn.withzz.crowdsourcing.core.WokerSelecter;
 import cn.withzz.crowdsourcing.core.WokerSetInt;
 
 public class Task implements Serializable{
@@ -88,9 +89,10 @@ public class Task implements Serializable{
 	}
 //	public  void prepare() throws Exception{
 //		ArrayList<User> devs=new WokerSelecter(register).selectDevFromAll(this);
+//		System.out.println(devs.size());
 //		if(devs.size()>=this.models.size()){
 //			for (int i = 0; i <this.models.size(); i++) {
-//				this.models.get(i).setWoker(devs.get(i));
+//				this.models.pollFirst().setWoker(devs.get(i));
 //			}
 //		}
 //	}
@@ -147,5 +149,18 @@ public class Task implements Serializable{
 			System.out.println(model);
 		}
 	}
-	
+
+	@Override
+	public String toString() {
+		return "Task{" +
+				"id=" + id +
+				", models=" + models +
+				", register=" + register +
+				", skill='" + skill + '\'' +
+				", g=" + g +
+				", complexity=" + complexity +
+				", ccgs=" + ccgs +
+				", ccg=" + ccg +
+				'}';
+	}
 }

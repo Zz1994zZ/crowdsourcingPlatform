@@ -1,17 +1,27 @@
-package cn.withzz.crowdsourcing.experiment;
-
-import java.util.*;
+package cn.withzz.crowdsourcing.util;
 
 import cn.withzz.crowdsourcing.base.Distribution;
 import cn.withzz.crowdsourcing.base.Model;
 import cn.withzz.crowdsourcing.base.Task;
 import cn.withzz.crowdsourcing.base.User;
-import cn.withzz.crowdsourcing.core.CoCGroup;
 import cn.withzz.crowdsourcing.core.KMimplement;
 import cn.withzz.crowdsourcing.core.TimeRangeInt;
-import cn.withzz.crowdsourcing.core.WorkAssigner;
+import cn.withzz.crowdsourcing.core.WokerSelecter;
 
-public class DemoTest {
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+public class MultiAssignUtil {
+	public static void assgin(List<Task> tasks,boolean isLog) throws Exception {
+		for (Distribution distribution : new KMimplement(tasks,isLog).KM()) {
+			HashMap<Model, User> map  = distribution.getPairs();
+			for(Model model:map.keySet()){
+				model.setWoker(map.get(model));
+			}
+		}
+
+	}
 	public static void main(String[] args) throws Exception {
 		User d1=new User();
 		d1.setNickname("d1");
@@ -122,25 +132,10 @@ public class DemoTest {
 //		}
 		//本文算法
 //		float zxy1 = 0;
-		try{
-			System.out.println("KM匹配---------------------------------");
-			for (Distribution distribution : new KMimplement(tasks,false).KM()) {
-//				 System.out.println("总体优化任务g="+distribution.getTask().getG());
-//				 distribution.show();
-				HashMap<Model, User> map  = distribution.getPairs();
-				for(Model model:map.keySet()){
-					model.setWoker(map.get(model));
-				}
-				Task task = distribution.getTask();
-				System.out.println(task.getId()+"\t"+task.getG());
-				task.showDevs();
-//				 System.out.println("分配效用"+distribution.getXy());
-//				zxy1 += distribution.getXy();
-			}
-//			System.out.println("KM总效用：" + zxy1);
-		}catch(Exception e){
-			e.printStackTrace();
+		assgin(tasks,false);
+		for (Task t:tasks){
+			System.out.println(t.getId()+"\t"+t.getG());
+			t.showDevs();
 		}
-	
 	}
 }

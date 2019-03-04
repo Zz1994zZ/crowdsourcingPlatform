@@ -15,6 +15,8 @@ import cn.withzz.crowdsourcing.base.Task;
 import cn.withzz.crowdsourcing.base.User;
 import cn.withzz.crowdsourcing.core.LinkInfo.Type;
 
+
+//多任务分配工具
 public class KMimplement {
 	private HashMap<Model, LinkInfo> modelsMap = new HashMap<Model, LinkInfo>();
 	private HashMap<User, LinkInfo> usersMap = new HashMap<User, LinkInfo>();

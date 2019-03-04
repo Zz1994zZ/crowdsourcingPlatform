@@ -1,17 +1,18 @@
 package cn.withzz.crowdsourcing.experiment;
 
-import java.util.*;
-
 import cn.withzz.crowdsourcing.base.Distribution;
 import cn.withzz.crowdsourcing.base.Model;
 import cn.withzz.crowdsourcing.base.Task;
 import cn.withzz.crowdsourcing.base.User;
-import cn.withzz.crowdsourcing.core.CoCGroup;
 import cn.withzz.crowdsourcing.core.KMimplement;
 import cn.withzz.crowdsourcing.core.TimeRangeInt;
-import cn.withzz.crowdsourcing.core.WorkAssigner;
+import cn.withzz.crowdsourcing.core.WokerSelecter;
 
-public class DemoTest {
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+public class SingelTaskTest {
 	public static void main(String[] args) throws Exception {
 		User d1=new User();
 		d1.setNickname("d1");
@@ -78,8 +79,7 @@ public class DemoTest {
 		
 		
 		Task t1=new Task();
-		t1.setId(1);
-		t1.setG(2);
+		t1.setG(3);
 		t1.setSkill("java");
 		t1.getModels().add(new Model(0.7f,"java",t1));
 		t1.getModels().add(new Model(0.6f,"java",t1));
@@ -87,7 +87,6 @@ public class DemoTest {
 		t1.setRegister(users);
 
 		Task t2=new Task();
-		t2.setId(2);
 		t2.setG(3);
 		t2.setSkill("java");
 		t2.getModels().add(new Model(0.8f,"java",t2));
@@ -95,7 +94,6 @@ public class DemoTest {
 		t2.setRegister(users);
 		
 		Task t3=new Task();
-		t3.setId(3);
 		t3.setG(2);
 		t3.setSkill("java");
 		t3.getModels().add(new Model(0.5f,"java",t3));
@@ -107,40 +105,9 @@ public class DemoTest {
 		tasks.add(t1);
 		tasks.add(t2);
 		tasks.add(t3);
-		
-		
+
 		System.out.println("开始匹配---------------------------------");
-//		for (Task task : tasks) {
-//			System.out.println(task.getModels());
-//			System.out.println(task.getRegister());
-//			//System.out.println("任务g=" + task.getG()+",mnum="+task.getModels().size());
-//			PriorityQueue<CoCGroup> ccgPQ=WorkAssigner.buildCoCGroups(task, task.getRegister(),100);
-//			while(!ccgPQ.isEmpty()){
-//				ccgPQ.poll().show();
-//			}
-//			System.out.println("---------------------------------");
-//		}
-		//本文算法
-//		float zxy1 = 0;
-		try{
-			System.out.println("KM匹配---------------------------------");
-			for (Distribution distribution : new KMimplement(tasks,false).KM()) {
-//				 System.out.println("总体优化任务g="+distribution.getTask().getG());
-//				 distribution.show();
-				HashMap<Model, User> map  = distribution.getPairs();
-				for(Model model:map.keySet()){
-					model.setWoker(map.get(model));
-				}
-				Task task = distribution.getTask();
-				System.out.println(task.getId()+"\t"+task.getG());
-				task.showDevs();
-//				 System.out.println("分配效用"+distribution.getXy());
-//				zxy1 += distribution.getXy();
-			}
-//			System.out.println("KM总效用：" + zxy1);
-		}catch(Exception e){
-			e.printStackTrace();
-		}
-	
+		new WokerSelecter(t1,0.3f).assgin();
+		t1.showDevs();
 	}
 }
