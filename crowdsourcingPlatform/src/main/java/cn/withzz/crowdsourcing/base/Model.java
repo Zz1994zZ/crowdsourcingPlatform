@@ -5,7 +5,7 @@ import java.io.Serializable;
 public class Model implements Comparable<Model>,Serializable{
 	private transient int id;
 	private float complexity;
-	private User woker;
+	private User worker;
 	private String skill;
 	private Task task;
 	public Model(float complexity, String skill, Task task) {
@@ -32,11 +32,11 @@ public class Model implements Comparable<Model>,Serializable{
 	public void setComplexity(float complexity) {
 		this.complexity = complexity;
 	}
-	public User getWoker() {
-		return woker;
+	public User getWorker() {
+		return worker;
 	}
-	public void setWoker(User woker) {
-		this.woker = woker;
+	public void setWorker(User woker) {
+		this.worker = woker;
 	}
 	public String getSkill() {
 		return skill;
@@ -52,18 +52,18 @@ public class Model implements Comparable<Model>,Serializable{
 	}
 	public void finish(){
 		float evaluate;
-		float realSkill=woker.getRealSkillMap().get(getSkill());
+		float realSkill=worker.getRealSkillMap().get(getSkill());
 		if(realSkill/complexity>=1){
 			evaluate=(float) (Math.random()*0.2f+0.8f);
 		}else{
 			evaluate=(float) (Math.random()*realSkill);
 		}
 		float point=complexity*evaluate;
-		this.woker.updateSkill2(this.skill,point);
+		this.worker.updateSkill2(this.skill,point);
 	}
 	public void finish(float evaluate){
 		float point=complexity*evaluate;
-		this.woker.updateSkill2(this.skill,point);
+		this.worker.updateSkill2(this.skill,point);
 	}
 	public int compareTo(Model o) {
 		int a=((Float) (o.getComplexity())).compareTo(((Float) (this.getComplexity())));
@@ -77,7 +77,7 @@ public class Model implements Comparable<Model>,Serializable{
 		return "Model{" +
 				"id=" + id +
 				", complexity=" + complexity +
-				", woker=" + woker +
+				", woker=" + worker +
 				", skill='" + skill + '\'' +
 				", task=" + task.getId() +
 				'}';

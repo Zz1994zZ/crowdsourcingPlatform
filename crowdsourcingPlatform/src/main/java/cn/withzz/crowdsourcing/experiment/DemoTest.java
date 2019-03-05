@@ -129,7 +129,7 @@ public class DemoTest {
 //				 distribution.show();
 				HashMap<Model, User> map  = distribution.getPairs();
 				for(Model model:map.keySet()){
-					model.setWoker(map.get(model));
+					model.setWorker(map.get(model));
 				}
 				Task task = distribution.getTask();
 				System.out.println(task.getId()+"\t"+task.getG());

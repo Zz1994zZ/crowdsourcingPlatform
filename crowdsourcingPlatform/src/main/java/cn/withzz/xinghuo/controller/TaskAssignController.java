@@ -5,6 +5,8 @@ import cn.withzz.crowdsourcing.base.Model;
 import cn.withzz.crowdsourcing.base.Task;
 import cn.withzz.crowdsourcing.base.User;
 import cn.withzz.crowdsourcing.core.TimeRangeInt;
+import cn.withzz.crowdsourcing.util.MultiAssignUtil;
+import cn.withzz.crowdsourcing.util.SingleAssginUtil;
 import cn.withzz.xinghuo.domain.ResponseResult;
 import cn.withzz.xinghuo.domain.UserInfo;
 import cn.withzz.xinghuo.schedules.TaskAssigner;
@@ -42,19 +44,41 @@ public class TaskAssignController {
         return null;
     }
     @RequestMapping(value = "/api/sassign", method = RequestMethod.POST)
-    public List<Distribution> singleAssign(@RequestBody JData data) {
-
+    public Task singleAssign(@RequestBody JData data) {
         System.out.println(data);
-        System.out.println(data.JMultiDump());
-        return null;
+        List<Task> tasks = data.JMultiDump();
+        Task task = tasks.get(0);
+        System.out.println(task);
+        float alpha = data.getTasks().get(0).getAlpha();
+        System.out.println("alpha = "+alpha);
+        try {
+            SingleAssginUtil.assgin(task,alpha );
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        //防止死循环
+        for(Model model:task.getModels()){
+            model.setTask(null);
+        }
+        return task;
     }
     @RequestMapping(value = "/api/massign", method = RequestMethod.POST)
-    public List<Distribution> multiAssign(@RequestBody JData data) {
-
+    public List<Task> multiAssign(@RequestBody JData data) {
         System.out.println(data);
-        System.out.println(data.JMultiDump());
-
-        return null;
+        List<Task> tasks = data.JMultiDump();
+        System.out.println(tasks);
+        try {
+            MultiAssignUtil.assgin(tasks,false);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        //防止死循环
+        for(Task task:tasks){
+            for(Model model:task.getModels()){
+                model.setTask(null);
+            }
+        }
+        return tasks;
     }
 
 }

@@ -107,7 +107,40 @@ public class SingelTaskTest {
 		tasks.add(t3);
 
 		System.out.println("开始匹配---------------------------------");
-		new WokerSelecter(t1,0.3f).assgin();
+		new WokerSelecter(t1,0.8f).assgin();
 		t1.showDevs();
+
+		//打印工人信息
+		System.out.println("[");
+		int i = 0;
+		for(User u:t1.getRegister()){
+			System.out.println("{");
+			System.out.println("id:"+i+",");
+			System.out.println("nickname:\""+u.getNickname()+"\",");
+			System.out.println("skillMap:"+u.getSkillMap()+",");
+			System.out.println("workTime:"+u.getTimeRangeInt().getValue());
+			System.out.println("},");
+			i++;
+		}
+		System.out.println("]");
+
+		//打印任务信息
+		System.out.println("打印任务信息");
+		System.out.println("{");
+		i = 0;
+		System.out.println("id:"+t1.getId()+",");
+		System.out.println("skill:\""+t1.getSkill()+"\",");
+		System.out.println("g:"+t1.getG()+",");
+		System.out.println("alpha:0.8,");
+		System.out.println("models:[");
+			for(Model m:t1.getModels()){
+				System.out.println("{");
+				System.out.println("id:"+i+",");
+				System.out.println("complexity:"+m.getComplexity());
+				System.out.println("},");
+				i++;
+			}
+		System.out.println("]");
+		System.out.println("}");
 	}
 }

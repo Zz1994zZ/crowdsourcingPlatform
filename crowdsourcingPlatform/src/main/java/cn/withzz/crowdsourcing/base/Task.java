@@ -115,8 +115,8 @@ public class Task implements Serializable{
 		TimeRangeInt timeRange=new TimeRangeInt();
 		timeRange.addRange(1, 24);
 		for (Model model:models){
-			timeRange=timeRange.and(model.getWoker().getTimeRangeInt());
-			xy+=model.getComplexity()*model.getWoker().getSkillPoint(skill);
+			timeRange=timeRange.and(model.getWorker().getTimeRangeInt());
+			xy+=model.getComplexity()*model.getWorker().getSkillPoint(skill);
 		}
 		return xy/this.models.size();
 	}
@@ -125,8 +125,8 @@ public class Task implements Serializable{
 		TimeRangeInt timeRange=new TimeRangeInt();
 		timeRange.addRange(1, 24);
 		for (Model model:models){
-			timeRange=timeRange.and(model.getWoker().getTimeRangeInt());
-			xy+=model.getComplexity()*model.getWoker().getSkillPoint(skill);
+			timeRange=timeRange.and(model.getWorker().getTimeRangeInt());
+			xy+=model.getComplexity()*model.getWorker().getSkillPoint(skill);
 		}
 		return xy/this.models.size()*timeRange.cwc();
 	}
@@ -134,14 +134,14 @@ public class Task implements Serializable{
 		TimeRangeInt timeRange=new TimeRangeInt();
 		timeRange.addRange(1, 24);
 		for (Model model:models){
-			timeRange=timeRange.and(model.getWoker().getTimeRangeInt());
+			timeRange=timeRange.and(model.getWorker().getTimeRangeInt());
 		}
 		return timeRange.abs();
 	}
 	
 	public void clearModels(){
 		for (Model model:models){
-			model.setWoker(null);
+			model.setWorker(null);
 		}
 	}
 	public void showDevs(){

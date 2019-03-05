@@ -28,7 +28,7 @@ public class WokerSelecter {
 		if(devs.size()>=mSize){
 			int i =0 ;
 			for(Model m:models){
-				m.setWoker(devs.get(i));
+				m.setWorker(devs.get(i));
 				i++;
 			}
 		}

@@ -17,7 +17,7 @@ public class MultiAssignUtil {
 		for (Distribution distribution : new KMimplement(tasks,isLog).KM()) {
 			HashMap<Model, User> map  = distribution.getPairs();
 			for(Model model:map.keySet()){
-				model.setWoker(map.get(model));
+				model.setWorker(map.get(model));
 			}
 		}
 
