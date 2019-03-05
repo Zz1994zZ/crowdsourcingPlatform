@@ -39,6 +39,7 @@
     <!-- 引入组件库 -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/element-ui/2.4.9/index.js"></script>
 
+
     <style type="text/css">
 
       .linear{
@@ -92,6 +93,15 @@
           <!--<el-tabs tab-position="left" @tab-click="editing=false;userInfo=tempInfo? tempInfo:userInfo">-->
           <el-tabs tab-position="left" @tab-click="">
             <el-tab-pane label="单任务分配">
+              <el-card class="box-card" shadow="hover">
+                <el-alert
+                        title="暂时没有配置，敬请期待！"
+                        type="info"
+                >
+                </el-alert>
+              </el-card>
+            </el-tab-pane>
+            <el-tab-pane label="多任务分配">
               <el-card class="box-card" shadow="hover">
                 <el-row>
                   <el-card class="box-card">
@@ -155,87 +165,141 @@
                     </el-table>
                   </el-card>
                 </el-row>
-                <el-row :gutter="20">
-                  <el-col :span="14">
-                    <el-card>
-                      <div slot="header" class="clearfix">
-                        <span>报名信息</span>
-                        <div> &nbsp </div>
-                      </div>
-                      <template>
-                        <el-transfer
-                                v-model="selectedUsers"
-                                :titles="['已录入工人', '报名工人']"
-                                :props="{
-                                  key: 'id',
-                                  label: 'nickname'
-                                }"
-                                @left-check-change="handleCheckChange"
-                                :data="userData">
-                          <el-button class="transfer-footer" slot="left-footer" size="small" @click="workerDialogFormVisible = true"  >录入工人</el-button>
-                          <el-button class="transfer-footer" slot="left-footer" size="small" type="danger" @click="delWokers">删除</el-button>
-                        </el-transfer>
-
-                      </template>
-                    </el-card>
-                  </el-col>
-                  <el-col :span="10">
-                    <el-card>
-                        <div slot="header" class="clearfix">
-                          <span>任务信息</span>
-                          <el-button style="float: right; padding: 3px 0" type="text" @click="taskDialogFormVisible = true">配置</el-button>
-                          <div> id:<el-tag size="mini">{{ task.id}}</el-tag>
-                              <!--阈值g:<el-tag type="success" size="mini">{{task.g}}</el-tag>-->
-                                开发语言:<el-tag size="mini" type="warning">{{ task.skill}}</el-tag>
-                              协同因子:<el-tag size="mini" type="info">{{ task.alpha}}</el-tag>
+                <el-card>
+                  <div slot="header" class="clearfix">
+                    <span>任务列表</span>
+                    <el-button style="float: right; padding: 3px 0" type="text" @click="addTask">添加任务</el-button>
+                  </div>
+                  <template v-for="task in tasks">
+                    <el-row :gutter="20">
+                      <el-col :span="10">
+                        <el-card>
+                          <div slot="header" class="clearfix">
+                            <span>任务信息</span>
+                            <el-button style="float: right; padding: 3px 0" type="text" @click="confTask(task)">配置</el-button>
+                            <div> id:<el-tag size="mini">{{ task.id}}</el-tag>
+                              阈值g:<el-tag type="success" size="mini">{{task.g}}</el-tag>
+                              开发语言:<el-tag size="mini" type="warning">{{ task.skill}}</el-tag>
+                              <!--协同因子:<el-tag size="mini" type="info">{{ task.alpha}}</el-tag>-->
+                            </div>
                           </div>
-                        </div>
-                        <el-table
-                                :data="models"
-                                style="width: 100%"
-                                max-height="250">
-                          <el-table-column
-                                  fixed
-                                  prop="id"
-                                  label="id"
-                                  width="80">
-                          </el-table-column>
-                          <el-table-column
-                                  prop="complexity"
-                                  label="复杂度"
-                                  width="80">
-                            <template slot-scope="scope">
-                              <div slot="reference" class="name-wrapper">
-                                <el-tag size="mini">{{ scope.row.complexity}}</el-tag>
-                              </div>
-                            </template>
-                          </el-table-column>
-                          <el-table-column
-                                  fixed="right"
-                                  label="操作"
-                                  width="150">
-                            <template slot-scope="scope">
-                              <el-button
-                                      size="mini"
-                                      @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-                              <el-button
-                                      size="mini"
-                                      type="danger"
-                                      @click="handleDelete(scope.$index, scope.row)">删除</el-button>
-                            </template>
-                          </el-table-column>
-                        </el-table>
-                        <div  style="text-align: center"><el-button type="primary" plain @click="dialogFormVisible = true">添加模块</el-button></div>
-                    </el-card>
-                  </el-col>
-                </el-row>
+                          <el-table
+                                  :data="task.models"
+                                  style="width: 100%"
+                                  max-height="250">
+                            <el-table-column
+                                    fixed
+                                    prop="id"
+                                    label="id"
+                                    width="80">
+                            </el-table-column>
+                            <el-table-column
+                                    prop="complexity"
+                                    label="复杂度"
+                                    width="80">
+                              <template slot-scope="scope">
+                                <div slot="reference" class="name-wrapper">
+                                  <el-tag size="mini">{{ scope.row.complexity}}</el-tag>
+                                </div>
+                              </template>
+                            </el-table-column>
+                            <el-table-column
+                                    fixed="right"
+                                    label="操作"
+                                    width="150">
+                              <template slot-scope="scope">
+                                <el-button
+                                        size="mini"
+                                        @click="handleEdit(task,scope.$index, scope.row)">编辑</el-button>
+                                <el-button
+                                        size="mini"
+                                        type="danger"
+                                        @click="handleDelete(task,scope.$index, scope.row)">删除</el-button>
+                              </template>
+                            </el-table-column>
+                          </el-table>
+                          <div  style="text-align: center"><el-button type="primary" plain @click="confModels(task)">添加模块</el-button></div>
+                        </el-card>
+                      </el-col>
+                      <el-col :span="14">
+                        <el-card>
+                          <template>
+                            <el-select v-model="task.registers"  multiple collapse-tags placeholder="请选择">
+                              <el-option
+                                      v-for="user in userData"
+                                      :key="user.id"
+                                      :value="user.id">
+                                <span style="float: left">{{ user.id+"-" }}</span>
+                                <span style="float: left">{{ user.nickname }}</span>
+                                <span style="float: right; color: #8492a6; font-size: 13px">{{ user.workTime }}</span>
+                              </el-option>
+                            </el-select>
+                          </template>
+                          <el-table
+                                  :data="task.registers"
+                                  style="width: 100%"
+                                  max-height="250">
+                            <el-table-column
+                                    fixed
+                                    prop="id"
+                                    label="id"
+                                    width="40">
+                              <template slot-scope="scope">
+                                <div slot="reference" class="name-wrapper">
+                                  {{ scope.row}}
+                                </div>
+                              </template>
+                            </el-table-column>
+                            <el-table-column
+                                    prop="nickname"
+                                    label="昵称"
+                                    width="80">
+                              <template slot-scope="scope">
+                                <div slot="reference" class="name-wrapper">
+                                  <el-tag size="mini">{{ findUserById(scope.row).nickname}}</el-tag>
+                                </div>
+                              </template>
+                            </el-table-column>
+                            <el-table-column
+                                    prop="workTime"
+                                    label="活跃时间"
+                                    width="200">
+                              <template slot-scope="scope">
+                                <div slot="reference" class="name-wrapper">
+                                  <el-tag size="mini">{{ findUserById(scope.row).workTime}}</el-tag>
+                                </div>
+                              </template>
+                            </el-table-column>
+                            <el-table-column
+                                    prop="skillMap"
+                                    label="技能水平"
+                                    width="200">
+                              <template slot-scope="scope">
+                                <div slot="reference" class="name-wrapper">
+                                  <el-tag size="mini">{{ findUserById(scope.row).skillMap}}</el-tag>
+                                </div>
+                              </template>
+                            </el-table-column>
+                          </el-table>
+                        </el-card>
+                      </el-col>
+                    </el-row>
+                  </template>
+                </el-card>
               </el-card>
+
+
+
               <div style="text-align: center"><el-button type="primary" @click="post">开始分配</el-button></div>
               <el-card class="box-card">
                 <div slot="header" class="clearfix">
                   <span>分配结果</span>
                 </div>
-                  <div v-for="model in assignResult.models" >
+                <el-card  v-for="task in assignResult" class="box-card">
+                  <div slot="header" class="clearfix">
+                    <span>任务id:{{task.id}},任务阈值g={{task.g}}</span>
+                  </div>
+                  <div v-for="model in task.models" >
                     <el-card class="box-card">
                       <el-row :gutter="5">
                         <el-col :span="12">
@@ -269,19 +333,13 @@
                       </el-row>
                     </el-card>
                   </div>
+                </el-card>
               </el-card>
             </el-tab-pane>
-            <el-tab-pane label="多任务分配"><el-card class="box-card" shadow="hover">
-              <el-alert
-                      title="暂时没有配置，敬请期待！"
-                      type="info"
-              >
-              </el-alert>
-            </el-card></el-tab-pane>
           </el-tabs>
         </el-card>
       </el-row>
-      <el-dialog title="添加模块" :visible.sync="dialogFormVisible" width="500px">
+      <el-dialog :title="'为任务'+task.id+'添加模块'" :visible.sync="dialogFormVisible" width="500px">
         <el-form :model="model" label-width="90px" >
           <el-form-item label="模块id" >
             <el-input v-model="model.id" autocomplete="off" ></el-input>
@@ -295,23 +353,24 @@
           <el-button type="primary" @click="addModel">确 定</el-button>
         </div>
       </el-dialog>
-      <el-dialog title="任务配置" :visible.sync="taskDialogFormVisible" width="500px">
+      <el-dialog :title="task.isNew? '为新任务进行配置': ('为任务'+task.id+'进行配置')" :visible.sync="taskDialogFormVisible" width="500px">
         <el-form :model="task" label-width="150" >
           <el-form-item label="任务id" >
-            <el-input v-model="task.id" autocomplete="off" ></el-input>
+            <el-input :disabled="task.isNew? false:true" v-model="task.id" autocomplete="off" ></el-input>
           </el-form-item>
-          <!--<el-form-item label="最小共有活跃时长" >-->
-            <!--<el-input v-model="task.g" autocomplete="off" ></el-input>-->
-          <!--</el-form-item>-->
+          <el-form-item label="最小共有活跃时长" >
+            <el-input v-model="task.g" autocomplete="off" ></el-input>
+          </el-form-item>
           <el-form-item label="开发语言" >
             <el-input v-model="task.skill" autocomplete="off" ></el-input>
           </el-form-item>
-          <el-form-item label="协同因子" >
-            <el-input v-model="task.alpha" autocomplete="off"></el-input>
-          </el-form-item>
+          <!--<el-form-item label="协同因子" >-->
+            <!--<el-input v-model="task.alpha" autocomplete="off"></el-input>-->
+          <!--</el-form-item>-->
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button @click="taskDialogFormVisible = false">关闭</el-button>
+          <el-button v-if="task.isNew? true:false" type="primary" @click="addTaskSubmit">确 定</el-button>
         </div>
       </el-dialog>
       <el-dialog title="添加工人信息" :visible.sync="workerDialogFormVisible" width="500px">
@@ -331,7 +390,7 @@
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button @click="workerDialogFormVisible = false">取 消</el-button>
-          <el-button type="primary" @click="addWorker">确 定</el-button>
+          <el-button type="primary" @click="addTaskSubmit">确 定</el-button>
         </div>
       </el-dialog>
       <hr class="featurette-divider">
@@ -366,7 +425,7 @@
   </body>
   <!-- app -->
   <script src="../js/navbarComponent.js"></script>
-  <script src="../js/assgin.js"></script>
+  <script src="../js/multiAssgin.js"></script>
 </html>
 
 
