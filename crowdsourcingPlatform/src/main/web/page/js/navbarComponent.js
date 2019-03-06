@@ -18,7 +18,7 @@ Date.prototype.Format = function(fmt)
 }
 
 //发布的时候这里记得改成部署的机器域名
-let publishHost = 'localhost:8080';
+let publishHost = 'api.csd.withzz.cn';
 
 Vue.component('xinhuo-navbar', {
     props: ['activeIndex'],

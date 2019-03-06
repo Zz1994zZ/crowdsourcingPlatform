@@ -146,7 +146,7 @@ var app = new Vue({
           w.workTime = this.worker.workTime;
           w.skillMap = JSON.parse(this.worker.skillMap);
           this.userData.push(w);
-        this.workerDialogFormVisible = false;
+          this.workerDialogFormVisible = false;
       },
       addModel(task){
           this.task.models.push(this.model);
