@@ -256,6 +256,10 @@ var app = new Vue({
               start = null;
           }
           return timeStrArray;
+      },
+      getTimeStrByBits(bitInt){
+          let timeArr = this.getTime(bitInt);
+          return  this.time2Str(timeArr)
       }
   },
     mounted: function () {

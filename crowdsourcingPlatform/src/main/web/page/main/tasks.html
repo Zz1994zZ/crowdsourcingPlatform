@@ -105,12 +105,12 @@
                       </el-col>
                     </el-row>
                     <el-row style="margin-bottom: 20px;margin-top: 10px">
-                      <el-tag v-if="task.type==1" size="small">软件众包</el-tag>
-                      <el-tag v-if="task.type==2" size="small">时空众包</el-tag>
-                      <el-tag v-if="task.properties.price>1000" size="small" type="danger">高酬劳</el-tag>
-                      <el-tag v-if="task.properties.crowdNum>1" size="small" type="success">多人协作</el-tag>
-                      <el-tag v-if="task.properties.crowdNum==1" size="small" type="success">独立任务</el-tag>
-                      <el-tag v-if="new Date()-new Date(task.properties.expStartTime)<=24*3600*1000" size="small" type="danger">即将截止</el-tag>
+                      <el-tag v-if="task.type==1" size="medium">软件众包</el-tag>
+                      <el-tag v-if="task.type==2" size="medium">时空众包</el-tag>
+                      <el-tag v-if="task.properties.price>1000" size="medium" type="danger">高酬劳</el-tag>
+                      <el-tag v-if="task.properties.crowdNum>1" size="medium" type="success">多人协作</el-tag>
+                      <el-tag v-if="task.properties.crowdNum==1" size="medium" type="success">独立任务</el-tag>
+                      <el-tag v-if="new Date()-new Date(task.properties.expStartTime)<=24*3600*1000" size="medium" type="danger">即将截止</el-tag>
                     </el-row>
                     <el-row style="padding-top: 10px;color: #999">
                       <el-col :span="12" style="">

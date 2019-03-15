@@ -18,7 +18,8 @@ Date.prototype.Format = function(fmt)
 }
 
 //发布的时候这里记得改成部署的机器域名
-let publishHost = 'api.csd.withzz.cn';
+// let publishHost = 'api.csd.withzz.cn';
+let publishHost = 'localhost:8080';
 
 Vue.component('xinhuo-navbar', {
     props: ['activeIndex'],
@@ -61,6 +62,12 @@ Vue.component('xinhuo-navbar', {
                       <el-dropdown-item class="clearfix" command="message">
                         消息
                         <el-badge class="mark" :value="3" />
+                      </el-dropdown-item>
+                      <el-dropdown-item class="clearfix" command="assignmentDemo">
+                        单任务分配工具
+                      </el-dropdown-item>
+                      <el-dropdown-item class="clearfix" command="multiAssignmentUtil">
+                         多任务分配工具
                       </el-dropdown-item>
                     </el-dropdown-menu>
                   </el-dropdown>

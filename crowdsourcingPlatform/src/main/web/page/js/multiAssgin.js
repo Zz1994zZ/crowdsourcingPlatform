@@ -250,6 +250,10 @@ var app = new Vue({
           }
           return timeStrArray;
       },
+      getTimeStrByBits(bitInt){
+          let timeArr = this.getTime(bitInt);
+          return  this.time2Str(timeArr)
+      },
       findUserById(id){
         for(let user of this.userData){
             if(user.id == id){

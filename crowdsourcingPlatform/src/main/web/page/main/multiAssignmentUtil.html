@@ -89,20 +89,6 @@
       <!-- START THE FEATURETTES -->
       <hr class="featurette-divider" style="margin-bottom: 10px">
       <el-row>
-        <el-card class="box-card" shadow="hover">
-          <!--<el-tabs tab-position="left" @tab-click="editing=false;userInfo=tempInfo? tempInfo:userInfo">-->
-          <el-tabs tab-position="left" @tab-click="">
-            <el-tab-pane label="单任务分配">
-              <el-card class="box-card" shadow="hover">
-                <el-alert
-                        title="暂时没有配置，敬请期待！"
-                        type="info"
-                >
-                </el-alert>
-              </el-card>
-            </el-tab-pane>
-            <el-tab-pane label="多任务分配">
-              <el-card class="box-card" shadow="hover">
                 <el-row>
                   <el-card class="box-card">
                     <div slot="header" class="clearfix">
@@ -125,39 +111,41 @@
                               width="150">
                         <template slot-scope="scope">
                           <div slot="reference" class="name-wrapper">
-                            <el-tag size="mini">{{ scope.row.nickname}}</el-tag>
+                            <el-tag size="medium">{{ scope.row.nickname}}</el-tag>
                           </div>
                         </template>
                       </el-table-column>
                       <el-table-column
                               prop="workTime"
                               label="活跃时间"
-                              width="200">
+                              show-overflow-tooltip
+                              min-width="200">
                         <template slot-scope="scope">
                           <div slot="reference" class="name-wrapper">
-                            <el-tag size="mini">{{ scope.row.workTime}}</el-tag>
+                            <el-tag size="medium">{{ getTimeStrByBits(scope.row.workTime)}}</el-tag>
                           </div>
                         </template>
                       </el-table-column>
                       <el-table-column
                               prop="skillMap"
                               label="技能水平"
-                              width="200">
+                              show-overflow-tooltip
+                              min-width="200">
                         <template slot-scope="scope">
                           <div slot="reference" class="name-wrapper">
-                            <el-tag size="mini">{{ scope.row.skillMap}}</el-tag>
+                            <el-tag size="medium">{{ scope.row.skillMap}}</el-tag>
                           </div>
                         </template>
                       </el-table-column>
                       <el-table-column
                               label="操作"
-                              width="150">
+                              width="200">
                         <template slot-scope="scope">
                           <el-button
-                                  size="mini"
+                                  size="medium"
                                   @click="handleUserEdit(scope.$index, scope.row)">编辑</el-button>
                           <el-button
-                                  size="mini"
+                                  size="medium"
                                   type="danger"
                                   @click="handleUserDelete(scope.$index, scope.row)">删除</el-button>
                         </template>
@@ -177,10 +165,10 @@
                           <div slot="header" class="clearfix">
                             <span>任务信息</span>
                             <el-button style="float: right; padding: 3px 0" type="text" @click="confTask(task)">配置</el-button>
-                            <div> id:<el-tag size="mini">{{ task.id}}</el-tag>
-                              阈值g:<el-tag type="success" size="mini">{{task.g}}</el-tag>
-                              开发语言:<el-tag size="mini" type="warning">{{ task.skill}}</el-tag>
-                              <!--协同因子:<el-tag size="mini" type="info">{{ task.alpha}}</el-tag>-->
+                            <div> id:<el-tag size="medium">{{ task.id}}</el-tag>
+                              阈值g:<el-tag type="success" size="medium">{{task.g}}</el-tag>
+                              开发语言:<el-tag size="medium" type="warning">{{ task.skill}}</el-tag>
+                              <!--协同因子:<el-tag size="medium" type="info">{{ task.alpha}}</el-tag>-->
                             </div>
                           </div>
                           <el-table
@@ -191,7 +179,7 @@
                                     fixed
                                     prop="id"
                                     label="id"
-                                    width="80">
+                                    width="50">
                             </el-table-column>
                             <el-table-column
                                     prop="complexity"
@@ -199,20 +187,20 @@
                                     width="80">
                               <template slot-scope="scope">
                                 <div slot="reference" class="name-wrapper">
-                                  <el-tag size="mini">{{ scope.row.complexity}}</el-tag>
+                                  <el-tag size="medium">{{ scope.row.complexity}}</el-tag>
                                 </div>
                               </template>
                             </el-table-column>
                             <el-table-column
                                     fixed="right"
                                     label="操作"
-                                    width="150">
+                                    width="200">
                               <template slot-scope="scope">
                                 <el-button
-                                        size="mini"
+                                        size="medium"
                                         @click="handleEdit(task,scope.$index, scope.row)">编辑</el-button>
                                 <el-button
-                                        size="mini"
+                                        size="medium"
                                         type="danger"
                                         @click="handleDelete(task,scope.$index, scope.row)">删除</el-button>
                               </template>
@@ -256,27 +244,29 @@
                                     width="80">
                               <template slot-scope="scope">
                                 <div slot="reference" class="name-wrapper">
-                                  <el-tag size="mini">{{ findUserById(scope.row).nickname}}</el-tag>
+                                  <el-tag size="medium">{{ findUserById(scope.row).nickname}}</el-tag>
                                 </div>
                               </template>
                             </el-table-column>
                             <el-table-column
                                     prop="workTime"
                                     label="活跃时间"
-                                    width="200">
+                                    show-overflow-tooltip
+                                    min-width="200">
                               <template slot-scope="scope">
                                 <div slot="reference" class="name-wrapper">
-                                  <el-tag size="mini">{{ findUserById(scope.row).workTime}}</el-tag>
+                                  <el-tag size="medium">{{ getTimeStrByBits(findUserById(scope.row).workTime)}}</el-tag>
                                 </div>
                               </template>
                             </el-table-column>
                             <el-table-column
                                     prop="skillMap"
                                     label="技能水平"
-                                    width="200">
+                                    show-overflow-tooltip
+                                    min-width="200">
                               <template slot-scope="scope">
                                 <div slot="reference" class="name-wrapper">
-                                  <el-tag size="mini">{{ findUserById(scope.row).skillMap}}</el-tag>
+                                  <el-tag size="medium">{{ findUserById(scope.row).skillMap}}</el-tag>
                                 </div>
                               </template>
                             </el-table-column>
@@ -286,10 +276,6 @@
                     </el-row>
                   </template>
                 </el-card>
-              </el-card>
-
-
-
               <div style="text-align: center"><el-button type="primary" @click="post">开始分配</el-button></div>
               <el-card class="box-card">
                 <div slot="header" class="clearfix">
@@ -335,9 +321,6 @@
                   </div>
                 </el-card>
               </el-card>
-            </el-tab-pane>
-          </el-tabs>
-        </el-card>
       </el-row>
       <el-dialog :title="'为任务'+task.id+'添加模块'" :visible.sync="dialogFormVisible" width="500px">
         <el-form :model="model" label-width="90px" >
