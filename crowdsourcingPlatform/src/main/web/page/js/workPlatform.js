@@ -3,7 +3,7 @@ var app = new Vue({
   el: '#app',
   data: {
     tasks: [],
-    recommendTasks: [],
+    allTasks: [],
     //分页
     currentPage: 0,
     total: 0,
@@ -68,10 +68,12 @@ var app = new Vue({
                })
                .then(function (response) {
                      console.log(response);
-                     that.tasks = response.data;
-                     for(let t of  that.tasks) {
+                     that.allTasks = response.data;
+                     that.total =  that.allTasks.length;
+                     for(let t of  that.allTasks) {
                          t.properties = JSON.parse(t.properties);
                      }
+                     that.tasks = that.allTasks.slice(0,10);
                })
                .catch(function (error) {
                  console.log(error);
@@ -86,7 +88,9 @@ var app = new Vue({
       },
       handleCurrentChange(val) {
           console.log(`当前页: ${val}`);
-          this.getTasksList();
+          let offset = (val-1)*10;
+          this.tasks = this.allTasks.slice(offset,10+offset);
+          // this.getTasksList();
       }
   },
   mounted: function () {

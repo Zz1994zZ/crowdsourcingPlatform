@@ -22,17 +22,17 @@ public interface TaskDao {
         // 返回 Map 结果集
     List<Task> findByParentTask(@Param("id") int id);
 
-    @Select("select * from tasks where parentTask = 0 order by createTime desc limit #{start}, #{pageSize}")
+    @Select("select * from tasks where parentTask = 0 and status = 1 order by createTime desc limit #{start}, #{pageSize}")
     List<Task> findByPage(@Param("start") int start,@Param("pageSize") int per_page);
 
-//    @Select("select * from tasks #{condition}")
-    @Select("<script>"
-            + "SELECT COUNT(*) "
-            + "FROM tasks "
-            + "<if test='condition!=null'>"
-            + "WHERE #{condition}"
-            + "</if>"
-            + "</script>")
+    @Select("select count(id) from tasks where parentTask = 0 and status = 1")
+//    @Select("<script>"
+//            + "SELECT COUNT(*) "
+//            + "FROM tasks "
+//            + "<if test='condition!=null'>"
+//            + "WHERE #{condition}"
+//            + "</if>"
+//            + "</script>")
     int getCount(@Param("condition") String condition);
 
     @Select("<script>"

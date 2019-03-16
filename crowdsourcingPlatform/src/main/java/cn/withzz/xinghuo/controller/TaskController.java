@@ -56,7 +56,7 @@ public class TaskController {
                 tasks = taskService.findByPage(1,10);
             }
         }
-        int count = taskService.getCount(" parentTask=0");
+        int count = taskService.getCount("where parentTask = 0");
         result.put("count",count);
         result.put("tasks",tasks);
         return result;

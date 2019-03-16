@@ -32,14 +32,20 @@
     <!-- VUE -->
     <script src="https://cdn.jsdelivr.net/npm/vue"></script>
     <!-- axios  -->
-    <script src="https://cdn.bootcss.com/axios/0.18.0/axios.min.js"></script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js"></script>
     <!-- 引入样式 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/element-ui/2.4.9/theme-chalk/index.css">
     <!-- 引入组件库 -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/element-ui/2.4.9/index.js"></script>
     <!-- echart-->
-    <script src="https://cdn.bootcss.com/echarts/4.2.0-rc.2/echarts.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/4.1.0/echarts.min.js"></script>
+
+    <style>
+      .registerUsers .el-card {
+        border: 0px solid #ebeef5;
+      }
+
+    </style>
   </head>
 <!-- NAVBAR
 ================================================== -->
@@ -62,7 +68,9 @@
                 </div>
               </el-col>
               <el-col :span="6" style="text-align: right">
-                <el-tag size="small">报名中</el-tag>
+                <el-tag v-if="task.status == 1" size="small">报名中</el-tag>
+                <el-tag v-else-if="task.status == 2" type="warning" size="small">开发中</el-tag>
+                <el-tag v-else-if="task.status == 3" type="info" size="small">已完成</el-tag>
               </el-col>
             </div>
                   <el-row>
@@ -115,13 +123,57 @@
                       </el-card>
                     </div>
                   </el-row>
-                  <el-row style="margin-top:20px;text-align: right">
-                    <el-button v-if="!registers.includes(login.username)" type="primary" size="medium" @click="confirm">我要报名</el-button>
-                    <el-button v-else  size="medium" type="info" plain disabled>已报名</el-button>
+                  <el-row v-if="task.parentTask==0" style="margin-top:20px;text-align: right">
+                    <el-button v-if="task.status == 1 && !registers.includes(login.username)" type="primary" size="medium" @click="confirm">我要报名</el-button>
+                    <el-button v-else-if="task.status == 1"  size="medium" type="info" plain disabled>已报名</el-button>
+                  </el-row>
+                  <!--下方信息区域 1报名用户列表 2开发人员列表 3开发人员列表-->
+                  <el-row v-if="task.status == 1 && task.parentTask==0" style="margin-top:20px">
+                    <el-card :body-style="{ padding: '0px'}" shadow="hover">
+                      <div slot="header" class="clearfix">
+                        <span>共{{registers.length}}人已报名：</span>
+                      </div>
+                      <el-col :span="4" v-for="username in registers"  class="registerUsers" >
+                        <el-tooltip class="item" effect="dark" :content="username" placement="top-end">
+                          <el-card shadow="never" :body-style="{ padding: '0px'}">
+                            <img src="http://img.zcool.cn/community/01333d5ad56151a80120402918e758.jpeg" style="border-radius: 50%;width: 120px;"></img>
+                          </el-card>
+                        </el-tooltip>
+                      </el-col>
+                    </el-card>
+                  </el-row>
+                  <el-row v-else-if="task.status == 2 && task.parentTask==0" style="margin-top:20px">
+                    <el-card :body-style="{ padding: '0px'}" shadow="hover">
+                      <div slot="header" class="clearfix">
+                        <span>开发者：</span>
+                      </div>
+                      <el-col :span="4" class="registerUsers">
+                        <el-tooltip class="item" effect="dark" :content="task.executor" placement="top-end">
+                          <el-card shadow="never" :body-style="{ padding: '0px'}">
+                            <img src="http://img.zcool.cn/community/01333d5ad56151a80120402918e758.jpeg" style="border-radius: 50%;width: 120px;"></img>
+                          </el-card>
+                        </el-tooltip>
+                      </el-col>
+                    </el-card>
+                  </el-row>
+                  <el-row v-else-if="task.status == 3 && task.parentTask==0" style="margin-top:20px">
+                    <el-card :body-style="{ padding: '0px'}" shadow="hover">
+                      <div slot="header" class="clearfix">
+                        <span>开发者：</span>
+                      </div>
+                      <el-col :span="4" class="registerUsers">
+                        <el-tooltip class="item" effect="dark" :content="task.executor" placement="top-end">
+                          <el-card shadow="never" :body-style="{ padding: '0px'}">
+                            <img src="http://img.zcool.cn/community/01333d5ad56151a80120402918e758.jpeg" style="border-radius: 50%;width: 120px;"></img>
+                          </el-card>
+                        </el-tooltip>
+                      </el-col>
+                    </el-card>
                   </el-row>
           </el-card>
         </el-col>
-        <el-col :span="8" style="padding-left: 10px">
+        <!--右上角信息区域 1匹配雷达图 2发布方联系方式 3完成评价-->
+        <el-col  v-if="task.status == 1" :span="8" style="padding-left: 10px">
           <el-card class="box-card" shadow="hover">
             <div slot="header" class="clearfix">
               <h5>看起来这个项目很适合您，赶紧报名吧~</h5>
@@ -129,6 +181,31 @@
             <div ref="chartzz" style="width: 100%;height:250px;"></div>
           </el-card>
         </el-col>
+        <el-col  v-else-if="task.status == 2" :span="8" style="padding-left: 10px">
+          <el-card class="box-card" shadow="hover">
+            <div slot="header" class="clearfix">
+              <h5>对需求有疑问请随时联系:</h5>
+            </div>
+            电话：18071118228
+            微信:18071118228
+          </el-card>
+        </el-col>
+        <el-col  v-else-if="task.status == 3" :span="8" style="padding-left: 10px">
+          <el-card class="box-card" shadow="hover">
+            <div slot="header" class="clearfix">
+              <h5>用户评价</h5>
+            </div>
+            <el-rate
+                    value="3"
+                    disabled
+                    show-score
+                    text-color="#ff9900"
+                    score-template="{value}">
+            </el-rate>
+
+          </el-card>
+        </el-col>
+
       </el-row>
 
       <hr class="featurette-divider">

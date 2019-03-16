@@ -32,8 +32,7 @@
     <!-- VUE -->
     <script src="https://cdn.jsdelivr.net/npm/vue"></script>
     <!-- axios  -->
-    <script src="https://cdn.bootcss.com/axios/0.18.0/axios.min.js"></script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js"></script>
     <!-- 引入样式 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/element-ui/2.4.9/theme-chalk/index.css">
     <!-- 引入组件库 -->
@@ -47,7 +46,7 @@
     <div id="app" class="container marketing">
       <!-- START THE FEATURETTES -->
       <hr class="featurette-divider" style="margin-bottom: 10px">
-      <img width="100%" style="margin-bottom:10px" src="https://zb.oschina.net/static/images/project/star-list1.png"/>
+      <!--<img width="100%" style="margin-bottom:10px" src="https://zb.oschina.net/static/images/project/star-list1.png"/>-->
       <el-row>
         <el-col :span="18">
           <el-row style="margin-bottom: 10px">
@@ -65,21 +64,21 @@
           </el-row>
           <el-card :body-style="{ padding: '0px'}">
             <el-form  label-width="100px" >
-              <el-form-item label="应用类型：" style="margin-bottom: 0px;">
-                <el-checkbox-group v-model="appType" size="small">
-                  <el-checkbox-button style="" border="true" v-for="type in appTypes" :label="type" :key="type">{{type}}</el-checkbox-button>
-                </el-checkbox-group>
-              </el-form-item>
-              <el-form-item label="项目类型：" style="margin-bottom: 0px;">
-                <el-checkbox-group v-model="projectType" size="small">
-                  <el-checkbox-button style="" border="true" v-for="type in projectTypes" :label="type" :key="type">{{type}}</el-checkbox-button>
-                </el-checkbox-group>
-              </el-form-item>
-              <el-form-item label="金额范围：" style="margin-bottom: 0px;">
-                <el-checkbox-group v-model="priceType" size="small">
-                  <el-checkbox-button style="" border="true" v-for="type in priceTypes" :label="type" :key="type">{{type}}</el-checkbox-button>
-                </el-checkbox-group>
-              </el-form-item>
+              <!--<el-form-item label="应用类型：" style="margin-bottom: 0px;">-->
+                <!--<el-checkbox-group v-model="appType" size="small">-->
+                  <!--<el-checkbox-button style="" border="true" v-for="type in appTypes" :label="type" :key="type">{{type}}</el-checkbox-button>-->
+                <!--</el-checkbox-group>-->
+              <!--</el-form-item>-->
+              <!--<el-form-item label="项目类型：" style="margin-bottom: 0px;">-->
+                <!--<el-checkbox-group v-model="projectType" size="small">-->
+                  <!--<el-checkbox-button style="" border="true" v-for="type in projectTypes" :label="type" :key="type">{{type}}</el-checkbox-button>-->
+                <!--</el-checkbox-group>-->
+              <!--</el-form-item>-->
+              <!--<el-form-item label="金额范围：" style="margin-bottom: 0px;">-->
+                <!--<el-checkbox-group v-model="priceType" size="small">-->
+                  <!--<el-checkbox-button style="" border="true" v-for="type in priceTypes" :label="type" :key="type">{{type}}</el-checkbox-button>-->
+                <!--</el-checkbox-group>-->
+              <!--</el-form-item>-->
             </el-form>
           </el-card>
           <el-card v-if="!tasks.length" :body-style="{ padding: '0px'}" shadow="hover">
