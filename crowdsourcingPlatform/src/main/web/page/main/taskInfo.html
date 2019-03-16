@@ -123,10 +123,19 @@
                       </el-card>
                     </div>
                   </el-row>
+                  <!--操作按钮 1报名 2提交任务 3发布方评价-->
                   <el-row v-if="task.parentTask==0" style="margin-top:20px;text-align: right">
                     <el-button v-if="task.status == 1 && !registers.includes(login.username)" type="primary" size="medium" @click="confirm">我要报名</el-button>
                     <el-button v-else-if="task.status == 1"  size="medium" type="info" plain disabled>已报名</el-button>
                   </el-row>
+                  <el-row v-if="task.properties.crowdNum==1" style="margin-top:20px;text-align: right">
+                    <el-button v-if="task.status == 2 && task.executor == login.username" type="primary" size="medium" @click="confirm">提交任务</el-button>
+                  </el-row>
+                  <el-row v-if="task.properties.crowdNum==1" style="margin-top:20px;text-align: right">
+                    <el-button v-if="task.status == 3 && task.creator == login.username" type="primary" size="medium" @click="confirm">评价任务</el-button>
+                  </el-row>
+
+
                   <!--下方信息区域 1报名用户列表 2开发人员列表 3开发人员列表-->
                   <el-row v-if="task.status == 1 && task.parentTask==0" style="margin-top:20px">
                     <el-card :body-style="{ padding: '0px'}" shadow="hover">
