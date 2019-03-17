@@ -14,7 +14,9 @@ var app = new Vue({
     id:'',
     task: {},
     modules:[],
-    registers:[]
+    registers:[],
+    graded:false,
+    score:0
   },
   methods: {
       initChart(){
@@ -79,6 +81,12 @@ var app = new Vue({
                     that.task = data.task;
                     that.registers = data.registers;
                     that.task.properties = JSON.parse(that.task.properties);
+                    if(!that.task.properties.score){
+                        that.task.properties.score = 0;
+                        that.graded=false;
+                    }else{
+                        that.graded=true;
+                    }
                     //多人任务含有子任务（模块）
                     if(that.task.properties.crowdNum>1){
                         that.getModulesInfo();
@@ -169,6 +177,103 @@ var app = new Vue({
                       message: '取消报名'
                   });
               });
+      },
+      submit(){
+          let that = this;
+          this.$confirm('确认提交吗?', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+          }).then(() => {
+              axios(
+                  {
+                      method: 'post',
+                      url: "http://"+login.ip+"/api/task/"+that.task.id+"/submit",
+                      headers: {
+                          'username': login.username,
+                          'token': login.token
+                      }
+                  })
+                  .then(function (response) {
+                      console.log(response);
+                      let data = response.data;
+                      if(data.success){
+                          that.$message({
+                              type: 'success',
+                              message: data.message
+                          });
+                      }else{
+                          that.$message({
+                              message: data.message,
+                              type: 'error'
+                          });
+                      }
+                      that.getTaskInfo();
+                  })
+                  .catch(function (error) {
+                      console.log(error);
+                      that.$message({
+                          message: '网络错误！',
+                          type: 'error'
+                      });
+                  });
+          }).catch(() => {
+              that.$message({
+                  type: 'info',
+                  message: '取消提交'
+              });
+          });
+      },
+      grade(){
+          let that = this;
+          that.task.properties.score = that.score;
+          this.$confirm('提交评价后不可以轻言更改哟, 是否继续?', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+          }).then(() => {
+              axios(
+                  {
+                      method: 'post',
+                      url: "http://"+login.ip+"/api/task/grade",
+                      headers: {
+                          'username': login.username,
+                          'token': login.token
+                      },
+                      data:{
+                          id:that.task.id,
+                          properties:JSON.stringify(that.task.properties)
+                      }
+                  })
+                  .then(function (response) {
+                      console.log(response);
+                      let data = response.data;
+                      if(data.success){
+                          that.$message({
+                              type: 'success',
+                              message: data.message
+                          });
+                      }else{
+                          that.$message({
+                              message: data.message,
+                              type: 'error'
+                          });
+                      }
+                      that.getTaskInfo();
+                  })
+                  .catch(function (error) {
+                      console.log(error);
+                      that.$message({
+                          message: '网络错误！',
+                          type: 'error'
+                      });
+                  });
+          }).catch(() => {
+              that.$message({
+                  type: 'info',
+                  message: '取消评价'
+              });
+          });
       }
   },
   mounted: function () {

@@ -25,6 +25,10 @@ public interface TaskDao {
     @Select("select * from tasks where parentTask = 0 and status = 1 order by createTime desc limit #{start}, #{pageSize}")
     List<Task> findByPage(@Param("start") int start,@Param("pageSize") int per_page);
 
+    @Select("select * from tasks where executor = #{executor} and status = #{status} order by createTime desc")
+    List<Task> findByExecutorAndStatus(@Param("executor") String executor,@Param("status") int status);
+
+
     @Select("select count(id) from tasks where parentTask = 0 and status = 1")
 //    @Select("<script>"
 //            + "SELECT COUNT(*) "

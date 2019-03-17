@@ -40,4 +40,8 @@ public interface TaskService {
     List<Task> getRegisterTasks(String username,int status);
 
     List<Task> getPublishedTasks(String username,int status);
+
+    List<Task> getTaskByExcutor(String executor,int status);
+
+
 }

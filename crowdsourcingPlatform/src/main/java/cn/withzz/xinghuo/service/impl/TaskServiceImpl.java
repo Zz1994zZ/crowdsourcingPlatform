@@ -126,4 +126,10 @@ public class TaskServiceImpl implements TaskService {
         return result;
     }
 
+    @Override
+    public List<Task> getTaskByExcutor(String executor, int status){
+        List<Task> tasks  = taskDao.findByExecutorAndStatus(executor,status);
+        return tasks;
+    }
+
 }

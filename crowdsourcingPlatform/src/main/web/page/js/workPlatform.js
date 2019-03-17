@@ -9,7 +9,7 @@ var app = new Vue({
     total: 0,
     menuIndex:'1-1',
     status: 2,
-    requestContent:'registerTask',
+    requestContent:'task',
   },
   methods: {
       menuSelect(index,indexPath){
@@ -18,11 +18,11 @@ var app = new Vue({
           switch (this.menuIndex) {
               case '1-1':
                   this.status = 2;
-                  this.requestContent='registerTask';
+                  this.requestContent='task';
                   break;
               case '1-2':
                   this.status = 3;
-                  this.requestContent='registerTask';
+                  this.requestContent='task';
                   break;
               case '1-3':
                   this.status = 0;

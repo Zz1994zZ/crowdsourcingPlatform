@@ -129,10 +129,21 @@
                     <el-button v-else-if="task.status == 1"  size="medium" type="info" plain disabled>已报名</el-button>
                   </el-row>
                   <el-row v-if="task.properties.crowdNum==1" style="margin-top:20px;text-align: right">
-                    <el-button v-if="task.status == 2 && task.executor == login.username" type="primary" size="medium" @click="confirm">提交任务</el-button>
+                    <el-button v-if="task.status == 2 && task.executor == login.username" type="primary" size="medium" @click="submit">提交任务</el-button>
                   </el-row>
                   <el-row v-if="task.properties.crowdNum==1" style="margin-top:20px;text-align: right">
-                    <el-button v-if="task.status == 3 && task.creator == login.username" type="primary" size="medium" @click="confirm">评价任务</el-button>
+                      <el-col :span="20" v-if="task.status == 3 && task.creator == login.username && !graded">
+                          <el-rate
+                                  v-model="score"
+                                  :colors="['#99A9BF', '#F7BA2A', '#FF9900']">
+                          </el-rate>
+                      </el-col>
+                      <el-col :span="4" v-if="task.status == 3 && task.creator == login.username && !graded" >
+                          <el-button  type="primary" size="medium" @click="grade">评价任务</el-button>
+                      </el-col>
+                      <el-col :span="24" v-else-if="task.status == 3 && task.creator == login.username && graded" >
+                          <el-button  type="info" size="medium" disabled>已评价该任务</el-button>
+                      </el-col>
                   </el-row>
 
 
@@ -205,7 +216,7 @@
               <h5>用户评价</h5>
             </div>
             <el-rate
-                    value="3"
+                    v-model="task.properties.score"
                     disabled
                     show-score
                     text-color="#ff9900"

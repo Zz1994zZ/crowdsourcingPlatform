@@ -134,8 +134,58 @@ public class TaskController {
             }
         }
         return result;
-
     }
+
+    @RequestMapping(value = "/api/task/{id}/submit", method = RequestMethod.POST)
+    public ResponseResult submit(@PathVariable("id") int id,@RequestHeader("username") String username) {
+        ResponseResult<String> result =new ResponseResult<String>();
+        Task task = taskService.findByKey(id);
+        //校验身份
+        if(task==null||!task.getExecutor().equals(username)){
+            result.setMessage("提交任务失败！任务不存在或无权操作该任务！");
+            result.setSuccess(false);
+        }else{
+            try{
+                //TODO  差一张日志表记录状态更改日志
+                task.setStatus(3);
+                taskService.update(task);
+                result.setMessage("提交任务成功！");
+                result.setSuccess(true);
+            }catch (Exception e){
+                e.printStackTrace();
+                result.setMessage("提交任务失败！");
+                result.setSuccess(false);
+            }
+        }
+        return result;
+    }
+
+    @RequestMapping(value = "/api/task/grade", method = RequestMethod.POST)
+    public ResponseResult grade(@RequestBody Task task,@RequestHeader("username") String username) {
+        ResponseResult<String> result =new ResponseResult<String>();
+        Task oldTask = taskService.findByKey(task.getId());
+        //校验身份
+        if(oldTask==null||!oldTask.getCreator().equals(username)){
+            result.setMessage("评价失败！任务不存在或无权操作该任务！");
+            result.setSuccess(false);
+        }else{
+            try{
+                //TODO  差一张日志表记录状态更改日志
+                oldTask.setProperties(task.getProperties());
+                taskService.update(oldTask);
+                result.setMessage("评价任务成功！");
+                result.setSuccess(true);
+            }catch (Exception e){
+                e.printStackTrace();
+                result.setMessage("评价任务失败！");
+                result.setSuccess(false);
+            }
+        }
+        return result;
+    }
+
+
+
     @RequestMapping(value = "/api/task/{id}", method = RequestMethod.DELETE)
     public void deleteUser(@PathVariable("id") int id) {
         taskService.delete(id);
@@ -144,6 +194,12 @@ public class TaskController {
     @RequestMapping(value = "/api/user/{username}/publishedTask", method = RequestMethod.GET)
     public List<Task> findOnesTasks(@PathVariable("username") String username,@RequestParam("status") int status) {
         List<Task> tasks = taskService.getPublishedTasks(username,status);
+        return tasks;
+    }
+
+    @RequestMapping(value = "/api/user/{executor}/task", method = RequestMethod.GET)
+    public  List<Task> userTasks(@PathVariable("executor") String executor,@RequestParam("status") int status) {
+        List<Task> tasks = taskService.getTaskByExcutor(executor,status);
         return tasks;
     }
 }
