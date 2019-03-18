@@ -162,7 +162,7 @@
                       </el-col>
                     </el-card>
                   </el-row>
-                  <el-row v-else-if="task.status == 2 && task.parentTask==0" style="margin-top:20px">
+                  <el-row v-else-if="task.status == 2" style="margin-top:20px">
                     <el-card :body-style="{ padding: '0px'}" shadow="hover">
                       <div slot="header" class="clearfix">
                         <span>开发者：</span>
@@ -176,7 +176,7 @@
                       </el-col>
                     </el-card>
                   </el-row>
-                  <el-row v-else-if="task.status == 3 && task.parentTask==0" style="margin-top:20px">
+                  <el-row v-else-if="task.status == 3" style="margin-top:20px">
                     <el-card :body-style="{ padding: '0px'}" shadow="hover">
                       <div slot="header" class="clearfix">
                         <span>开发者：</span>

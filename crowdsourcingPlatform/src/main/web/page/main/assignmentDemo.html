@@ -257,7 +257,7 @@
                             </div>
                             <div>
                               工人{{model.worker.id}}->能力:
-                              <el-progress  :stroke-width="18"  status="text" :text-inside="true" :percentage="model.worker.skillMap[task.skill]*100" color="#f56c6c">{{model.worker.skillMap[task.skill]}}</el-progress>
+                              <el-progress  :stroke-width="18"  status="text" :text-inside="true" :percentage="getSkillAbility(model.worker.skillMap,task.skill)*100" color="#f56c6c"></el-progress>
                             </div>
                         </el-col>
                         <el-col :span="12">
@@ -282,6 +282,7 @@
                     </el-card>
                   </div>
               </el-card>
+            <div v-if="currentTaskId!='0'" style="text-align: center"><el-button type="primary" @click="submitAssgin">确认分配</el-button></div>
           </el-tabs>
       </el-row>
       <el-dialog title="添加模块" :visible.sync="dialogFormVisible" width="500px">

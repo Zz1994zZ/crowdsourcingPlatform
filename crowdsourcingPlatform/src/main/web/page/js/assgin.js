@@ -74,11 +74,12 @@ var app = new Vue({
       // },
       currentTaskId:"0",
       task:{
-          id:0,
-          skill:"java",
-          g:3,
-          alpha:0.8,
-      },
+                id:0,
+                skill:"java",
+                g:3,
+                alpha:0.8,
+            },
+
       //被选中的已录入工人
       selectedKeys:[],
       //左边工人数据
@@ -187,7 +188,7 @@ var app = new Vue({
           console.log(index, row);
           this.userData.splice(index,1)
       },
-        post(){
+      post(){
                 let that = this;
                 //模块拼进task
                 this.task["models"] = this.models;
@@ -302,6 +303,14 @@ var app = new Vue({
           this.selectedUsers=[];
           //自由分配则无视
           if(id==0){
+              this.task = {
+                                          id:0,
+                                          skill:"java",
+                                          g:3,
+                                          alpha:0.8,
+                                      };
+              this.userData = [];
+              this.models = [];
               return;
           }
           let that = this;
@@ -340,6 +349,7 @@ var app = new Vue({
                       let temp={};
                       temp.id = i;
                       i++;
+                      temp.username = r.username;
                       temp.nickname = r.name;
                       temp.skillMap = JSON.parse(r.skillList);
                       console.log(JSON.parse(r.extention).activeTime);
@@ -369,6 +379,46 @@ var app = new Vue({
               r=r+timeMap[i];
           }
           return r;
+      },
+      getSkillAbility(map,skill){
+            for(let key in map){
+                if(key.toLowerCase() == skill.toLowerCase()){
+                    return map[key];
+                }
+            }
+      },
+      submitAssgin(){//提交分配结果到后台
+            let that = this;
+           //构建模块id——工人username map
+           let assginMap={};
+           for(let m of that.assignResult.models){
+                let key = m.id;
+                let userIndex = m.worker.id;
+                let username = that.userData[userIndex].username;
+                assginMap[key] = username;
+           }
+           console.log(assginMap);
+                        axios(
+                                      {
+                                          method: 'post',
+                                          url: "http://"+login.ip+"/api/task/"+that.task.id+"/assignSubmit",
+                                          headers: {
+                                              'username': login.username,
+                                              'token': login.token
+                                          },
+                                          data: assginMap
+                                      })
+                          .then(function (response) {
+                              that.assignResult = response.data;
+                          })
+                          .catch(function (error) {
+                              console.log(error);
+                              that.$message({
+                                  message: '网络错误！',
+                                  type: 'error'
+                              });
+                          });
+
       }
   },
     mounted: function () {

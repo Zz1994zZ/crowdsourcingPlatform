@@ -86,6 +86,33 @@ public class TaskAssignController {
         return tasks;
     }
 
+    @RequestMapping(value = "/api/task/{id}/assignSubmit", method = RequestMethod.POST)
+    public ResponseResult singleAssignSubmit(@RequestBody Map<Integer,String> assginMap,@PathVariable("id") int id,@RequestHeader("username") String username) {
+        ResponseResult<String> result =new ResponseResult<String>();
+        cn.withzz.xinghuo.domain.Task task = taskService.findByKey(id);
+        if(!task.getCreator().equals(username)){
+            result.setSuccess(false);
+            result.setErrorcode("401");
+            result.setMessage("您没有权限操作该任务!");
+            return result;
+        }
+        try{
+            for (int taskId:assginMap.keySet()){
+                cn.withzz.xinghuo.domain.Task t=taskService.findByKey(taskId);
+                t.setExecutor(assginMap.get(taskId));
+                t.setStatus(2);
+                taskService.update(t);
+            }
+            result.setSuccess(true);
+            result.setMessage("服务器错误");
+        }catch (Exception e){
+            result.setSuccess(false);
+            result.setErrorcode("500");
+            result.setMessage(e.getMessage());
+        }
+        return result;
+    }
+
     @RequestMapping(value = "/api/task/{id}/assignInfo", method = RequestMethod.GET)
     public Map<String,Object> singleAssignTaskInfo(@PathVariable("id") int id,@RequestHeader("username") String username) {
         Map<String,Object> result = new HashMap<>();
