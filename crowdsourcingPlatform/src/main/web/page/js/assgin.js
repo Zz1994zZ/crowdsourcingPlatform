@@ -1,3 +1,7 @@
+var timeMap =[];
+for(let i=1;i<=24;i++){
+    timeMap[i]= 1<<(24-i);
+}
 var app = new Vue({
   el: '#app',
   data: {
@@ -37,6 +41,7 @@ var app = new Vue({
       //        {"id":9,"nickname":"user9","workTime":1,"skillMap":{"java":0.9,"php":0.5}},
       //        {"id":10,"nickname":"user10","workTime":1,"skillMap":{"java":12,"php":0.5}}
       //     ],
+      tasks:[],
       type:1,
       //单任务时用到
       models:[
@@ -67,6 +72,7 @@ var app = new Vue({
       //     "skill":"空",
       //     "alpha":0
       // },
+      currentTaskId:"0",
       task:{
           id:0,
           skill:"java",
@@ -260,9 +266,112 @@ var app = new Vue({
       getTimeStrByBits(bitInt){
           let timeArr = this.getTime(bitInt);
           return  this.time2Str(timeArr)
+      },
+      getTasksList(){//获取用户发布的所有处于报名状态的任务
+          let that = this;
+          axios(
+              {
+                  method: 'get',
+                  url: "http://"+login.ip+"/api/user/"+login.username+"/publishedTask",
+                  params:{
+                      status: 1,
+                  },
+                  headers: {
+                      'username': login.username,
+                      'token': login.token
+                  }
+              })
+              .then(function (response) {
+                  console.log(response);
+                  that.tasks = response.data;
+                  for(let t of  that.tasks) {
+                      t.properties = JSON.parse(t.properties);
+                  }
+              })
+              .catch(function (error) {
+                  console.log(error);
+                  that.$message({
+                      message: '网络错误！',
+                      type: 'error'
+                  });
+              });
+      },
+      changeTask(id){
+          //初始化报名工人列表
+          this.selectedKeys=[];
+          this.selectedUsers=[];
+          //自由分配则无视
+          if(id==0){
+              return;
+          }
+          let that = this;
+          axios(
+              {
+                  method: 'get',
+                  url: "http://"+login.ip+"/api/task/"+id+"/assignInfo",
+                  params:{
+                      status: 1,
+                  },
+                  headers: {
+                      'username': login.username,
+                      'token': login.token
+                  }
+              })
+              .then(function (response) {
+                  console.log(response.data);
+                  let data = response.data;
+                  let modules = [];
+                  for(m of data.modules){
+                      let temp={};
+                      temp.id = m.id;
+                      temp.complexity = 1;
+                      modules.push(temp);
+                  }
+                  if(modules.length==0){
+                      let temp={};
+                      temp.id = that.currentTaskId;
+                      temp.complexity = 1;
+                      modules.push(temp);
+                  }
+                  that.models = modules;
+                  let users = [];
+                  let i = 0;
+                  for(r of data.registers){
+                      let temp={};
+                      temp.id = i;
+                      i++;
+                      temp.nickname = r.name;
+                      temp.skillMap = JSON.parse(r.skillList);
+                      console.log(JSON.parse(r.extention).activeTime);
+                      temp.workTime = that.getIntRangeByArray(JSON.parse(r.extention).activeTime);
+                      users.push(temp);
+                  }
+                  that.userData = users;
+                  for (let t of that.tasks) {
+                      if(t.id == that.currentTaskId){
+                          that.task.id = t.id;
+                          that.task.skill = t.properties.skills;
+                          break;
+                      }
+                  }
+              })
+              .catch(function (error) {
+                  console.log(error);
+                  that.$message({
+                      message: '网络错误！',
+                      type: 'error'
+                  });
+              });
+      },
+      getIntRangeByArray(array){
+          let r = 0;
+          for(let i of array){
+              r=r+timeMap[i];
+          }
+          return r;
       }
   },
     mounted: function () {
-
+        this.getTasksList();
     }
 })

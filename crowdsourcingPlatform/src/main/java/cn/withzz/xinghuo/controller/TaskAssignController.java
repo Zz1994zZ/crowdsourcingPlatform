@@ -10,6 +10,7 @@ import cn.withzz.crowdsourcing.util.SingleAssginUtil;
 import cn.withzz.xinghuo.domain.ResponseResult;
 import cn.withzz.xinghuo.domain.UserInfo;
 import cn.withzz.xinghuo.schedules.TaskAssigner;
+import cn.withzz.xinghuo.service.TaskService;
 import cn.withzz.xinghuo.service.UserInfoService;
 import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,10 @@ public class TaskAssignController {
 
     @Autowired
     private TaskAssigner taskAssigner;
+    @Autowired
+    private TaskService taskService;
+    @Autowired
+    private UserInfoService userInfoService;
 
     @RequestMapping(value = "/api/assign", method = RequestMethod.GET)
     public List<Distribution> assign() {
@@ -79,6 +84,23 @@ public class TaskAssignController {
             }
         }
         return tasks;
+    }
+
+    @RequestMapping(value = "/api/task/{id}/assignInfo", method = RequestMethod.GET)
+    public Map<String,Object> singleAssignTaskInfo(@PathVariable("id") int id,@RequestHeader("username") String username) {
+        Map<String,Object> result = new HashMap<>();
+        cn.withzz.xinghuo.domain.Task task = taskService.findByKey(id);
+        if(!task.getCreator().equals(username))
+            return null;
+        List<cn.withzz.xinghuo.domain.Task> modules = taskService.findByParentTask(id);
+        List<String> registers = taskService.getAllRegisters(id);
+        List<UserInfo> registerInfos = new ArrayList<UserInfo>();
+        for(String user:registers){
+            registerInfos.add(userInfoService.findByKey(user));
+        }
+        result.put("modules",modules);
+        result.put("registers",registerInfos);
+        return result;
     }
 
 }
