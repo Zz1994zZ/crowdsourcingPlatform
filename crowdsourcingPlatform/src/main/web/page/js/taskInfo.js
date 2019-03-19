@@ -81,7 +81,7 @@ var app = new Vue({
                     that.task = data.task;
                     that.registers = data.registers;
                     that.task.properties = JSON.parse(that.task.properties);
-                    if(!that.task.properties.score){
+                  if(!that.task.properties.score){
                         that.task.properties.score = 0;
                         that.graded=false;
                     }else{
@@ -89,6 +89,7 @@ var app = new Vue({
                     }
                     //多人任务含有子任务（模块）
                     if(that.task.properties.crowdNum>1){
+                        that.task.executor = JSON.parse(that.task.executor);
                         that.getModulesInfo();
                     }
                   that.$nextTick(function () {

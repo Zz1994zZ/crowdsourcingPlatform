@@ -12,8 +12,13 @@ import cn.withzz.xinghuo.domain.UserInfo;
 import cn.withzz.xinghuo.schedules.TaskAssigner;
 import cn.withzz.xinghuo.service.TaskService;
 import cn.withzz.xinghuo.service.UserInfoService;
+import cn.withzz.xinghuo.service.UserService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.org.apache.xpath.internal.operations.Mod;
+import jdk.nashorn.internal.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.json.GsonJsonParser;
+import org.springframework.http.converter.json.GsonBuilderUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -36,6 +41,8 @@ public class TaskAssignController {
     private TaskService taskService;
     @Autowired
     private UserInfoService userInfoService;
+    @Autowired
+    private UserService userService;
 
     @RequestMapping(value = "/api/assign", method = RequestMethod.GET)
     public List<Distribution> assign() {
@@ -60,6 +67,7 @@ public class TaskAssignController {
             SingleAssginUtil.assgin(task,alpha );
         } catch (Exception e) {
             e.printStackTrace();
+            return null;
         }
         //防止死循环
         for(Model model:task.getModels()){
@@ -76,6 +84,7 @@ public class TaskAssignController {
             MultiAssignUtil.assgin(tasks,false);
         } catch (Exception e) {
             e.printStackTrace();
+            return null;
         }
         //防止死循环
         for(Task task:tasks){
@@ -87,24 +96,38 @@ public class TaskAssignController {
     }
 
     @RequestMapping(value = "/api/task/{id}/assignSubmit", method = RequestMethod.POST)
-    public ResponseResult singleAssignSubmit(@RequestBody Map<Integer,String> assginMap,@PathVariable("id") int id,@RequestHeader("username") String username) {
+    public ResponseResult singleAssignSubmit(@RequestBody Map<Integer,String> assginMap,@PathVariable("id") int id,@RequestHeader("username") String username) throws IOException {
         ResponseResult<String> result =new ResponseResult<String>();
         cn.withzz.xinghuo.domain.Task task = taskService.findByKey(id);
+        ObjectMapper mapper = new ObjectMapper();
         if(!task.getCreator().equals(username)){
             result.setSuccess(false);
             result.setErrorcode("401");
             result.setMessage("您没有权限操作该任务!");
             return result;
         }
+        int taskModuleNum = (int) mapper.readValue(task.getProperties(),Map.class).get("crowdNum");
+        if(taskModuleNum != assginMap.size()){
+            result.setSuccess(false);
+            result.setErrorcode("500");
+            result.setMessage("请为所有模块进行分配！");
+            return result;
+        }
         try{
+            List executors = new ArrayList();
             for (int taskId:assginMap.keySet()){
                 cn.withzz.xinghuo.domain.Task t=taskService.findByKey(taskId);
-                t.setExecutor(assginMap.get(taskId));
+                String executor = assginMap.get(taskId);
+                t.setExecutor(executor);
                 t.setStatus(2);
                 taskService.update(t);
+                executors.add(executor);
             }
+            task.setExecutor(mapper.writeValueAsString(executors));
+            task.setStatus(2);
+            taskService.update(task);
             result.setSuccess(true);
-            result.setMessage("服务器错误");
+            result.setMessage("分配成功！");
         }catch (Exception e){
             result.setSuccess(false);
             result.setErrorcode("500");
@@ -127,6 +150,36 @@ public class TaskAssignController {
         }
         result.put("modules",modules);
         result.put("registers",registerInfos);
+        return result;
+    }
+
+    @RequestMapping(value = "/api/task/mutilAssignInfo", method = RequestMethod.GET)
+    public List<Map<String,Object>> mutilAssignTasksInfo(@RequestHeader("username") String username) {
+        //验证username是否超级管理员
+        cn.withzz.xinghuo.domain.User user = userService.findByKey(username);
+        if(user.getStatus()<2)
+            return null;
+        //获取所有任务
+        List<cn.withzz.xinghuo.domain.Task> tasks = taskService.getTaskByStatus(1);
+        List<Map<String,Object>> result = new ArrayList<>();
+        for(cn.withzz.xinghuo.domain.Task task:tasks){
+            int id = task.getId();
+            List<cn.withzz.xinghuo.domain.Task> modules = taskService.findByParentTask(id);
+            List<String> registers = taskService.getAllRegisters(id);
+            //如果人数不够则剔除出去
+            if(registers.size()==0||registers.size()<modules.size()){
+                continue;
+            }
+            Map<String,Object> taskInfo = new HashMap<>();
+            List<UserInfo> registerInfos = new ArrayList<UserInfo>();
+            for(String u:registers){
+                registerInfos.add(userInfoService.findByKey(u));
+            }
+            taskInfo.put("task",task);
+            taskInfo.put("modules",modules);
+            taskInfo.put("registers",registerInfos);
+            result.add(taskInfo);
+        }
         return result;
     }
 

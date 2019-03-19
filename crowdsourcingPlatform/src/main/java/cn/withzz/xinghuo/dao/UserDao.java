@@ -20,20 +20,21 @@ public interface UserDao {
 
     List<User> findByPage();
 
-    @Select("SELECT * FROM users where status = 1 and username=#{username}")
+    @Select("SELECT * FROM users where status != 0 and username=#{username}")
     // 返回 Map 结果集
     @Results({
             @Result(property = "username", column = "username"),
             @Result(property = "password", column = "password"),
             @Result(property = "createTime", column = "createTime"),
             @Result(property = "updateTime", column = "updateTime"),
+            @Result(property = "status", column = "status"),
     })
     User findByKey(@Param("username") String username);
 
     @Insert("insert into users values(#{username},#{password},#{createTime},#{updateTime},1)")
     Long save(User user);
 
-    @Update("update users set password=#{password},updateTime=#{updateTime} where username=#{username} and status=1")
+    @Update("update users set password=#{password},updateTime=#{updateTime} where username=#{username} and status!=0")
     Long update(User user);
 
     Long delete(String username);

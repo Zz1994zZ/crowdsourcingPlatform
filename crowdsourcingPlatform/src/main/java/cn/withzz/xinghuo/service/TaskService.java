@@ -43,5 +43,5 @@ public interface TaskService {
 
     List<Task> getTaskByExcutor(String executor,int status);
 
-
+    List<Task> getTaskByStatus(int status);
 }

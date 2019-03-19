@@ -162,32 +162,29 @@
                       </el-col>
                     </el-card>
                   </el-row>
-                  <el-row v-else-if="task.status == 2" style="margin-top:20px">
+                  <el-row v-else-if="task.status == 2 || task.status == 3" style="margin-top:20px">
                     <el-card :body-style="{ padding: '0px'}" shadow="hover">
                       <div slot="header" class="clearfix">
                         <span>开发者：</span>
                       </div>
-                      <el-col :span="4" class="registerUsers">
-                        <el-tooltip class="item" effect="dark" :content="task.executor" placement="top-end">
-                          <el-card shadow="never" :body-style="{ padding: '0px'}">
-                            <img src="http://img.zcool.cn/community/01333d5ad56151a80120402918e758.jpeg" style="border-radius: 50%;width: 120px;"></img>
-                          </el-card>
-                        </el-tooltip>
-                      </el-col>
-                    </el-card>
-                  </el-row>
-                  <el-row v-else-if="task.status == 3" style="margin-top:20px">
-                    <el-card :body-style="{ padding: '0px'}" shadow="hover">
-                      <div slot="header" class="clearfix">
-                        <span>开发者：</span>
-                      </div>
-                      <el-col :span="4" class="registerUsers">
-                        <el-tooltip class="item" effect="dark" :content="task.executor" placement="top-end">
-                          <el-card shadow="never" :body-style="{ padding: '0px'}">
-                            <img src="http://img.zcool.cn/community/01333d5ad56151a80120402918e758.jpeg" style="border-radius: 50%;width: 120px;"></img>
-                          </el-card>
-                        </el-tooltip>
-                      </el-col>
+                      <temple v-if="Array.isArray(task.executor)">
+                        <el-col  v-for="executor of task.executor" :span="4" class="registerUsers">
+                          <el-tooltip class="item" effect="dark" :content="executor" placement="top-end">
+                            <el-card shadow="never" :body-style="{ padding: '0px'}">
+                              <img src="http://img.zcool.cn/community/01333d5ad56151a80120402918e758.jpeg" style="border-radius: 50%;width: 120px;"></img>
+                            </el-card>
+                          </el-tooltip>
+                        </el-col>
+                      </temple>
+                      <temple v-else >
+                        <el-col :span="4" class="registerUsers">
+                          <el-tooltip class="item" effect="dark" :content="task.executor" placement="top-end">
+                            <el-card shadow="never" :body-style="{ padding: '0px'}">
+                              <img src="http://img.zcool.cn/community/01333d5ad56151a80120402918e758.jpeg" style="border-radius: 50%;width: 120px;"></img>
+                            </el-card>
+                          </el-tooltip>
+                        </el-col>
+                      </temple>
                     </el-card>
                   </el-row>
           </el-card>

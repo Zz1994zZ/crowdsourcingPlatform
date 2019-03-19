@@ -14,6 +14,7 @@ public class User {
     private String password;
     private Timestamp createTime;
     private Timestamp updateTime;
+    private int status;
 
     public String getUsername() {
         return username;
@@ -45,5 +46,13 @@ public class User {
 
     public void setUpdateTime(Timestamp updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 }

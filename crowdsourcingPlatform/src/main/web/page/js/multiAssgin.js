@@ -1,3 +1,7 @@
+var timeMap =[];
+for(let i=1;i<=24;i++){
+    timeMap[i]= 1<<(24-i);
+}
 var app = new Vue({
   el: '#app',
   data: {
@@ -197,7 +201,18 @@ var app = new Vue({
                               }
                           })
                           .then(function (response) {
-                              that.assignResult = response.data;
+                              if(response.data){
+                                  that.assignResult = response.data;
+                                  that.$message({
+                                      message: '分配成功！',
+                                      type: 'success'
+                                  });
+                              }else{
+                                  that.$message({
+                                      message: '分配失败，请检查配置或剔除部分任务！',
+                                      type: 'error'
+                                  });
+                              }
                           })
                           .catch(function (error) {
                               console.log(error);
@@ -284,10 +299,82 @@ var app = new Vue({
             delete this.task.isNew;
             this.tasks.push(this.task);
             this.taskDialogFormVisible = false;
-      }
+      },
+      getMutilTasksInfo(){
+          let that = this;
+          axios(
+              {
+                  method: 'GET',
+                  url: "http://"+login.ip+"/api/task/mutilAssignInfo",
+                  headers: {
+                      'username': login.username,
+                      'token': login.token
+                  }
+              })
+              .then(function (response) {
+                  if(response.data){
+                      console.log(response.data);
+                      let users = {};
+                      for(let data of response.data){
+                          let task = data.task;
+                          let modules = data.modules;
+                          let registers = data.registers;
+                          //将所有用户加入usersmap
+                          for(let r of registers){
+                              if(!users[r.username]){
+                                  r.extention = JSON.parse(r.extention);
+                                  users[r.username] = r;
+                              }
+                          }
+                      }
+                      //usersmap转化为userData
+                      let i =0;
+                      let rUsers = [];
+                      for(let username in users){
+                          let userInfo = users[username];
+                         let temp = {};
+                          temp.id = i;
+                          i++;
+                          temp.nickname = userInfo.name;
+                          temp.username = userInfo.username;
+                          temp.skillMap = JSON.parse(userInfo.skillList);
+                          // console.log(JSON.parse(userInfo.extention).activeTime);
+                          temp.workTime = that.getIntRangeByArray(userInfo.extention.activeTime);
+                          console.log(temp);
+                          rUsers.push(temp);
+                      }
+                      that.userData = rUsers;
+                      //tasks配置
 
+
+                      that.$message({
+                          message: '获取数据成功！',
+                          type: 'success'
+                      });
+                  }else{
+                      that.$message({
+                          message: '暂时没有可分配任务！',
+                          type: 'error'
+                      });
+                  }
+              })
+              .catch(function (error) {
+                  console.log(error);
+                  that.$message({
+                      message: '网络错误！',
+                      type: 'error'
+                  });
+              });
+      },
+      getIntRangeByArray(array){
+          let r = 0;
+          for(let i of array){
+              r=r+timeMap[i];
+          }
+          return r;
+      }
   },
     mounted: function () {
-
+        this.getMutilTasksInfo();
     }
 })

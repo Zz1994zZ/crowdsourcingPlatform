@@ -132,4 +132,10 @@ public class TaskServiceImpl implements TaskService {
         return tasks;
     }
 
+    @Override
+    public List<Task> getTaskByStatus(int status){
+        List<Task> tasks  = taskDao.findByStatus(status);
+        return tasks;
+    }
+
 }

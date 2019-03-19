@@ -196,7 +196,7 @@ var app = new Vue({
                 let tasks = [];
                 tasks.push(this.task);
                 let users = this.userData;
-            axios(
+                axios(
                           {
                               method: 'post',
                               url: "http://"+login.ip+"/api/sassign",
@@ -211,7 +211,18 @@ var app = new Vue({
                               }
                           })
                           .then(function (response) {
-                              that.assignResult = response.data;
+                              if(response.data){
+                                  that.assignResult = response.data;
+                                  that.$message({
+                                      message: '分配成功！',
+                                      type: 'success'
+                                  });
+                              }else{
+                                  that.$message({
+                                      message: '分配失败，请检查配置！',
+                                      type: 'error'
+                                  });
+                              }
                           })
                           .catch(function (error) {
                               console.log(error);
@@ -304,11 +315,11 @@ var app = new Vue({
           //自由分配则无视
           if(id==0){
               this.task = {
-                                          id:0,
-                                          skill:"java",
-                                          g:3,
-                                          alpha:0.8,
-                                      };
+                              id:0,
+                              skill:"java",
+                              g:3,
+                              alpha:0.8,
+                          };
               this.userData = [];
               this.models = [];
               return;
@@ -409,7 +420,17 @@ var app = new Vue({
                                           data: assginMap
                                       })
                           .then(function (response) {
-                              that.assignResult = response.data;
+                              let data= response.data;
+                              console.log(data);
+                              let msg = {};
+                              if(data.success){
+                                  msg.message = data.message;
+                                  msg.type = 'success';
+                              }else{
+                                  msg.message = data.message;
+                                  msg.type = 'error';
+                              }
+                              that.$message(msg);
                           })
                           .catch(function (error) {
                               console.log(error);
