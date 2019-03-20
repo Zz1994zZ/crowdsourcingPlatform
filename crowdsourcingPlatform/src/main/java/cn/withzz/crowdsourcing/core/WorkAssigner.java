@@ -31,6 +31,17 @@ public class WorkAssigner {
 		CCreator cc = new CCreator(24, task.getG());
 		//建立小根堆
 		PriorityQueue <CoCGroup> minHeap = new PriorityQueue<CoCGroup>(k);
+		//当g=0时直接返回所有工人的wsi add by svenzzhou 2019/03/20
+		if(task.getG() == 0){
+			WokerSetInt tiWithAll =new WokerSetInt(temp.size());
+			for(int i = 0;i<temp.size();i++){
+				tiWithAll.addWokerIndex(i);
+			}
+			//由所有员工构建协同候选队列
+			updateMinHeap( minHeap, task, tiWithAll, temp , k);
+			return minHeap;
+		}
+
 		//遍历所有时段组合
 		while (cc.hasNext()) {
 			TimeRangeInt t = new TimeRangeInt(cc.next());
@@ -43,29 +54,54 @@ public class WorkAssigner {
 				ti = ti.and(OTDS[a[i]]);
 			}
 			//协同工作组人数大于模块数才尝试产生匹配
-			if (ti.abs() >= task.getModels().size()) {
-				for (int i = task.getModels().size(); i <=ti.abs(); i++) {
-					//生成这个协同候选组
-					CoCGroup ccg=new CoCGroup(task, ti, temp, i);
-					//保留总效用前k大的协同候选组
-					//如果小根堆中协同候选组数小于k直接加入
-					if(minHeap.size()<k){
-						if(repeatCheck(minHeap, ccg))
+//			if (ti.abs() >= task.getModels().size()) {
+//				for (int i = task.getModels().size(); i <=ti.abs(); i++) {
+//					//生成这个协同候选组
+//					CoCGroup ccg=new CoCGroup(task, ti, temp, i);
+//					//保留总效用前k大的协同候选组
+//					//如果小根堆中协同候选组数小于k直接加入
+//					if(minHeap.size()<k){
+//						if(repeatCheck(minHeap, ccg))
+//							minHeap.add(ccg);
+//					}
+//					else{//小根堆满时若新组大于堆中最小组则弹出最小组加入新组
+//						if(minHeap.peek().getMinXY()<ccg.getMinXY()){
+//							if(repeatCheck(minHeap, ccg)){
+//								minHeap.poll();
+//								minHeap.add(ccg);
+//							}
+//						}else//如果没当前第k小的大那么后面的必然更小，直接跳到下一个循环
+//							break;
+//					}
+//				}
+//			}
+			updateMinHeap( minHeap, task, ti, temp , k);
+		}
+		return 	minHeap;
+	}
+
+	public static void updateMinHeap(PriorityQueue <CoCGroup> minHeap,Task task,WokerSetInt ti,List<UserInfoAndRank> temp ,int k){
+		if (ti.abs() >= task.getModels().size()) {
+			for (int i = task.getModels().size(); i <=ti.abs(); i++) {
+				//生成这个协同候选组
+				CoCGroup ccg=new CoCGroup(task, ti, temp, i);
+				//保留总效用前k大的协同候选组
+				//如果小根堆中协同候选组数小于k直接加入
+				if(minHeap.size()<k){
+					if(repeatCheck(minHeap, ccg))
+						minHeap.add(ccg);
+				}
+				else{//小根堆满时若新组大于堆中最小组则弹出最小组加入新组
+					if(minHeap.peek().getMinXY()<ccg.getMinXY()){
+						if(repeatCheck(minHeap, ccg)){
+							minHeap.poll();
 							minHeap.add(ccg);
-					}
-					else{//小根堆满时若新组大于堆中最小组则弹出最小组加入新组
-						if(minHeap.peek().getMinXY()<ccg.getMinXY()){
-							if(repeatCheck(minHeap, ccg)){
-								minHeap.poll();
-								minHeap.add(ccg);
-							}
-						}else//如果没当前第k小的大那么后面的必然更小，直接跳到下一个循环
-							break;
-					}
+						}
+					}else//如果没当前第k小的大那么后面的必然更小，直接跳到下一个循环
+						break;
 				}
 			}
 		}
-		return 	minHeap;
 	}
 	/**
 	 * 返回true说明通过重复检查
@@ -135,20 +171,12 @@ public class WorkAssigner {
 	}
 	/**
 	 * 这将返回最大的分配
-	 * @param task
-	 * @param users
-	 * @param k
-	 * @return
-	 * @throws Exception
 	 */
 	public static PriorityQueue<Distribution> SingleTaskAssigne(Task task,List<User> users) throws Exception{
 		return 	SingleTaskAssigne(task, users, 1, 0);
 	}
 	/**
 	 * 生成 24 个代表不同时段的工人集合，每个集合包含活跃时间包括其所代表时段 的所有工人
-	 * @param  UserInfoAndRank users
-	 * @return
-	 * @throws Exception
 	 */
 	private static WokerSetInt[] createOTD(List<UserInfoAndRank> temp) throws Exception{
 		WokerSetInt[] wi = new WokerSetInt[24];

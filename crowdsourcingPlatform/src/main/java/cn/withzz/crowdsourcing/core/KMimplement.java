@@ -153,6 +153,23 @@ public class KMimplement {
 		}
 		candidates.put(task, group.getUsers());
 	}
+	//重置KM初始化
+	private void resetKMInit(){
+		for(User user:usersMap.keySet()){
+			LinkInfo userLinkInfo = usersMap.get(user);
+			userLinkInfo.setDb(0);
+			userLinkInfo.setLink(null);
+		}
+		for (Task task : tasks) {
+			List<User> users = task.getCcg().getUsers();
+			for (Model model : task.getModels()) {
+				// 建立与最优选的边
+				modelsMap.get(model).setDb(
+						Distribution.computeWeight(model, users.get(0)));
+				modelsMap.get(model).setLink(null);
+			}
+		}
+	}
 
 	// 确定替换ccg的任务
 	private Task findTask2replaceCCG(Set<Task> tasks) {
@@ -239,8 +256,18 @@ public class KMimplement {
 						// 哈哈 这里需要一个goto一样的功能~
 						Task t = findTask2replaceCCG(usedTasks);
 						if (t != null) {
-							replace2NextCoCG(t);
+							//原本只要这一句
+//							replace2NextCoCG(t);
+
+							//现在开始新的尝试
+							CoCGroup group = t.getCcgs().pollFirst();
+							t.setCcg(group);
+							candidates.put(t, group.getUsers());
+							resetKMInit();
+							//hope it works
+							//HOHO~ it works well!!那么也许我们的实验结果本可以更好的，不过目前的实验已经能说明问题了~
 							replaceCCG = true;
+
 							break;
 						}
 						return null;

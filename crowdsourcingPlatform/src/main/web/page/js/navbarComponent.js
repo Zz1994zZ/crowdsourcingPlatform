@@ -154,6 +154,7 @@ Vue.component('xinhuo-navbar', {
                             sessionStorage.setItem('token', that.token);
                             sessionStorage.setItem('username', that.username);
                             that.dialogFormVisible = false;
+                            parent.location.reload();
                             that.onFinishLogin();
                         }
                         that.$message({

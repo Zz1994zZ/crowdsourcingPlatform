@@ -100,6 +100,7 @@ public class TaskController {
                 taskService.save(mainTask);
                 for (int i = 1; i < taskModules.size(); i++) {
                     Task module = taskModules.get(i);
+                    module.setType(0);
                     taskService.saveModule(mainTask,module);
                 }
                 result.setMessage("添加任务信息成功！");

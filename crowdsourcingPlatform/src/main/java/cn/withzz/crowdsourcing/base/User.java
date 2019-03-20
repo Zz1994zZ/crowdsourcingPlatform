@@ -147,7 +147,12 @@ public class User implements Serializable {
 		this.skillMap = skillMap;
 	}
 	public float getSkillPoint(String skill){
-		return this.getSkillMap().get(skill);
+		for(String key:this.getSkillMap().keySet()){
+			if(key.equalsIgnoreCase(skill)){
+				return this.getSkillMap().get(key);
+			}
+		}
+		return 0;
 	}
 	
 	public HashMap<String, Float> getMaxAMap() {

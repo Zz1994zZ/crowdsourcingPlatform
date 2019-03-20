@@ -5,42 +5,6 @@ for(let i=1;i<=24;i++){
 var app = new Vue({
   el: '#app',
   data: {
-      // tasks:[
-      //        {
-      //            "id":1,
-      //             "g":1,
-      //             "skill":"java",
-      //             "alpha":0.5,
-      //             "registers":[1,2,3,4],
-      //             "models":[
-      //                {"id":1,"complexity":0.6},
-      //                {"id":1,"complexity":0.7}
-      //             ]
-      //        },
-      //       {
-      //           "id":2,
-      //            "g":2,
-      //            "skill":"java",
-      //            "alpha":0.5,
-      //            "registers":[2,4,6,8],
-      //            "models":[
-      //               {"id":1,"complexity":0.6},
-      //               {"id":1,"complexity":0.7}
-      //            ]
-      //       }
-      //     ],
-      // users:[
-      //        {"id":1,"nickname":"user1","workTime":1,"skillMap":{"java":0.1,"php":0.5}},
-      //        {"id":2,"nickname":"user2","workTime":1,"skillMap":{"java":0.2,"php":0.5}},
-      //        {"id":3,"nickname":"user3","workTime":1,"skillMap":{"java":0.3,"php":0.5}},
-      //        {"id":4,"nickname":"user4","workTime":1,"skillMap":{"java":0.4,"php":0.5}},
-      //        {"id":5,"nickname":"user5","workTime":1,"skillMap":{"java":0.5,"php":0.5}},
-      //        {"id":6,"nickname":"user6","workTime":1,"skillMap":{"java":0.6,"php":0.5}},
-      //        {"id":7,"nickname":"user7","workTime":1,"skillMap":{"java":0.7,"php":0.5}},
-      //        {"id":8,"nickname":"user8","workTime":1,"skillMap":{"java":0.8,"php":0.5}},
-      //        {"id":9,"nickname":"user9","workTime":1,"skillMap":{"java":0.9,"php":0.5}},
-      //        {"id":10,"nickname":"user10","workTime":1,"skillMap":{"java":12,"php":0.5}}
-      //     ],
       tasks:[],
       type:1,
       //单任务时用到

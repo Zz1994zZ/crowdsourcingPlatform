@@ -7,56 +7,31 @@ var app = new Vue({
   data: {
        tasks:[
               {
-                  "id":1,
+                  "id":1994,
                    "g":1,
                    "skill":"java",
                    "alpha":0.5,
                    "registers":[0,1,2,3,4,5,6,7,8,9],
                    "models":[
-                      {"id":1,"complexity":0.6},
-                      {"id":2,"complexity":0.7}
+                      {"id":1021,"complexity":0.6},
+                      {"id":1022,"complexity":0.7}
                    ]
               },
              {
-                 "id":2,
+                 "id":2019,
                   "g":2,
                   "skill":"java",
                   "alpha":0.5,
                   "registers":[0,1,2,3,4,5,6,7,8,9],
                   "models":[
-                     {"id":1,"complexity":0.4},
-                     {"id":2,"complexity":0.2}
+                     {"id":1023,"complexity":0.4},
+                     {"id":1024,"complexity":0.2}
                   ]
              }
            ],
-      // users:[
-      //        {"id":1,"nickname":"user1","workTime":1,"skillMap":{"java":0.1,"php":0.5}},
-      //        {"id":2,"nickname":"user2","workTime":1,"skillMap":{"java":0.2,"php":0.5}},
-      //        {"id":3,"nickname":"user3","workTime":1,"skillMap":{"java":0.3,"php":0.5}},
-      //        {"id":4,"nickname":"user4","workTime":1,"skillMap":{"java":0.4,"php":0.5}},
-      //        {"id":5,"nickname":"user5","workTime":1,"skillMap":{"java":0.5,"php":0.5}},
-      //        {"id":6,"nickname":"user6","workTime":1,"skillMap":{"java":0.6,"php":0.5}},
-      //        {"id":7,"nickname":"user7","workTime":1,"skillMap":{"java":0.7,"php":0.5}},
-      //        {"id":8,"nickname":"user8","workTime":1,"skillMap":{"java":0.8,"php":0.5}},
-      //        {"id":9,"nickname":"user9","workTime":1,"skillMap":{"java":0.9,"php":0.5}},
-      //        {"id":10,"nickname":"user10","workTime":1,"skillMap":{"java":12,"php":0.5}}
-      //     ],
+
       type:2,
-      //单任务时用到
-//      models:[
-//          {
-//              id:0,
-//              complexity:0.7
-//          },
-//          {
-//              id:1,
-//              complexity:0.6
-//          },
-//          {
-//              id:2,
-//              complexity:0.6
-//          },
-//      ],
+
       //添加模块弹框
       dialogFormVisible:false,
       //任务配置弹框
@@ -80,67 +55,77 @@ var app = new Vue({
           {
               id:0,
               nickname:"d1",
+              username:"username1",
               skillMap:{java:0.8},
               workTime:62400
           },
           {
               id:1,
               nickname:"d2",
+              username:"username2",
               skillMap:{java:0.7},
               workTime:960
           },
           {
               id:2,
               nickname:"d3",
+              username:"username3",
               skillMap:{java:0.6},
               workTime:61440
           },
           {
               id:3,
               nickname:"d4",
+              username:"username4",
               skillMap:{java:0.5},
               workTime:496
           },
           {
               id:4,
               nickname:"d5",
-              skillMap:{java:0.5},
+              username:"username5",
+              skillMap:{java:0.4},
               workTime:16515073
           },
           {
               id:5,
               nickname:"d6",
-              skillMap:{java:0.5},
+              username:"username6",
+              skillMap:{java:0.36},
               workTime:14680064
           },
           {
               id:6,
               nickname:"d7",
-              skillMap:{java:0.5},
+              username:"username7",
+              skillMap:{java:0.33},
               workTime:16777215
           },
           {
               id:7,
               nickname:"d8",
-              skillMap:{java:0.4},
+              username:"username8",
+              skillMap:{java:0.25},
               workTime:60
           },
           {
               id:8,
               nickname:"d9",
-              skillMap:{java:0.3},
+              username:"username9",
+              skillMap:{java:0.24},
               workTime:253952
           },
           {
               id:9,
               nickname:"d10",
-              skillMap:{java:0.2},
+              username:"username10",
+              skillMap:{java:0.15},
               workTime:16128
           }
       ],
       //右边数据（分配时提交的）
       selectedUsers: [],
-      assignResult:{}
+      assignResult:null
   },
   methods: {
       addWorker(){
@@ -184,7 +169,12 @@ var app = new Vue({
         post(){
                 let that = this;
                 //模块拼进task
-                let tasks = this.tasks;
+                let tasks = [];
+                for(let t of that.tasks){
+                    if(t.models.length>0){
+                        tasks.push(t);
+                    }
+                }
                 let users = this.userData;
             axios(
                           {
@@ -300,6 +290,29 @@ var app = new Vue({
             this.tasks.push(this.task);
             this.taskDialogFormVisible = false;
       },
+      modulsArrayTran(modules){
+            let result = [];
+            for(let m of modules){
+                m.properties = JSON.parse(m.properties)
+                let temp = {};
+                temp.id=m.id;
+                temp.complexity= m.properties.price;
+                result.push(temp);
+            }
+            return result;
+      },
+      registersArrayTran(registers,userData){
+          let result = [];
+          for(let r of registers){
+              for(let u of userData){
+                  if(u.username == r.username){
+                      result.push(u.id);
+                      break;
+                  }
+              }
+          }
+          return result;
+      },
       getMutilTasksInfo(){
           let that = this;
           axios(
@@ -315,10 +328,14 @@ var app = new Vue({
                   if(response.data){
                       console.log(response.data);
                       let users = {};
+                      let rTasks = [];
                       for(let data of response.data){
+
                           let task = data.task;
                           let modules = data.modules;
                           let registers = data.registers;
+
+                          task.properties = JSON.parse(task.properties);
                           //将所有用户加入usersmap
                           for(let r of registers){
                               if(!users[r.username]){
@@ -326,6 +343,18 @@ var app = new Vue({
                                   users[r.username] = r;
                               }
                           }
+                          let temp = {};
+                          temp.id = task.id;
+                          temp.g = 1;
+                          temp.skill = task.properties.skills;
+                          temp.alpha = 0.8;
+                          temp.registers = registers;
+                          if(task.properties.crowdNum==1){
+                              temp.models = [{"id":task.id,"complexity":task.properties.price}];
+                          }else{
+                              temp.models = that.modulsArrayTran(modules);
+                          }
+                          rTasks.push(temp);
                       }
                       //usersmap转化为userData
                       let i =0;
@@ -345,15 +374,18 @@ var app = new Vue({
                       }
                       that.userData = rUsers;
                       //tasks配置
-
-
+                      console.log(rTasks);
+                      for(let task of rTasks){
+                          task.registers =that.registersArrayTran(task.registers,rUsers);
+                      }
+                      that.tasks = rTasks;
                       that.$message({
                           message: '获取数据成功！',
                           type: 'success'
                       });
                   }else{
                       that.$message({
-                          message: '暂时没有可分配任务！',
+                          message: '暂时没有可分配任务或者您的权限不够哦~！',
                           type: 'error'
                       });
                   }
@@ -372,6 +404,60 @@ var app = new Vue({
               r=r+timeMap[i];
           }
           return r;
+      },
+      submitAssgin(){//提交分配结果到后台
+          let that = this;
+          //构建模块id——工人username map
+          let assginTaskMap={};
+          for(let assignResultTask of that.assignResult){
+              let assginMap={};
+              for(let m of assignResultTask.models){
+                  let key = m.id;
+                  let userIndex = m.worker.id;
+                  let username = that.userData[userIndex].username;
+                  assginMap[key] = username;
+              }
+              assginTaskMap[assignResultTask.id]=assginMap;
+          }
+          console.log(assginTaskMap);
+          axios(
+              {
+                  method: 'post',
+                  url: "http://"+login.ip+"/api/task/mutilAssignSubmit",
+                  headers: {
+                      'username': login.username,
+                      'token': login.token
+                  },
+                  data: assginTaskMap
+              })
+              .then(function (response) {
+                  let data= response.data;
+                  console.log(data);
+                  let msg = {};
+                  if(data.success){
+                      msg.message = data.message;
+                      msg.type = 'success';
+                  }else{
+                      msg.message = data.message;
+                      msg.type = 'error';
+                  }
+                  that.$message(msg);
+              })
+              .catch(function (error) {
+                  console.log(error);
+                  that.$message({
+                      message: '网络错误！',
+                      type: 'error'
+                  });
+              });
+
+      },
+      getSkillAbility(map,skill){
+          for(let key in map){
+              if(key.toLowerCase() == skill.toLowerCase()){
+                  return map[key];
+              }
+          }
       }
   },
     mounted: function () {

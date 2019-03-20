@@ -136,6 +136,67 @@ public class TaskAssignController {
         return result;
     }
 
+    @RequestMapping(value = "/api/task/mutilAssignSubmit", method = RequestMethod.POST)
+    public ResponseResult mutilAssignSubmit(@RequestBody Map< Integer, Map<Integer,String>> assginTaskMap,@RequestHeader("username") String username) throws IOException {
+
+        ResponseResult<String> result =new ResponseResult<String>();
+        cn.withzz.xinghuo.domain.User user = userService.findByKey(username);
+        if(user.getStatus()!=2){
+            result.setSuccess(false);
+            result.setErrorcode("401");
+            result.setMessage("您没有权限进行该操作!");
+            return result;
+        }
+        List<cn.withzz.xinghuo.domain.Task> upList = new ArrayList<cn.withzz.xinghuo.domain.Task>();
+        for(int taskId: assginTaskMap.keySet()){
+            Map<Integer,String> assginMap = assginTaskMap.get(taskId);
+            cn.withzz.xinghuo.domain.Task task = taskService.findByKey(taskId);
+            ObjectMapper mapper = new ObjectMapper();
+            int taskModuleNum = (int) mapper.readValue(task.getProperties(),Map.class).get("crowdNum");
+            if(taskModuleNum != assginMap.size()){
+                result.setSuccess(false);
+                result.setErrorcode("500");
+                result.setMessage("任务"+taskId+"分配人数不够，需求"+taskModuleNum+",收到"+assginMap.size());
+                return result;
+            }
+            try{
+                List executors = new ArrayList();
+                for (int moduleId:assginMap.keySet()){
+                    cn.withzz.xinghuo.domain.Task t=taskService.findByKey(moduleId);
+                    String executor = assginMap.get(moduleId);
+                    t.setExecutor(executor);
+                    t.setStatus(2);
+                    //加入模块
+                    upList.add(t);
+                    executors.add(executor);
+                }
+                task.setExecutor(mapper.writeValueAsString(executors));
+                task.setStatus(2);
+                //加入任务
+                upList.add(task);
+            }catch (Exception e){
+                result.setSuccess(false);
+                result.setErrorcode("500");
+                result.setMessage(e.getMessage());
+                return result;
+            }
+        }
+        //这里之后最好搞个事务
+        try{
+            for(cn.withzz.xinghuo.domain.Task t:upList){
+                taskService.update(t);
+            }
+            result.setSuccess(true);
+            result.setMessage("分配成功！");
+        }catch (Exception e){
+            result.setSuccess(false);
+            result.setErrorcode("500");
+            result.setMessage(e.getMessage());
+        }
+        return result;
+    }
+
+
     @RequestMapping(value = "/api/task/{id}/assignInfo", method = RequestMethod.GET)
     public Map<String,Object> singleAssignTaskInfo(@PathVariable("id") int id,@RequestHeader("username") String username) {
         Map<String,Object> result = new HashMap<>();

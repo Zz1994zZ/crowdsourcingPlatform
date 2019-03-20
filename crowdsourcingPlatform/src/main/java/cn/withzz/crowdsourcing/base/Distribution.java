@@ -137,7 +137,7 @@ public class Distribution implements Comparable<Distribution>{
 	public static int computeWeight(Model model, User user){
 		double weight=model.getComplexity()*user.getSkillPoint(model.getTask().getSkill());
 //		weight=weight*model.getTask().getG()/24;
-		return (int) (weight*100000000);
+		return (int) (weight*100);
 //		return weight;
 	}
 	
