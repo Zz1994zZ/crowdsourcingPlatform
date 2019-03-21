@@ -131,17 +131,64 @@
                   <span v-else >{{userInfo.name}}</span>
                 </el-form-item>
                 <el-form-item  label="活跃时间：">
-                  <el-slider
-                          v-if="editing"
-                          v-model="userInfo.extention.activeTime"
-                          show-tooltip
-                          :format-tooltip="formatSlider"
-                          range
-                          :disabled="!editing"
-                          show-stops
-                          :max="23">
-                  </el-slider>
-                  <span v-else >{{formatSlider(userInfo.extention.activeTime[0])+'~'+formatSlider(userInfo.extention.activeTime[1])}}</span>
+                  <!--<el-slider-->
+                          <!--v-if="editing"-->
+                          <!--v-model="userInfo.extention.activeTime"-->
+                          <!--show-tooltip-->
+                          <!--:format-tooltip="formatSlider"-->
+                          <!--range-->
+                          <!--:disabled="!editing"-->
+                          <!--show-stops-->
+                          <!--:max="23">-->
+                  <!--</el-slider>-->
+                  <template v-if="editing">
+                    <el-select
+                            v-model="userInfo.extention.activeTime"
+                            multiple
+                            collapse-tags
+                            laceholder="请选择">
+                      <el-option-group
+                              label="上午"
+                              :key="100"
+                        >
+                        <el-option
+                                v-for="o in [7,8,9,10,11,12]"
+                                :key="o"
+                                :label="time2Str([o])"
+                                :value="o"
+                        >
+                        </el-option>
+                      </el-option-group>
+                      <el-option-group
+                              label="下午"
+                              :key="200"
+                      >
+                        <el-option
+                                v-for="o in [13,14,15,16,17,18,19,20,21,22]"
+                                :key="o"
+                                :label="time2Str([o])"
+                                :value="o"
+                        >
+                        </el-option>
+                      </el-option-group>
+                      <el-option-group
+                              label="夜间"
+                              :key="300"
+                      >
+                        <el-option
+                                v-for="o in [23,24,1,2,3,4,5,6]"
+                                :key="o"
+                                :label="time2Str([o])"
+                                :value="o"
+                        >
+                        </el-option>
+                      </el-option-group>
+                    </el-select>
+                    {{time2Str(userInfo.extention.activeTime)}}
+                  </template>
+
+                  <!--<span v-else >{{formatSlider(userInfo.extention.activeTime[0])+'~'+formatSlider(userInfo.extention.activeTime[1])}}</span>-->
+                  <span v-else >{{time2Str(userInfo.extention.activeTime)}}</span>
                 </el-form-item>
                 <el-form-item  v-if="!editing" label="技能评分：">
                   <el-row v-for="item in userInfo.extention.developmentLanguage">

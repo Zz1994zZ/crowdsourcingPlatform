@@ -305,10 +305,11 @@ var app = new Vue({
                   console.log(response.data);
                   let data = response.data;
                   let modules = [];
-                  for(m of data.modules){
+                  for(let m of data.modules){
                       let temp={};
+                      m.properties = JSON.parse(m.properties);
                       temp.id = m.id;
-                      temp.complexity = 1;
+                      temp.complexity = m.properties.price;
                       modules.push(temp);
                   }
                   if(modules.length==0){
@@ -320,7 +321,7 @@ var app = new Vue({
                   that.models = modules;
                   let users = [];
                   let i = 0;
-                  for(r of data.registers){
+                  for(let r of data.registers){
                       let temp={};
                       temp.id = i;
                       i++;
@@ -339,6 +340,12 @@ var app = new Vue({
                           break;
                       }
                   }
+                  that.$message({
+                      message: '获取数据成功！',
+                      type: 'success'
+                  });
+                  //用价格换算复杂度
+                  // that.tramsAvgComplex();
               })
               .catch(function (error) {
                   console.log(error);
@@ -347,6 +354,34 @@ var app = new Vue({
                       type: 'error'
                   });
               });
+      },
+      caculateECofM(x,avg){
+          return (Math.atan(x-avg)+Math.atan(avg))/(Math.PI/2+Math.atan(avg));
+      },
+      tramsAvgComplex(){
+          let num =0;
+          let sum = 0;
+          let max = 0;
+          let priceArray = [];
+          let that = this;
+          for(let m of that.models){
+              sum+=m.complexity;
+              priceArray.push(m.complexity);
+              if(m.complexity>max){
+                  max=m.complexity;
+              }
+              num++;
+          }
+          let avg = sum/num;
+          let middle = priceArray.sort()[parseInt(num/2)];
+          if(num>0){
+              for(let m of that.models){
+                  m.complexity = m.complexity/max;
+                    // m.complexity = this.caculateECofM(m.complexity,avg);
+                  // m.complexity = this.caculateECofM(m.complexity,middle);
+                  m.complexity  = m.complexity .toFixed(2)
+              }
+          }
       },
       getIntRangeByArray(array){
           let r = 0;

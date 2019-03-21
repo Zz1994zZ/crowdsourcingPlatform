@@ -157,8 +157,9 @@ var app = new Vue({
           //     if(this.models[i].id == row.id)
           //         break;
           // }
-          task.models.splice(index,1)
-      },
+          task.models.splice(index, 1);
+      }
+      ,
       handleUserEdit(index, row) {
           console.log(index, row);
       },
@@ -378,6 +379,7 @@ var app = new Vue({
                       for(let task of rTasks){
                           task.registers =that.registersArrayTran(task.registers,rUsers);
                       }
+                      // that.tramsAvgComplex(rTasks);
                       that.tasks = rTasks;
                       that.$message({
                           message: '获取数据成功！',
@@ -397,6 +399,37 @@ var app = new Vue({
                       type: 'error'
                   });
               });
+      },
+      caculateECofM(x,avg){
+          return (Math.atan(x-avg)+Math.atan(avg))/(Math.PI/2+Math.atan(avg));
+      },
+      tramsAvgComplex(tasks){
+          let num =0;
+          let sum = 0;
+          let max = 0;
+          let priceArray = [];
+          for(let task of tasks){
+              for(let m of task.models){
+                  sum+=m.complexity;
+                  priceArray.push(m.complexity);
+                  if(m.complexity>max){
+                      max=m.complexity;
+                  }
+                  num++;
+              }
+          }
+          let avg = sum/num;
+          let middle = priceArray.sort()[parseInt(num/2)];
+          if(num>0){
+              for(let task of tasks){
+                  for(let m of task.models){
+                    m.complexity = m.complexity/max;
+                    //   m.complexity = this.caculateECofM(m.complexity,avg);
+                    //   m.complexity = this.caculateECofM(m.complexity,middle);
+                      m.complexity  = m.complexity .toFixed(2)
+                  }
+              }
+          }
       },
       getIntRangeByArray(array){
           let r = 0;

@@ -33,6 +33,35 @@ var app = new Vue({
               return '下午'+(value+1)+':00';
           }
       },
+      time2Str(timeArr){
+          let start = null;
+          let timeStrArray = [];
+          for(let i = 1;i<=24;i++){
+              if(timeArr.indexOf(i)!=-1){
+                  if(!start){
+                      start = i;
+                  }
+              }else{
+                  if(start){
+                      //输出start到i的时间字符串
+                      let left = start-1<10? "0"+(start-1):(start-1);
+                      left += ":00";
+                      let right = i-1<10? "0"+(i-1):(i-1);
+                      right += ":00";
+                      timeStrArray.push(left+"~"+right);
+                      start = null;
+                  }
+              }
+          }
+          if(start){
+              //输出start到i的时间字符串
+              let left = start-1<10? "0"+(start-1):(start-1);
+              left += ":00";
+              timeStrArray.push(left+"~24:00");
+              start = null;
+          }
+          return timeStrArray;
+      },
       onPost(){
           let that = this;
           axios(
