@@ -287,9 +287,9 @@
                   <div v-for="model in task.models" >
                     <el-card class="box-card">
                       <el-row :gutter="5">
-                        <el-col :span="12">
+                        <el-col :span="14">
                             <div>
-                              模块{{model.id}}->难度:
+                              模块{{model.id}}->难度:{{model.complexity}}
                               <el-progress  :stroke-width="18"  status="text" :text-inside="true" :percentage="model.complexity*100">{{model.complexity}}</el-progress>
                             </div>
                             <div>
@@ -297,7 +297,7 @@
                               <el-progress  :stroke-width="18"  status="text" :text-inside="true" :percentage="getSkillAbility(model.worker.skillMap,task.skill)*100" color="#f56c6c">{{model.worker.skillMap[task.skill]}}</el-progress>
                             </div>
                         </el-col>
-                        <el-col :span="12">
+                        <el-col :span="10">
                           <div>
                            活跃时间
                           </div>

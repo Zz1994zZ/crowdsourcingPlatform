@@ -345,7 +345,7 @@ var app = new Vue({
                       type: 'success'
                   });
                   //用价格换算复杂度
-                  // that.tramsAvgComplex();
+                  that.tramsAvgComplex();
               })
               .catch(function (error) {
                   console.log(error);

@@ -2,13 +2,15 @@ package cn.withzz.xinghuo.controller;
 
 import cn.withzz.xinghuo.domain.ResponseResult;
 import cn.withzz.xinghuo.domain.Task;
+import cn.withzz.xinghuo.domain.UserInfo;
 import cn.withzz.xinghuo.service.TaskService;
+import cn.withzz.xinghuo.service.UserInfoService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.IOException;
+import java.util.*;
 
 /**
  * Register Controller 实现 Restful HTTP 服务
@@ -20,6 +22,9 @@ public class RegisterController {
 
     @Autowired
     private TaskService taskService;
+    @Autowired
+    private UserInfoService userInfoService;
+
     //报名任务
     @RequestMapping(value = "/api/task/{id}/user", method = RequestMethod.POST)
     public ResponseResult register(@PathVariable("id") int id,@RequestHeader("username") String username) {
@@ -48,6 +53,40 @@ public class RegisterController {
         List<Task> tasks = taskService.getRegisterTasks(username,status);
         return tasks;
     }
+
+    //随机挑一批人强行报名
+    @RequestMapping(value = "/api/randomRegister", method = RequestMethod.GET)
+    public ResponseResult randomRegister() throws IOException {
+        ResponseResult<String> result =new ResponseResult<String>();
+        List<Task> tasks = taskService.getTaskByStatus(1);
+        int sumNum  = 0;
+        for(Task task : tasks){
+            ObjectMapper mapper = new ObjectMapper();
+            int taskModuleNum = (int) mapper.readValue(task.getProperties(),Map.class).get("crowdNum");
+            sumNum+=taskModuleNum;
+        }
+        //随机挑选sumNum个人数的工人
+        List<UserInfo> users = userInfoService.findAll();
+        int usersNum = users.size();
+        Random random = new Random();
+        List<UserInfo> selectedUsers = new ArrayList<UserInfo>();
+        for(int i = 0; i < sumNum && i < usersNum; i++){
+            int selectedIndex = random.nextInt(usersNum-i);
+            selectedUsers.add(users.get(selectedIndex));
+            UserInfo temp = users.get(usersNum-i-1);
+            users.set(usersNum-i-1,users.get(selectedIndex));
+            users.set(selectedIndex,temp);
+        }
+        for(Task task : tasks){
+          for(UserInfo userInfo:selectedUsers){
+              taskService.register(task.getId(),userInfo.getUsername());
+          }
+        }
+        result.setMessage("注册成功，每个任务添加"+selectedUsers);
+        result.setSuccess(true);
+        return result;
+    }
+
 
 
 }
