@@ -2,9 +2,11 @@ package cn.withzz.xinghuo.controller;
 
 import cn.withzz.xinghuo.domain.ResponseResult;
 import cn.withzz.xinghuo.domain.Task;
+import cn.withzz.xinghuo.domain.User;
 import cn.withzz.xinghuo.domain.UserInfo;
 import cn.withzz.xinghuo.service.TaskService;
 import cn.withzz.xinghuo.service.UserInfoService;
+import cn.withzz.xinghuo.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +26,8 @@ public class RegisterController {
     private TaskService taskService;
     @Autowired
     private UserInfoService userInfoService;
+    @Autowired
+    private UserService userService;
 
     //报名任务
     @RequestMapping(value = "/api/task/{id}/user", method = RequestMethod.POST)
@@ -56,8 +60,16 @@ public class RegisterController {
 
     //随机挑一批人强行报名
     @RequestMapping(value = "/api/randomRegister", method = RequestMethod.GET)
-    public ResponseResult randomRegister() throws IOException {
+    public ResponseResult randomRegister(@RequestHeader("username") String username) throws IOException {
         ResponseResult<String> result =new ResponseResult<String>();
+        //只有管理员权限可以进行该操作
+        User user = userService.findByKey(username);
+        if(user.getStatus()!=2){
+            result.setMessage("您的权限不足！");
+            result.setSuccess(false);
+            return result;
+        }
+
         List<Task> tasks = taskService.getTaskByStatus(1);
         int sumNum  = 0;
         for(Task task : tasks){
